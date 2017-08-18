@@ -2,23 +2,20 @@ package com.test;
 
 import java.io.UnsupportedEncodingException;
 
+import org.springframework.util.StringUtils;
+
 public class Fun {
 	public static void main(String[] args) {
 		
-		String aaa = new String("GBK");
-		aaa="测试中文";
+		String aaa = "MarShow";
+
+		String empty = "";
 		
 		
-		String bbb = null;
-		try {
-			bbb = new String(aaa.getBytes(), "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		System.out.println(aaa);
-		System.out.println(bbb);
+		String bbb = aaa.replaceAll(empty, ""); 
+		System.out.println(aaa+"11111");
+		System.out.println(bbb+"11111");
 		
 	}
 }
