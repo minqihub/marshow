@@ -1,0 +1,3 @@
+#git的忽略列表
+*.class
+v1.config
