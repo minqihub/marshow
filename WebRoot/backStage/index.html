@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<title>Smart后台管理系统</title>
 		<link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/index.css" media="all" />
 	</head>
 	
 	<body>
@@ -16,7 +17,7 @@
 		    		<b>Smart后台管理系统</b>
 		    	</div>
 		    	
-		    	<ul class="layui-nav layui-layout-right" style="margin-right: 20px">
+		    	<ul class="layui-nav layui-layout-right">
 		    		<li class="layui-nav-item">
  		    			<a href="javascript:;">审批/代办<span class="layui-badge">6</span></a>
 		    		</li>
@@ -34,10 +35,10 @@
 		        		<a><img src="http://t.cn/RCzsdCq" class="layui-nav-img">闵奇</a>
 		        		<dl class="layui-nav-child">
 		          			<dd id="userInfo">
-		          				<a jumpUrl="/marshow/backStage/userInfo.html" href="javascript:;"><i class="layui-icon">&#xe612;</i>  个人信息</a>
+		          				<a jumpUrl="/backStage/userInfo.html" href="javascript:;"><i class="layui-icon">&#xe612;</i>  个人信息</a>
 	          				</dd>
 		       				<dd id="setUp">
-		       					<a jumpUrl="/marshow/backStage/setUp.html" href="javascript:;"><i class="layui-icon">&#xe614;</i>  设置</a>
+		       					<a jumpUrl="/backStage/setUp.html" href="javascript:;"><i class="layui-icon">&#xe614;</i>  设置</a>
 	       					</dd>
 							<dd id="logOut">
 								<a href="javascript:;"><i class="layui-icon">&#xe64d;</i>  注销</a>
@@ -56,27 +57,27 @@
 						<li class="layui-nav-item layui-nav-itemed">
 							<a href="javascript:;"><i class="layui-icon">&#xe613;</i> 人员管理</a>
 							<dl class="layui-nav-child">
-								<dd><a jumpUrl="/marshow/backStage/personManage/deptUser.html" href="javascript:;">部门人员</a></dd>
-								<dd><a jumpUrl="/marshow/backStage/personManage/commUser.html" href="javascript:;">社区人员</a></dd>
-								<dd><a jumpUrl="/marshow/backStage/personManage/commUser.html" href="javascript:;">跳转</a></dd>
+								<dd><a jumpUrl="/backStage/personManage/deptUser.html" href="javascript:;">部门人员</a></dd>
+								<dd><a jumpUrl="/backStage/personManage/commUser.html" href="javascript:;">社区人员</a></dd>
+								<dd><a jumpUrl="/backStage/personManage/commUser.html" href="javascript:;">跳转</a></dd>
 							</dl>
 						</li>
 					
 						<li class="layui-nav-item layui-nav-itemed">
 							<a href="javascript:;"><i class="layui-icon">&#xe715;</i> 社区管理</a>
 							<dl class="layui-nav-child">
-								<dd><a jumpUrl="/marshow/backStage/houseManage/commStructure.html" href="javascript:;">定义结构</a></dd>
-						    	<dd><a jumpUrl="/marshow/backStage/commManage/commUser.html" href="javascript:;">后台模版</a></dd>
-						    	<dd><a jumpUrl="/marshow/backStage/commManage/commUser.html" href="javascript:;">电商平台</a></dd>
+						    	<dd><a jumpUrl="/backStage/commManage/commInfo.html" href="javascript:;">我的社区</a></dd>
+								<dd><a jumpUrl="/backStage/commManage/commStructure.html" href="javascript:;">定义结构</a></dd>
+						    	<dd><a jumpUrl="/backStage/commManage/commNotice.html" href="javascript:;">社区通知</a></dd>
 							</dl>
 						</li>
 						 
 						<li class="layui-nav-item layui-nav-itemed">
-							<a href="javascript:;"><i class="layui-icon">&#xe65e;</i> 缴费管理</a>
+							<a href="javascript:;"><i class="layui-icon">&#xe65e;</i> 财务管理</a>
 							<dl class="layui-nav-child">
 		            			<dd><a jumpUrl="" href="javascript:;">水费</a></dd>
 		            			<dd><a jumpUrl="" href="javascript:;">电费</a></dd>
-		            			<dd><a jumpUrl="" href="javascript:;">物业费费</a></dd>
+		            			<dd><a jumpUrl="" href="javascript:;">物业费</a></dd>
 						 	</dl>
 						</li>
 						 
@@ -98,14 +99,29 @@
 		  	</div>
 		  	
 		  	<!-- 内容主体区域 -->
-			<div class="layui-body" id="admin-body" style="height: 90%;">
+<!-- 			<div class="layui-body" id="admin-body" style="padding: 20px; height: 90%;">
 				<iframe id="iframe" src="/marshow/backStage/main.html" style="width: 100%; height: 100%;"></iframe>
 			</div>
-		  	
+			 -->
+			
+
+			<div class="layui-body" id="admin-body">
+				<div class="layui-tab admin-nav-card layui-tab-brief" lay-allowClose="true" lay-filter="admin-tab">
+					<ul class="layui-tab-title">
+						<li class="layui-this">控制面板</li>
+					</ul>
+					<div class="layui-tab-content">
+						<div class="layui-tab-item layui-show"><iframe src="/marshow/backStage/main.html"></iframe></div>
+					</div>
+				</div>
+			</div>
+			
 		  	<!-- 底部版权信息 -->
 		  	<div class="layui-footer">
-		  		<div class="layui-main" style="margin-left: 50%">
-		  			© minqi Copyright - 2017-08
+		  		<div class="layui-main" style="margin-left: 40%">
+		  			© minqi Copyright
+		  			<a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=eUhJSEBKTk5ATkk5CAhXGhYU" target="_blank">意见反馈</a>
+		  			<a href="http://weibo.com/u/1970968631" target="_blank">微博</a>
 		  		</div>
 		  	</div>
 		  	
