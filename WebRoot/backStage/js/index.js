@@ -29,6 +29,12 @@ $('a').on('click', function() {
 
 $('#logOut').on('click', function() {
 	alert("logOut点击了");
+	//完成后台退出登录操作
+	
+	
+	//返回到登录界面
+	window.location.href = "login.html";
+	
 });
 
 
