@@ -19,8 +19,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
 	
-	<script type="text/javascript" src="lib/formTools.js"></script>
-	<script type="text/javascript" src="lib/jquery-3.1.1.js"></script>
+	<script type="text/javascript" src="plugins/formTools.js"></script>
+	<script type="text/javascript" src="plugins/jquery-3.1.1.js"></script>
 	<script type="text/javascript">
 	  	var fun1 = function(){debugger
 	  		var json = {"key1" : "哈哈哈","key2" : "吼吼吼"};
