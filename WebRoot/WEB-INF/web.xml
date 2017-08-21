@@ -28,7 +28,7 @@
 	
 	<error-page>												<!-- 配置错误定向页面 -->
 		<error-code>404</error-code>
-		<location>/index.jsp</location>
+		<location>/errorPage.html</location>
 	</error-page>
      
     <servlet-mapping>  
