@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>index.html</title>
+	
+    	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    	<meta http-equiv="description" content="this is my page">
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+		<link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all" />
+
+		<script src="../plugins/layui/layui.js"></script>
+		<script src="../plugins/jquery-3.1.1.js"></script>
+		<script src="../plugins/formTools.js"></script>
+		<script src="js/index.js"></script>
+		
+		<style type="text/css">
+		
+		a {
+			color: gray!important;
+			font-family: Microsoft YaHei;
+		}
+		img {
+			height: 100%;
+			width: 100%;
+		}
+		.layui-header.header {
+			z-index: 10000;
+			background-color: white;
+		}
+		.floor1 {
+			background-color: #f2f2f2;
+			height: 200px;
+			width: 100%;
+		}
+		
+		.floor2 {
+			background-color: #eeeeee;
+			height: 200px;
+			width: 100%;
+		}
+		
+		.floor3 {
+			background-color: #e2e2e2;
+			height: 200px;
+			width: 100%;
+		}
+		.floor4 {
+			background-color: #dddddd;
+			height: 200px;
+			width: 100%;
+		}
+		</style>
+		
+	</head>
+  
+	<body>
+		
+		<div class="layui-layout layui-layout-admin">
+		
+			<!-- 水平头部导航栏 -->
+			<div class="layui-header header">
+			
+				<div class="layui-logo">
+		    		<b>武汉轻应用科技有限公司</b>
+		    	</div>
+				
+		    	<ul class="layui-nav layui-layout-right">
+		    		<li class="layui-nav-item">
+ 		    			<a href="javascript:;">审批/代办<span class="layui-badge">6</span></a>
+		    		</li>
+	      					    		
+		      		<li class="layui-nav-item">
+		        		<a><img src="http://t.cn/RCzsdCq" class="layui-nav-img">闵奇</a>
+		        		<dl class="layui-nav-child">
+		          			<dd id="userInfo">
+		          				<a jumpUrl="/backStage/userInfo.html" href="javascript:;"><i class="layui-icon">&#xe612;</i>  个人信息</a>
+	          				</dd>
+		       				<dd id="setUp">
+		       					<a jumpUrl="/backStage/setUp.html" href="javascript:;"><i class="layui-icon">&#xe614;</i>  设置</a>
+	       					</dd>
+							<dd id="logOut">
+								<a href="javascript:;"><i class="layui-icon">&#xe64d;</i>  注销</a>
+							</dd>
+		        		</dl>
+		      		</li>
+
+		    	</ul>
+			
+			</div>
+		
+	
+			<!-- 首页轮播图 -->
+			<div class="layui-carousel" id="test1">
+		  		<div carousel-item>
+				    <div><img alt="" src="../images/homepage_bg1.jpg"></div>
+				    <div><img alt="" src="../images/homepage_bg2.jpg"></div>
+				    <div><img alt="" src="../images/homepage_bg3.jpg"></div>
+				</div>
+			</div>
+			
+			<!--  -->
+			<div class="floor1">
+				
+			</div>
+			
+			<!--  -->
+			<div class="floor2">
+				
+			</div>
+			
+			<!--  -->
+			<div class="floor3">
+				
+			</div>
+		    
+			<!--  -->
+			<div class="floor4">
+				
+			</div>
+    
+    	</div>
+    	
+	</body>
+
+
+</html>
