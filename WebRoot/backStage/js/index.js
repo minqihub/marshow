@@ -12,7 +12,7 @@ layui.use('element', function(){
 
 
 //iframe自适应
-$(window).on('resize', function() {debugger
+$(window).on('resize', function() {
 	var $content = $('.admin-nav-card .layui-tab-content');
 	$content.height($(this).height() - 147);
 	$content.find('iframe').each(function() {
@@ -32,14 +32,13 @@ shadeMobile.on('click', function() {
 	$('body').removeClass('site-mobile');
 });
 
-
 /**
  * 导航的点击事件，替换iframe的内容
  * 注意：
  * 1.jumpUrl测试环境是/marshow/xx/x.html；而正是环境无需项目名，即/xx/x.html
  * 2.正式环境运行缓存，去掉Math的随机数
  */
-$('a').on('click', function() {debugger
+$('a').on('click', function() {
 	var jumpUrl = $(this).attr("jumpUrl");
 	if(!form.isNull(jumpUrl)){
 //		$("#iframe").attr("src", jumpUrl+"?rid="+Math.random());
@@ -55,6 +54,9 @@ $('a').on('click', function() {debugger
 		var content = '<div class="layui-tab-item layui-show"><iframe src="' + "/marshow" + jumpUrl + '"></iframe></div>';
 		$(".layui-tab-content").append(content);
 		
+		//手机端选择后，自动隐藏导航
+		$('body').removeClass('site-mobile');
+		
 		//动态加载的需init一下
 		layui.element.init();
 	}else{
@@ -62,13 +64,15 @@ $('a').on('click', function() {debugger
 	}
 });
 
-$(document).on('keydown', function() {debugger
+//键盘监听
+$(document).on('keydown', function() {
 	var e = window.event;
 	if(e.keyCode === 76 && e.altKey) {
 		alert("你按下了alt+l");
 	}
 });
 
+//退出登录
 $('#logOut').on('click', function() {
 	alert("logOut点击了");
 	//完成后台退出登录操作

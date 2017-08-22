@@ -33,7 +33,13 @@
                     	</label>
 						<input type="password" name="password" lay-verify="password" autocomplete="off" placeholder="这里输入密码" class="layui-input">
 					</div>
-					
+<!-- 验证码功能待定										
+					<div class="layui-form-item">
+						<label>请输入验证码</label>
+						<input type="text" name="verifyCode" >
+						<img class="login-icon" src="../images/qq.png" alt="QQ登陆">
+					</div>
+-->
 					<div class="layui-form-item">
 						<div class="beg-pull-left beg-login-remember">
 							<label>记住帐号？</label>
@@ -45,28 +51,27 @@
 						</div>
 						<div class="beg-clear"></div>
 					</div>
+										
+					<div class="layui-form-item">
+						<div>
+							<label>其他登录方式 >> &nbsp;</label>
+							<a id="qqLogin" href="javascript:;"><img class="login-icon" src="../images/qq.png" alt="QQ登陆"></a>&nbsp;
+							<a id="wechatLogin" href="javascript:;"><img class="login-icon" src="../images/wechat.png" alt="微信登录"></a>&nbsp;
+							<a id="weiboLogin" href="javascript:;"><img class="login-icon" src="../images/weibo.png" alt="微博登录"></a>
+						</div>
+					</div>
 					
 				</form>
 			</div>
 			
-			<footer><p>Beginner © </p></footer>
+			<footer><p>© minqi Copyright</p></footer>
 			
 		</div>
 		
 		<script type="text/javascript" src="../plugins/layui/layui.js"></script>
-		<script>
-			layui.use(['layer', 'form'], function() {
-				var layer = layui.layer,
-					$ = layui.jquery,
-					form = layui.form();
-					
-				form.on('submit(login)',function(data){
-					
-					location.href='index.html';
-					return false;
-				});
-			});
-		</script>
+		<script src="../plugins/jquery-3.1.1.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
+
 	</body>
 
 </html>
