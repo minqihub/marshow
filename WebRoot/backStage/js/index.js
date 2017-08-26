@@ -51,7 +51,7 @@ $('a').on('click', function() {
 		var title = '<li class="layui-this">' + name + '</li>';
 		$(".layui-tab-title").append(title);
 
-		var content = '<div class="layui-tab-item layui-show"><iframe src="' + "/marshow" + jumpUrl + '"></iframe></div>';
+		var content = '<div class="layui-tab-item layui-show"><iframe src="' + "/marshow" + jumpUrl + "?rid="+Math.random() + '"></iframe></div>';
 		$(".layui-tab-content").append(content);
 		
 		//手机端选择后，自动隐藏导航
