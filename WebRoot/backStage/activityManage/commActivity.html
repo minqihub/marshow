@@ -1,17 +1,72 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>login.html</title>
+  	<head>
+   		<title>login.html</title>
 	
-    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-    <meta http-equiv="description" content="this is my page">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    	<meta http-equiv="description" content="this is my page">
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-control" content="no-cache">
+		<meta http-equiv="Cache" content="no-cache">
     
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all" />
     <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
-
-  </head>
+		<style type="text/css">
+			input.layui-input {
+				width: 20%;
+			}
+			
+			
+			
+			
+			
+		</style>
+	</head>
   
-  <body>
-    这是社区活动界面. <br>
-  </body>
+	<body>
+	
+		社区生效中的活动-表格-（包含查看详情）. <br>
+		
+	   	社区活动已经完毕的活动-表格-（包含查看详情）. <br>
+		
+		
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		
+		活动名称：<input type="text" class="layui-input" id="name"><br>
+		活动发起人：<input type="text" class="layui-input" id=""><br>
+    	活动开始时间：<input type="text" class="layui-input" id="startTime"><br>
+      	活动结束时间：<input type="text" class="layui-input" id="endTime"><br>
+      	活动宣传图片：<input type="text" value="限单张图片，用活动列表展示的一张图片"><br>
+    	活动内容：<textarea id="content"></textarea>
+    
+    	<button class="layui-btn">确定发布（管理员可以直接发布，普通用户需要审核。触发更新活动页面的数据更新）</button>
+    	
+    	
+    	<p>---------------------------分割线------------------------------</p>
+    	
+    	此为物业通知<br>
+    	
+    	通知标题：<input type="text" class="layui-input" id=""><br>
+    	通知内容：<input type="text" class="layui-input" id=""><br>
+    	
+    	
+    	
+    	
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    
+        <script src="../../plugins/layui/layui.js"></script>
+		<script src="js/commActivity.js"></script>    
+    </body>
 </html>
