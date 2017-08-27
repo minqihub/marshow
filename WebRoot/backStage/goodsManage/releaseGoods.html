@@ -8,12 +8,13 @@
     	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
     
 		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all" />
-    	<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
 	
 		<style type="text/css">
-		a {
-			color: #1E9FFF;
-		}
+			em {
+				color: red;
+				font-size: 18px;
+			}
+
 		</style>
 		
   	</head>
@@ -29,7 +30,72 @@
 			<div class="layui-tab-content">
 			
 				<div class="layui-tab-item layui-show">
-					单个商品发布的内容
+					<form class="layui-form" action="">
+					
+			  			<div class="layui-form-item">
+			    			<label class="layui-form-label">商品名称<em>*</em></label>
+			    			<div class="layui-input-block">
+			      				<input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+			    				<div class="layui-form-mid layui-word-aux"><i class="layui-icon">&#x1007; 错误：不能全是空格</i></div>
+			    			</div>
+			  			</div>
+			  
+			  			<div class="layui-form-item">
+			    			<label class="layui-form-label">商品图片<em>*</em></label>
+			    			<div class="layui-input-inline">
+			      				<input name="" type="text" required lay-verify="required" class="layui-input" id=""><br>
+			    			</div>
+			    			<div class="layui-form-mid layui-word-aux"><i class="layui-icon">&#x1007; 错误：开始时间不能大于结束时间</i></div>
+			  			</div>
+			  			
+			  			
+			  			<div class="layui-form-item">
+			    			<label class="layui-form-label">商品分类<em>*</em></label>
+			    			<div class="layui-input-inline">
+			      				<select name="city" lay-verify="required">
+			        				<option value=""></option>
+			        				<option value="0">生活用品</option>
+							        <option value="1">体育用品</option>
+							        <option value="2">影像书籍</option>
+							        <option value="3">虚拟物品</option>
+							        <option value="4">动物植物</option>
+			      				</select>
+			    			</div>
+			  			</div>
+			  			
+			  			<div class="layui-form-item">
+						    <label class="layui-form-label">新旧程度<em>*</em></label>
+						    <div class="layui-input-block">
+								<input type="radio" name="degree" value="100%" title="全新" checked>
+						      	<input type="radio" name="degree" value="90%" title="九成新">
+						      	<input type="radio" name="degree" value="80%" title="八成新">
+						      	<input type="radio" name="degree" value="70%" title="七成新">
+			    			</div>
+			  			</div>
+			  			
+			  			<div class="layui-form-item">
+			    			<label class="layui-form-label">时间范围<em>*</em></label>
+			    			<div class="layui-input-inline">
+			      				<input name="startTime" type="text" required lay-verify="required" class="layui-input" id="startTime"><br>
+			    			</div>
+			    			<div class="layui-form-mid layui-word-aux"><i class="layui-icon">&#x1007; 错误：开始时间不能大于结束时间</i></div>
+			  			</div>
+			  			
+			  			
+			  			<div class="layui-form-item layui-form-text">
+			    			<label class="layui-form-label">商品描述<em>*</em></label>
+			    			<div class="layui-input-block">
+			      				<textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+			    			</div>
+			  			</div>
+			  			
+			  			<div class="layui-form-item">
+			    			<div class="layui-input-block">
+			      				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+			      				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			    			</div>
+			  			</div>
+					</form>
 				</div>
 				
 				<div class="layui-tab-item">

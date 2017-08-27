@@ -1,0 +1,173 @@
+layui.use('table', function(){
+	var table = layui.table;
+	
+	var reloadObj = table.render({
+//		id: 'test',		//相当于lay-filter
+		elem: '#demo',
+//		url: '/marshow/test/getData.do',
+		data: [{"id":10000,"username":"user-0","sex":"女","city":"城市-0","sign":"签名-0","experience":255,"logins":24,"wealth":82830700,"classify":"作家","score":57},{"id":10001,"username":"user-1","sex":"男","city":"城市-1","sign":"签名-1","experience":884,"logins":58,"wealth":64928690,"classify":"词人","score":27},{"id":10002,"username":"user-2","sex":"女","city":"城市-2","sign":"签名-2","experience":650,"logins":77,"wealth":6298078,"classify":"酱油","score":31},{"id":10003,"username":"user-3","sex":"女","city":"城市-3","sign":"签名-3","experience":362,"logins":157,"wealth":37117017,"classify":"诗人","score":68},{"id":10004,"username":"user-4","sex":"男","city":"城市-4","sign":"签名-4","experience":807,"logins":51,"wealth":76263262,"classify":"作家","score":6},{"id":10005,"username":"user-5","sex":"女","city":"城市-5","sign":"签名-5","experience":173,"logins":68,"wealth":60344147,"classify":"作家","score":87},{"id":10006,"username":"user-6","sex":"女","city":"城市-6","sign":"签名-6","experience":982,"logins":37,"wealth":57768166,"classify":"作家","score":34},{"id":10007,"username":"user-7","sex":"男","city":"城市-7","sign":"签名-7","experience":727,"logins":150,"wealth":82030578,"classify":"作家","score":28},{"id":10008,"username":"user-8","sex":"男","city":"城市-8","sign":"签名-8","experience":951,"logins":133,"wealth":16503371,"classify":"词人","score":14},{"id":10009,"username":"user-9","sex":"女","city":"城市-9","sign":"签名-9","experience":484,"logins":25,"wealth":86801934,"classify":"词人","score":75},{"id":10010,"username":"user-10","sex":"女","city":"城市-10","sign":"签名-10","experience":1016,"logins":182,"wealth":71294671,"classify":"诗人","score":34},{"id":10011,"username":"user-11","sex":"女","city":"城市-11","sign":"签名-11","experience":492,"logins":107,"wealth":8062783,"classify":"诗人","score":6},{"id":10012,"username":"user-12","sex":"女","city":"城市-12","sign":"签名-12","experience":106,"logins":176,"wealth":42622704,"classify":"词人","score":54},{"id":10013,"username":"user-13","sex":"男","city":"城市-13","sign":"签名-13","experience":1047,"logins":94,"wealth":59508583,"classify":"诗人","score":63},{"id":10014,"username":"user-14","sex":"男","city":"城市-14","sign":"签名-14","experience":873,"logins":116,"wealth":72549912,"classify":"词人","score":8},{"id":10015,"username":"user-15","sex":"女","city":"城市-15","sign":"签名-15","experience":1068,"logins":27,"wealth":52737025,"classify":"作家","score":28},{"id":10016,"username":"user-16","sex":"女","city":"城市-16","sign":"签名-16","experience":862,"logins":168,"wealth":37069775,"classify":"酱油","score":86},{"id":10017,"username":"user-17","sex":"女","city":"城市-17","sign":"签名-17","experience":1060,"logins":187,"wealth":66099525,"classify":"作家","score":69},{"id":10018,"username":"user-18","sex":"女","city":"城市-18","sign":"签名-18","experience":866,"logins":88,"wealth":81722326,"classify":"词人","score":74},{"id":10019,"username":"user-19","sex":"女","city":"城市-19","sign":"签名-19","experience":682,"logins":106,"wealth":68647362,"classify":"词人","score":51},{"id":10020,"username":"user-20","sex":"男","city":"城市-20","sign":"签名-20","experience":770,"logins":24,"wealth":92420248,"classify":"诗人","score":87},{"id":10021,"username":"user-21","sex":"男","city":"城市-21","sign":"签名-21","experience":184,"logins":131,"wealth":71566045,"classify":"词人","score":99},{"id":10022,"username":"user-22","sex":"男","city":"城市-22","sign":"签名-22","experience":739,"logins":152,"wealth":60907929,"classify":"作家","score":18},{"id":10023,"username":"user-23","sex":"女","city":"城市-23","sign":"签名-23","experience":127,"logins":82,"wealth":14765943,"classify":"作家","score":30},{"id":10024,"username":"user-24","sex":"女","city":"城市-24","sign":"签名-24","experience":212,"logins":133,"wealth":59011052,"classify":"词人","score":76},{"id":10025,"username":"user-25","sex":"女","city":"城市-25","sign":"签名-25","experience":938,"logins":182,"wealth":91183097,"classify":"作家","score":69},{"id":10026,"username":"user-26","sex":"男","city":"城市-26","sign":"签名-26","experience":978,"logins":7,"wealth":48008413,"classify":"作家","score":65},{"id":10027,"username":"user-27","sex":"女","city":"城市-27","sign":"签名-27","experience":371,"logins":44,"wealth":64419691,"classify":"诗人","score":60},{"id":10028,"username":"user-28","sex":"女","city":"城市-28","sign":"签名-28","experience":977,"logins":21,"wealth":75935022,"classify":"作家","score":37},{"id":10029,"username":"user-29","sex":"男","city":"城市-29","sign":"签名-29","experience":647,"logins":107,"wealth":97450636,"classify":"酱油","score":27}],
+//		where: {token: 'sasasas', id: 123},
+		method: 'get',		//post\get
+		cols: [[
+//		        {checkbox: true, fixed: true},
+		        {field:'id', title: 'ID', width:80, sort: true, fixed: true},
+		        {field:'username', title: '用户名', width:80, edit:'text'},
+		        {field:'sex', title: '性别', width:80, sort: true},
+		        {field:'city', title: '城市', width:80},
+		        {field:'sign', title: '签名', width:177},
+		        {field:'experience', title: '积分', sort: true, width:80},
+		        {field:'score', title: '评分', sort: true, width:80},
+		        {field:'classify', title: '职业', width:80},
+		        {field:'wealth', title: '财富', sort: true, width:135},
+		        {fixed: 'right', width:150, align:'center', toolbar: '#barDemo'},
+		]],
+		loading: false,		//默认true，但仅在接口取值的情况下
+    	page: true,
+    	height: 615,
+    	even: true ,	//开启隔行背景
+    	size: 'sm' ,	//小尺寸的表格sm\lg
+    	skin: 'line' ,//行边框风格line\row\nob
+    	done: function(res, curr, count){
+		    //如果是异步请求数据方式，res即为你接口返回的信息。
+		    //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+		    console.log(res);
+		    
+		    //得到当前页码
+		    console.log(curr); 
+		    
+		    //得到数据总量
+		    console.log(count);
+		}
+	});
+	
+	//监听checkbox
+	table.on('checkbox(test)', function(obj){debugger
+		console.log(obj.checked); 	//当前是否选中状态
+		console.log(obj.data); 		//选中行的相关数据
+		console.log(obj.type); 		//如果触发的是全选，则为：all，如果触发的是单选，则为：one
+	});
+	
+	
+	//监听工具条
+	table.on('tool(test)', function(obj){debugger 		//注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+		var data = obj.data; //获得当前行数据
+	  	var layEvent = obj.event; //获得 lay-event 对应的值
+	  	var tr = obj.tr; //获得当前行 tr 的DOM对象
+	 
+	  	if(layEvent === 'detail'){debugger //查看
+	  		//do somehing
+	  		
+	  	} else if(layEvent === 'del'){ //删除
+	  		layer.confirm('真的删除行么', function(index){
+	  			obj.del(); //删除对应行（tr）的DOM结构
+	  			layer.close(index);
+	  			//向服务端发送删除指令
+	  		});
+	  	} else if(layEvent === 'edit'){debugger //编辑
+	  		//do something
+	    
+	  		//同步更新缓存对应的值
+	  		obj.update({
+	  			username: '123',
+	  			title: 'xxx'
+	  		});
+	  	}
+	});
+	
+	//监听单元格编辑事件
+	table.on('edit(test)', function(obj){debugger
+		console.log(obj.value); //得到修改后的值
+		console.log(obj.field); //当前编辑的字段名
+		console.log(obj.data); //所在行的所有相关数据  
+		  
+		data[field] = value; //更新缓存中的值
+	});
+	
+	
+	$('#searchBtn').on('click', function() {debugger
+		reloadObj.reload({
+			where: { //设定异步数据接口的参数
+				id: $('#demoReload').val()
+			}
+		});
+		
+	});
+	
+	
+	//表格重载，只有url接口取数据才行
+//	reloadObj.reload({
+//		where: { //设定异步数据接口的参数
+//			key: 'xxx',
+//			value: 'yyy'
+//		}
+//	});
+
+});
+
+
+layui.use('laydate', function(){
+	var laydate = layui.laydate;
+	
+	
+	
+	var dateObj = laydate.render({
+		elem: '#startTime',
+		type: 'datetime',
+		range: '~',		//或range： '~'连接符
+		format: 'yyyy-MM-dd HH:mm:ss',
+//		value: '',		//初始值
+//		min: '',
+//		max: '',
+		trigger: 'click',	//输入框默认focus，非输入框默认click
+//		show: true,
+//		closeStop: '#startTime',
+//		position: '',	//默认absolute
+//		zIndex: 9999999,		//如果position设置为static，则无效
+//		showBottom: true,		//显示底部按钮
+//		btns: ['clear','now','comfirm'],		//此为默认的、控件可识别的
+//		lang: 'en',		//中文zn，英文en
+//		theme: '',		//默认default，molv，#颜色值，grid
+		calendar: true,		//是否显示公历节日
+//		mark:{			//自定义重要的日子
+//			'0-4-21':'闵奇生日',	//0-表示每一年
+//			'2017-8-15':'项目开始构思'
+//		},
+//		done:function(value, date){debugger
+//			if(date.year === 2017 && date.month === 4 && date.date === 21){
+//				dateObj.hint("提示：这一天是闵奇的生日");
+//			}
+//		},
+//		ready:function(date){
+//			console.info(date);
+//		},
+//		change:function(value, date, endDate){
+//			
+//		},
+//		done:function(value, date, endDate){		//点击日期、清空、现在、确定会触发
+//			
+//		},
+	});
+});
+
+
+
+
+
+
+layui.use('layedit', function(){
+	var layedit = layui.layedit;
+	
+	layedit.build('content');
+	
+});
+
+
+layui.use('form', function(){
+	  var form = layui.form;
+	  
+	  //监听提交
+	  form.on('submit(formDemo)', function(data){
+	    layer.msg(JSON.stringify(data.field));
+	    return false;
+	  });
+});

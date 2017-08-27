@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  	<head>
+   		<title>login.html</title>
+	
+    	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    	<meta http-equiv="description" content="this is my page">
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-control" content="no-cache">
+		<meta http-equiv="Cache" content="no-cache">
+    
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all" />
+		<style type="text/css">
+			em {
+				color: red;
+				font-size: 18px;
+			}
+			
+			i.layui-icon {
+				color: red;
+				font-size: 10px;
+			}
+			
+			label.layui-form-label {
+				/* width: 30%; */
+			}
+			
+			/* 非一整行 */
+			div.layui-input-inline {
+				width: 20%!important;
+			}
+			
+			/* 一整行 */
+			div.layui-input-block {
+			}
+			
+			div.layui-field-box {
+				padding: 20px!important;
+			}
+			
+		
+		</style>
+	</head>
+  
+	<body>
+		
+		<fieldset class="layui-elem-field layui-field-title">
+  			<legend>已发布的活动</legend>
+  			<div class="layui-field-box">
+				
+				<table id="demo" lay-filter="test"></table>
+   		
+		   		<script type="text/html" id="barDemo">
+  					<a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a>
+  					<a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
+  					<a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
+				</script>
+				
+			</div>
+		</fieldset>
+		
+		<fieldset class="layui-elem-field layui-field-title">
+  			<legend>活动详情</legend>
+  			<div class="layui-field-box">
+  			
+				<form class="layui-form" action="">
+		  			<div class="layui-form-item">
+		    			<label class="layui-form-label">活动标题<em>*</em></label>
+		    			<div class="layui-input-block">
+		      				<input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+		    				<div class="layui-form-mid layui-word-aux"><i class="layui-icon">&#x1007; 错误：不能全是空格</i></div>
+		    			</div>
+		  			</div>
+		  
+		  			<div class="layui-form-item">
+		    			<label class="layui-form-label">封面图片<em>*</em></label>
+		    			<div class="layui-input-inline">
+		      				<input name="" type="text" required lay-verify="required" class="layui-input" id=""><br>
+		    			</div>
+		    			<div class="layui-form-mid layui-word-aux"><i class="layui-icon">&#x1007; 错误：开始时间不能大于结束时间</i></div>
+		  			</div>
+		  			
+		  			<div class="layui-form-item">
+		    			<label class="layui-form-label">时间范围<em>*</em></label>
+		    			<div class="layui-input-inline">
+		      				<input name="startTime" type="text" required lay-verify="required" class="layui-input" id="startTime"><br>
+		    			</div>
+		    			<div class="layui-form-mid layui-word-aux"><i class="layui-icon">&#x1007; 错误：开始时间不能大于结束时间</i></div>
+		  			</div>
+		  			
+		  			<div class="layui-form-item layui-form-text">
+		    			<label class="layui-form-label">文本域<em>*</em></label>
+		    			<div class="layui-input-block">
+		      				<textarea name="content" id="content" required  lay-verify="required"></textarea>
+		    				<div class="layui-form-mid layui-word-aux"><i class="layui-icon">&#x1007; 错误：不能全是空格</i></div>
+		    			</div>
+		  			</div>
+		  			
+		  			<div class="layui-form-item">
+		    			<div class="layui-input-block">
+		      				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+		      				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    			</div>
+		  			</div>
+				</form>
+				
+			</div>
+		</fieldset>
+		
+		
+		
+        <script src="../../plugins/layui/layui.js"></script>
+		<script src="js/commActivity.js"></script>    
+    </body>
+</html>
