@@ -14,6 +14,10 @@ import java.security.MessageDigest;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import com.framework.utils.DataUtils;
@@ -29,49 +33,28 @@ import com.framework.utils.PropertiesReader;
 * @copyright: 深圳市快金数据技术服务有限公司
 * 
 * ID和Key请到官网申请：http://www.kdniao.com/ServiceApply.aspx
+* 快递短信：http://www.kdniao.com/UserCenter/sms/mySms.aspx
 */
 
+@Controller
+@RequestMapping("/logistics")
 public class Logistics {
 	
 	//配置文件读取对象
 	private static PropertiesReader property = PropertiesReader.getInstance();
 	
-	private static final String EBusinessID = property.getProperty("EBusinessID");		//电商ID
-	private static final String KDN_AppKey = property.getProperty("KDN_AppKey");		//电商加密私钥
-	private static final String ReqURL = "http://testapi.kdniao.cc:8081/api/dist";		//测试请求url
-//	private static final String ReqURL = "http://api.kdniao.cc/api/dist";				//正式请求url
+	private static final String EBusinessID = property.getProperty("KDN_EBusinessID");		//电商ID
+	private static final String AppKey = property.getProperty("KDN_AppKey");				//电商加密私钥
+	private static final String ReqURL = "http://testapi.kdniao.cc:8081/api/dist";			//测试请求url
+//	private static final String ReqURL = "http://api.kdniao.cc/api/dist";					//正式请求url
 	
-	//测试DEMO
-	public static void main(String[] args) {
-		Logistics api = new Logistics();
-		try {
-			//物流信息订阅
-			String result1 = api.orderTracesSubByJson();
-			System.out.print(result1);
-			
-			//物流轨迹	测试ok
-			
-			//单号识别（返回空结果）
-//			String result2 = api.getOrderTracesByJson("424383991450");
-//			System.out.print(result2);
 
-			//在线下单，预约取件（未开通该接口）
-//			String result3 = api.orderOnline();
-//			System.out.print(result3);
-			
-			//电子面单（未开通该接口）
-//			String result4 = api.orderOnlineByJson();
-//			System.out.print(result4);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/**
-     * Json方式  物流信息订阅
+     * 物流信息订阅
 	 * @throws Exception 
      */
+	@RequestMapping("/orderTracesSubByJson.do")
 	public String orderTracesSubByJson() throws Exception{
 		String requestData =   "{'OrderCode': 'SF201608081055208281'," +
                                 "'ShipperCode':'SF'," +
@@ -102,7 +85,7 @@ public class Logistics {
 		params.put("RequestData", urlEncoder(requestData, "UTF-8"));
 		params.put("EBusinessID", EBusinessID);
 		params.put("RequestType", "1008");
-		String dataSign = encrypt(requestData, KDN_AppKey, "UTF-8");
+		String dataSign = encrypt(requestData, AppKey, "UTF-8");
 		params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
 		params.put("DataType", "2");
 		
@@ -115,19 +98,32 @@ public class Logistics {
 	
 	
 	/**
-     * Json方式 查询订单物流轨迹
-	 * @param expCode 快递公司编码
-	 * @param expNo 物流单号
-	 * @return
+     * 实时查询订单物流轨迹
+	 * @param json 参数：LogisticCode物流单号
+	 * @return State 2-在途中,3-签收,4-问题件
 	 * @throws Exception
 	 */
-	public String getOrderTraces(String XmlData,HttpServletRequest request) throws Exception{
-		JSONObject json = Json.toJO(XmlData);
-		String ShipperCode = json.getString("ShipperCode");
-		String LogisticCode = json.getString("LogisticCode");
-		if(DataUtils.isNull(LogisticCode) || DataUtils.isNull(LogisticCode)){
+	@RequestMapping("/getTraces.do")
+	public JSONObject getTraces(String json, HttpServletRequest request) throws Exception{
+		//http://localhost:8080/marshow/logistics/getTraces.do
+		JSONObject data = Json.toJO(json);
+		
+		//测试数据
+		data.put("LogisticCode", "3101342580204");
+		
+		if(DataUtils.isNull(data.getString("LogisticCode"))){
 			throw new RuntimeException("物流公司或物流单号不能为空！");
 		}
+		
+		JSONObject shipperInfo = recognizeShipper(data.getString("LogisticCode"));
+		
+		
+		if(shipperInfo.getString("ShipperCode").equals("")){
+			throw new RuntimeException("物流公司未能正确识别！");
+		}
+		
+		String ShipperCode = shipperInfo.getString("ShipperCode");
+		String LogisticCode = data.getString("LogisticCode");
 		
 		String requestData = "{'OrderCode':'','ShipperCode':'" + ShipperCode + "','LogisticCode':'" + LogisticCode + "'}";
 		
@@ -135,34 +131,55 @@ public class Logistics {
 		params.put("RequestData", urlEncoder(requestData, "UTF-8"));
 		params.put("EBusinessID", EBusinessID);
 		params.put("RequestType", "1002");
-		String dataSign=encrypt(requestData, KDN_AppKey, "UTF-8");
+		String dataSign=encrypt(requestData, AppKey, "UTF-8");
 		params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
 		params.put("DataType", "2");
 		
-		String result = sendPost(ReqURL, params);	
-		return result;
+		JSONObject returnJson = Json.toJO(sendPost(ReqURL, params));
+		returnJson.put("ShipperName", shipperInfo.getString("ShipperName"));
+		return returnJson;
 	}
 	
 	/**
-     * Json方式 单号识别
-	 * @throws Exception 
-     */
-	public String getOrderTracesByJson(String expNo) throws Exception{
-		String requestData = "{'LogisticCode':'" + expNo + "'}";
+	 * 单号识别
+	 * @param expNum 快递单号
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/recognizeShipper.do")
+	public JSONObject recognizeShipper(String expNum) throws Exception{
+		//http://localhost:8080/marshow/logistics/recognizeShipper.do
+		JSONObject returnJson = new JSONObject();
+		
+//		expNum = "3101342580204";
+		
+		String requestData = "{'LogisticCode':'" + expNum + "'}";
 		
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("RequestData", urlEncoder(requestData, "UTF-8"));
 		params.put("EBusinessID", EBusinessID);
 		params.put("RequestType", "2002");
-		String dataSign = encrypt(requestData, KDN_AppKey, "UTF-8");
+		String dataSign = encrypt(requestData, AppKey, "UTF-8");
 		params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
 		params.put("DataType", "2");
 		
-		String url = "http://testapi.kdniao.cc:8081/Ebusiness/EbusinessOrderHandle.aspx";		//测试地址
-//		String url = "http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx";				//正式地址
+//		String url = "http://testapi.kdniao.cc:8081/Ebusiness/EbusinessOrderHandle.aspx";		//测试地址
+		String url = "http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx";				//正式地址
 		
 		String result = sendPost(url, params);
-		return result;
+		
+		JSONObject resultJson = Json.toJO(result);
+		
+		if(resultJson.getString("Success").equals("true")){
+			JSONArray shippers = Json.toJA(resultJson.get("Shippers").toString());
+//			JSONArray shippers = Json.toJA(resultJson.get("Shippers"));
+			JSONObject shipper = Json.toJO(shippers.get(0));
+			returnJson.put("ShipperCode", shipper.getString("ShipperCode"));
+			returnJson.put("ShipperName", shipper.getString("ShipperName"));
+		}else{
+			returnJson.put("ShipperCode", "");
+		}
+		return returnJson;
 	}
 	
 	/**
@@ -195,7 +212,7 @@ public class Logistics {
 		params.put("RequestData", urlEncoder(requestData, "UTF-8"));
 		params.put("EBusinessID", EBusinessID);
 		params.put("RequestType", "1007");
-		String dataSign = encrypt(requestData, KDN_AppKey, "UTF-8");
+		String dataSign = encrypt(requestData, AppKey, "UTF-8");
 		params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
 		params.put("DataType", "2");
 		
@@ -245,7 +262,7 @@ public class Logistics {
 		params.put("RequestData", urlEncoder(requestData, "UTF-8"));
 		params.put("EBusinessID", EBusinessID);
 		params.put("RequestType", "1001");
-		String dataSign = encrypt(requestData, KDN_AppKey, "UTF-8");
+		String dataSign = encrypt(requestData, AppKey, "UTF-8");
 		params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
 		params.put("DataType", "2");
 		
@@ -375,6 +392,7 @@ public class Logistics {
                 ex.printStackTrace();
             }
         }
+        System.out.println("快捷通返回："+result);
         return result.toString();
     }
 	
