@@ -4,72 +4,171 @@
     	<title>index.html</title>
     	
   		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-<!-- 		<meta name="viewport" content="width=device-width, initial-scale=1" /> -->
     	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
     	<meta http-equiv="description" content="this is my page">
     	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
     
-     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.ios.min.css">
-     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.min.css">
+     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.min.css">
+     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.colors.min.css">
+     	<style type="text/css">
+     	.toolbar.toolbar-bottom {
+     		background-color: white;
+     	}
+     	.swiper-slide {
+     		height: 200px;
+     	}
+     	img.swiper-img {
+     		height: 200px;
+     		width: 100%;
+     	}
+     	</style>
   	</head>
   
   	<body>
-    	This is my HTML page. <br>
     	
-               <div class="statusbar-overlay"></div>
-                  <!-- Panels overlay-->
-                  <div class="panel-overlay"></div>
-                  <!-- Left panel with reveal effect-->
-                  <div class="panel panel-left panel-reveal">
-                    <div class="content-block">
-                      <p>Left panel content goes here</p>
-                    </div>
-                  </div>
-                  <!-- Views -->
-                  <div class="views">
-                    <!-- Your main view, should have "view-main" class -->
-                    <div class="view view-main">
-                      <!-- Top Navbar-->
-                      <div class="navbar">
-                        <div class="navbar-inner">
-                          <!-- We need cool sliding animation on title element, so we have additional "sliding" class -->
-                          <div class="center sliding">Awesome App</div>
-                          <div class="right">
-                            <!-- 
-                              Right link contains only icon - additional "icon-only" class
-                              Additional "open-panel" class tells app to open panel when we click on this link
-                            -->
-                            <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
-                      <div class="pages navbar-through toolbar-through">
-                        <!-- Page, "data-page" contains page name -->
-                        <div data-page="index" class="page">
-                          <!-- Scrollable page content -->
-                          <div class="page-content">
-                            <p>Page content goes here</p>
-                            <!-- Link to another page -->
-                            <a href="about.html">About app</a>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- Bottom Toolbar-->
-                      <div class="toolbar">
-                        <div class="toolbar-inner">
-                          <!-- Toolbar links -->
-                          <a href="#" class="link">Link 1</a>
-                          <a href="#" class="link">Link 2</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+		<div class="statusbar-overlay"></div>
+		
+		<!-- Panels overlay-->
+		<div class="panel-overlay"></div>
+		
+ 		<div class="panel panel-left panel-reveal">
+     		<div class="content-block">
+            	<p>Left panel content goes here</p>
+     		</div>
+		</div>
+		
+ 		<div class="panel panel-right panel-reveal">
+     		<div class="content-block">
+            	<p>Right panel content goes here</p>
+     		</div>
+		</div>
+		
+		
+        <div class="views">
+  			<div class="view view-main">
+   			
+   				<!-- 头部工具栏 -->
+            	<div class="navbar">
+              		<div class="navbar-inner">
+                		<div class="right sliding">Awesome App</div>
+                		<div class="left">
+                  			<a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+                		</div>
+              		</div>
+            	</div>
+
+            	
+            	<!-- 主页面-->
+            	<div class="pages navbar-through toolbar-through">
+              		<!-- Page, "data-page" contains page name -->
+              		<div data-page="index" class="page">
+
+                		<!-- 主页面相关设置 -->
+                		<div class="page-content hide-bars-on-scroll pull-to-refresh-content">
+                		
+	                		<!-- 下拉刷新 -->
+							<div class="pull-to-refresh-layer">
+						    	<div class="preloader"></div>
+						    	<div class="pull-to-refresh-arrow"></div>
+						  	</div>
+	                		
+	                		<!-- 轮播图 -->
+							<div class="swiper-container">
+							    <div class="swiper-wrapper">
+							        <div class="swiper-slide">
+							        	<a href="/marshow/backStage/index.html"><img class="swiper-img" alt="" src="../images/loopImg/mobile1.jpg"></a>
+							        </div>
+							        <div class="swiper-slide">
+							        	<a href="http://www.baidu.com"><img class="swiper-img" alt="" src="../images/loopImg/mobile2.jpg"></a>
+							        </div>
+							        <div class="swiper-slide">
+							        	<a href="http://www.baidu.com"><img class="swiper-img" alt="" src="../images/loopImg/mobile3.jpg"></a>
+							        </div>
+							        <div class="swiper-slide">
+							        	<a href="http://www.baidu.com"><img class="swiper-img" alt="" src="../images/loopImg/mobile4.jpg"></a>
+							        </div>
+							    </div>
+							    <div class="swiper-pagination"></div>
+							</div> 
+							
+     						<p data-panel="left" class="open-panel">打开左侧边栏</p>
+     						<p data-panel="right" class="open-panel">打开右侧边栏</p>
+     						<p><a href="#" class="alert-text-title-callback">Alert With Text and Title and Callback</a></p>
+     						<p><a href="#" class="confirm-title-ok-cancel">Confirm with text, title, Ok and Cancel callback</a></p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+     						<p>Page content goes here</p>
+                		</div>
+              		</div>
+            	</div>
+            	
+            	<!-- 底部工具栏-->
+			  	<div class="toolbar toolbar-bottom">
+			    	<div class="toolbar-inner">
+			        	<a href="#tab1" class="tab-link active">
+			            	<i class="icon demo-icon-1"></i>
+			            	<span class="tabbar-label">Label 1</span>
+			        	</a>
+			        	<a href="#tab2" class="tab-link">
+			           		<i class="icon demo-icon-2">
+			                	<span class="badge bg-red">5</span>
+			            	</i>
+			            	<span class="tabbar-label">Label 2</span>
+			        	</a>
+			        	<a href="#tab3" class="tab-link">
+			            	<i class="icon demo-icon-3"></i>
+			            	<span class="tabbar-label">Label 3</span>
+			        	</a>
+			        	<a href="#tab4" class="tab-link">
+			            	<i class="icon demo-icon-4"></i>
+			            	<span class="tabbar-label">Label 4</span>
+			        	</a>
+			    	</div>
+			  	</div>
+            	
+      		</div>
+		</div>
     	
     	
     	
     	<script type="text/javascript" src="../plugins/framework7/js/framework7.js"></script>
-    	<script type="text/javascript" src="../plugins/framework7/js/framework7.min.js"></script>
     	<script src="js/index.js"></script>
     	
   	</body>
