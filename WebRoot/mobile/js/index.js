@@ -68,6 +68,11 @@ $$('.right.sliding').on('click', function () {
 	myApp.alert('待开发，扫码功能需要调用微信JS-SDK...', '提示');
 });
 
+//图标导航
+$$('.col-25').on('click', function () {
+	var jumpUrl = $$(this).attr("jumpUrl");
+	window.location.href = "/marshow" + jumpUrl;
+});
 
 //底部工具栏切换效果
 $$('.tab-link').on('click', function () {debugger
