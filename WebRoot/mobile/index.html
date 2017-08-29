@@ -1,71 +1,125 @@
 <!DOCTYPE html>
 <html>
 	<head>
-    	<title>index.html</title>
-    	
+    	<title>智慧社区</title>
   		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-    	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-    	<meta http-equiv="description" content="this is my page">
+  		<meta name="apple-mobile-web-app-capable" content="yes">
+  		<meta name="theme-color" content="#2196f3">
     	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
     
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.min.css">
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.colors.min.css">
+     	<link rel="stylesheet" href="../plugins/framework7/css/framework7-icons.css">
      	<style type="text/css">
-     	.toolbar.toolbar-bottom {
-     		background-color: white;
-     	}
-     	.swiper-slide {
-     		height: 200px;
-     	}
-     	img.swiper-img {
-     		height: 200px;
-     		width: 100%;
-     	}
+	     	.toolbar.toolbar-bottom {
+	     		background-color: white;
+	     	}
+	     	.swiper-slide {
+	     		height: 200px;
+	     	}
+	     	img.swiper-img {
+	     		height: 200px;
+	     		width: 100%;
+	     	}
+	      	a.tab-link {
+	     		background-color: #2196f3;
+	     	}
+	     	a.tab-link.active {
+	     		background-color: #63A1D2;
+	     	}
+	     	a.tab-link.active-state {
+	     		background-color: #63A1D2;
+	     	}
+	     	.item-content {
+				padding-left: 0px!important;
+	     	}
+	     	.item-inner {
+				padding-right: 0px!important;
+				margin-left: 0px!important;
+	     	}
+	     	/* 通知、活动等卡片样式 */
+			.demo-card-header-pic .card-header {
+		    	height: 20vw;
+		    	background-size: cover;
+		    	background-position: center;
+		  	}
      	</style>
   	</head>
   
   	<body>
-    	
-		<div class="statusbar-overlay"></div>
 		
-		<!-- Panels overlay-->
+		<!-- 侧边栏覆盖-->
 		<div class="panel-overlay"></div>
 		
+		<!-- 左面板-->
  		<div class="panel panel-left panel-reveal">
      		<div class="content-block">
-            	<p>Left panel content goes here</p>
+     			<p>Left panel goes here</p>
      		</div>
 		</div>
 		
+		<!-- 右面板-->
  		<div class="panel panel-right panel-reveal">
      		<div class="content-block">
-            	<p>Right panel content goes here</p>
+            	<div class="chip">
+			    	<div class="chip-media"><img src="http://lorempixel.com/100/100/people/9/"></div>
+			    	<div class="chip-label">Jane Doe</div>
+			  	</div>
+			  	
+			    <div class="list-block">
+			      <ul>
+			        <li class="item-content button">
+			          <div class="item-media"><i class="icon icon-f7"></i></div>
+			          <div class="item-inner">
+			            <div class="item-title">个人信息</div>
+			            <div class="item-after">Label</div>
+			          </div>
+			        </li>
+			        <li class="item-content button">
+			          <div class="item-media"><i class="icon icon-f7"></i></div>
+			          <div class="item-inner">
+			            <div class="item-title">用户须知</div>
+			          </div>
+			        </li>
+			        <li class="item-content button">
+			          <div class="item-media"><i class="icon icon-f7"></i></div>
+			          <div class="item-inner">
+			            <div class="item-title">使用帮助</div>
+			          </div>
+			        </li>
+			      </ul>
+			      <div class="list-block-label">List block label text goes here</div>
+			    </div>
+						
      		</div>
 		</div>
 		
 		
         <div class="views">
   			<div class="view view-main">
-   			
-   				<!-- 头部工具栏 -->
-            	<div class="navbar">
-              		<div class="navbar-inner">
-                		<div class="right sliding">Awesome App</div>
-                		<div class="left">
-                  			<a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
-                		</div>
-              		</div>
-            	</div>
-
-            	
+   		
             	<!-- 主页面-->
             	<div class="pages navbar-through toolbar-through">
+
               		<!-- Page, "data-page" contains page name -->
               		<div data-page="index" class="page">
-
-                		<!-- 主页面相关设置 -->
-                		<div class="page-content hide-bars-on-scroll pull-to-refresh-content">
-                		
+						
+						<!-- 头部工具栏 -->
+		            	<div class="navbar">
+		              		<div class="navbar-inner">
+		                		<div class="left sliding">
+		                			<img alt="获取定位" src="../images/location.png" style="height: 28px;margin-left: 15px;">
+								</div>
+		                		<div class="center">当前社区：幸福花园小区</div>
+		                		<div class="right sliding">
+		                			<img alt="点击扫码" src="../images/scan.png" style="height: 30px;margin-right: 15px;">
+								</div>
+		              		</div>
+		            	</div>
+						
+	               		<!-- 主页面相关设置 -->
+	               		<div class="page-content hide-bars-on-scroll pull-to-refresh-content">
+	               		
 	                		<!-- 下拉刷新 -->
 							<div class="pull-to-refresh-layer">
 						    	<div class="preloader"></div>
@@ -91,82 +145,184 @@
 							    <div class="swiper-pagination"></div>
 							</div> 
 							
-     						<p data-panel="left" class="open-panel">打开左侧边栏</p>
-     						<p data-panel="right" class="open-panel">打开右侧边栏</p>
-     						<p><a href="#" class="alert-text-title-callback">Alert With Text and Title and Callback</a></p>
-     						<p><a href="#" class="confirm-title-ok-cancel">Confirm with text, title, Ok and Cancel callback</a></p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-     						<p>Page content goes here</p>
-                		</div>
-              		</div>
-            	</div>
+	   						<p data-panel="left" class="open-panel">打开左侧边栏</p>
+	   						<p data-panel="right" class="open-panel">打开右侧边栏</p>
+	   						<p><a href="#" class="alert-text-title-callback">Alert With Text and Title and Callback</a></p>
+	   						<p><a href="#" class="confirm-title-ok-cancel">Confirm with text, title, Ok and Cancel callback</a></p>
+	   						<p>Page content goes here</p>
+	   						<a href="#" class="button button-raised">Button</a>
+	   						<p>Page content goes here</p>
+	   						<a href="#" class="my-link ripple-red">Link With Ripple Effect</a>
+	   						<p>Page content goes here</p>
+	   						<p><a href="#" class="open-login-screen">Open Login Screen</a></p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						
+	   						
+	   						<div class="list-block button" style="padding-bottom: 40px; border-top-style: outset;">
+						 		<div class="item-inner">
+						      		<div class="item-title">社区通知：</div>
+						       		<div class="item-after">查看更多↓</div>
+						      	</div>
+							</div>
+							<div class="card demo-card-header-pic">
+								<div style="background-image:url(../images/test.jpg)" valign="bottom" class="card-header color-white no-border">
+							  		关于停水的通知
+							  	</div>
+							  	<div class="card-content">
+							    	<div class="card-content-inner">
+							      		<p class="color-gray">2017-08-29 16:06:56</p>
+							      		<p>紧急通知：因地铁施工，不慎将水管挖断，本社区将于2017-08-29 下午5时许停水，已通知水务部门进行抢修。请居民提前备好生活用水。。。</p>
+							    	</div>
+							  	</div>
+							</div>
+
+							<div class="card demo-card-header-pic">
+								<div style="background-image:url(../images/test.jpg)" valign="bottom" class="card-header color-white no-border">
+							  		关于物业费调整的通知
+							  	</div>
+							  	<div class="card-content">
+							    	<div class="card-content-inner">
+							      		<p class="color-gray">2017-08-29 16:06:56</p>
+							      		<p>本社区从2017年12月开始，暂停收取物业费，截止到2018年5月31日止，试行半年，特此通知。。。</p>
+							    	</div>
+							  	</div>
+							</div>
+	   						
+	   						<div class="list-block button" style="padding-bottom: 40px; border-top-style: outset;">
+						 		<div class="item-inner">
+						      		<div class="item-title">社区活动：</div>
+						       		<div class="item-after">查看更多↓</div>
+						      	</div>
+							</div>
+						    
+							<div class="card demo-card-header-pic">
+								<div style="background-image:url(../images/test.jpg)" valign="bottom" class="card-header color-white no-border">
+							  		集合打篮球了啊
+							  	</div>
+							  	<div class="card-content">
+							    	<div class="card-content-inner">
+							      		<p class="color-gray">2017-08-29 16:06:56</p>
+							      		<p>后天晚上集合，在欢乐社区北门三号篮球场举行一场比赛，时间是下午3点开始，欢迎各位积极踊跃报名。。。</p>
+							    	</div>
+							  	</div>
+							</div>
+
+							<div class="card demo-card-header-pic">
+								<div style="background-image:url(../images/test.jpg)" valign="bottom" class="card-header color-white no-border">
+							  		集合打篮球了啊
+							  	</div>
+							  	<div class="card-content">
+							    	<div class="card-content-inner">
+							      		<p class="color-gray">2017-08-29 16:06:56</p>
+							      		<p>后天晚上集合，在欢乐社区北门三号篮球场举行一场比赛，时间是下午3点开始，欢迎各位积极踊跃报名。。。</p>
+							    	</div>
+							  	</div>
+							</div>
+
+
+
+
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	   						<p>Page content goes here</p>
+	               		</div>
+	           		</div>
+	           	</div>
             	
-            	<!-- 底部工具栏-->
-			  	<div class="toolbar toolbar-bottom">
+	           	<!-- 底部工具栏-->
+			  	<div class="toolbar toolbar-bottom tabbar">
 			    	<div class="toolbar-inner">
-			        	<a href="#tab1" class="tab-link active">
-			            	<i class="icon demo-icon-1"></i>
-			            	<span class="tabbar-label">Label 1</span>
-			        	</a>
-			        	<a href="#tab2" class="tab-link">
-			           		<i class="icon demo-icon-2">
-			                	<span class="badge bg-red">5</span>
-			            	</i>
-			            	<span class="tabbar-label">Label 2</span>
-			        	</a>
-			        	<a href="#tab3" class="tab-link">
-			            	<i class="icon demo-icon-3"></i>
-			            	<span class="tabbar-label">Label 3</span>
-			        	</a>
-			        	<a href="#tab4" class="tab-link">
-			            	<i class="icon demo-icon-4"></i>
-			            	<span class="tabbar-label">Label 4</span>
-			        	</a>
+			        	<a href="#tab1" class="tab-link open-panel" data-panel="left">
+				            <i class="f7-icons size-50">menu</i>
+				        </a>
+				        <a href="#tab2" class="tab-link">
+				            <i class="f7-icons size-50">compass</i>
+				        </a>
+				        <a href="#tab3" class="tab-link">
+				            <i class="f7-icons size-50">home</i>
+				        </a>
+				        <a href="#tab4" class="tab-link">
+				            <i class="f7-icons size-50">chat</i>
+				        </a>
+				        <a href="#tab5" class="tab-link">
+				            <i class="f7-icons size-50">person</i>
+				        </a>
 			    	</div>
 			  	</div>
-            	
-      		</div>
+	           	
+	   		</div>
 		</div>
     	
     	
+    	
+		<!-- Should be a direct child of BODY -->
+		<div class="login-screen">
+			<div class="view">
+		      	<div class="page">
+		        	<div class="page-content login-screen-content">
+		          		<div class="login-screen-title">快速登录</div>
+		          		<form>
+		            		<div class="list-block">
+		              			<ul>
+		                			<li class="item-content">
+				                  		<div class="item-inner">
+				                    		<div class="item-title label">用户名</div>
+				                    		<div class="item-input">
+				                      			<input type="text" name="username" placeholder="用户名/手机号">
+				                    		</div>
+				                  		</div>
+		                			</li>
+					                <li class="item-content">
+					                  	<div class="item-inner">
+					                    	<div class="item-title label">密码</div>
+				                    		<div class="item-input">
+					                      		<input type="password" name="password" placeholder="Your password">
+					                    	</div>
+					                  	</div>
+				                	</li>
+		              			</ul>
+		            		</div>
+		            		<div class="list-block">
+		              			<ul>
+		                			<li><a href="#" class="item-link list-button">点击登录</a></li>
+		              			</ul>
+			              		<div class="list-block-label">
+			                		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+			                		<p><a href="#" class="close-login-screen">退出登录</a></p>
+			              		</div>
+			            	</div>
+			          	</form>
+			        </div>
+		      	</div>
+	    	</div>
+	  	</div>
+
     	
     	<script type="text/javascript" src="../plugins/framework7/js/framework7.js"></script>
     	<script src="js/index.js"></script>
