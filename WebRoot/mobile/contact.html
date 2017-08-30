@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-    	<title>智慧社区</title>
+    	<title>物管电话</title>
   		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
   		<meta name="apple-mobile-web-app-capable" content="yes">
   		<meta name="theme-color" content="#2196f3">
@@ -10,10 +10,27 @@
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.min.css">
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.colors.min.css">
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7-icons.css">
+     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.indexed-list.min.css">
      	<style type="text/css">
-			form.searchbar {
+			.searchbar {
 				top: 0px!important;
 			}
+	     	.item-content.button {
+				padding-left: 0px!important;
+	     	}
+	     	.item-inner.user {
+				padding-right: 0px!important;
+				margin-left: 0px!important;
+	     	}
+	     	a.external {
+	     		margin-right: 20px;
+	     	}
+	     	ul.list-index {
+	     		line-height: 30px;
+	     	}
+	     	.active-state {
+	     		background: #91FBFB;
+	     	}
      	</style>
   	</head>
   
@@ -21,14 +38,7 @@
 		
 		<!-- 侧边栏覆盖-->
 		<div class="panel-overlay"></div>
-		
-		<!-- 左面板-->
- 		<div class="panel panel-left panel-reveal">
-     		<div class="content-block">
-     			<p>Left panel goes here</p>
-     		</div>
-		</div>
-		
+
 		<!-- 右面板-->
  		<div class="panel panel-right panel-reveal">
      		<div class="content-block">
@@ -36,28 +46,28 @@
      			<img src="../images/defaultUserImg3.png" style="border-radius: 50%; width: 50%; margin-left: 25%">
 			  	
 			    <div class="list-block">
-			      <ul>
-			        <li class="item-content button">
-			          <div class="item-media"><i class="icon icon-f7"></i></div>
-			          <div class="item-inner open-login-screen">
-			            <div class="item-title">个人信息</div>
-			            <div class="item-after">minqi</div>
-			          </div>
-			        </li>
-			        <li class="item-content button">
-			          <div class="item-media"><i class="icon icon-f7"></i></div>
-			          <div class="item-inner">
-			            <div class="item-title">用户须知</div>
-			          </div>
-			        </li>
-			        <li class="item-content button">
-			          <div class="item-media"><i class="icon icon-f7"></i></div>
-			          <div class="item-inner">
-			            <div class="item-title">使用帮助</div>
-			          </div>
-			        </li>
-			      </ul>
-			      <div class="list-block-label">List block label text goes here</div>
+			      	<ul>
+			        	<li class="item-content button">
+			          		<div class="item-media"><i class="icon icon-f7"></i></div>
+			          		<div class="item-inner user open-login-screen">
+			            		<div class="item-title">个人信息</div>
+			            		<div class="item-after">minqi</div>
+			          		</div>
+			        	</li>
+			        	<li class="item-content button">
+			          		<div class="item-media"><i class="icon icon-f7"></i></div>
+			          		<div class="item-inner user">
+			            		<div class="item-title">用户须知</div>
+			          		</div>
+			        	</li>
+			        	<li class="item-content button">
+			          		<div class="item-media"><i class="icon icon-f7"></i></div>
+			          		<div class="item-inner user">
+			            		<div class="item-title">使用帮助</div>
+			          		</div>
+			        	</li>
+			      	</ul>
+			      	<div class="list-block-label">List block label text goes here</div>
 			    </div>
 						
      		</div>
@@ -72,268 +82,211 @@
 
               		<!-- Page, "data-page" contains page name -->
               		<div data-page="index" class="page">
+              			
+              			<!-- 搜索框 -->
 						<form class="searchbar">
 					        <div class="searchbar-input">
-					            <input type="search" placeholder="Search">
+					            <input type="search" placeholder="请输入名称...">
 					            <a href="#" class="searchbar-clear"></a>
 					        </div>
 					        <a href="#" class="searchbar-cancel">Cancel</a>
 					    </form>
-					    
-					    <!-- Search Bar overlay-->
 					    <div class="searchbar-overlay"></div>
 							    
 	               		<!-- 主页面相关设置 -->
 	               		<div class="page-content contacts-content">
 
-					        <div class="content-block searchbar-not-found">
-					                Nothing found
-					        </div>
+					        <div class="content-block searchbar-not-found">未找到匹配的名称</div>
  
-
 							<div class="list-block contacts-block list-block-search searchbar-found">
-							    <div class="list-group">
-							      <ul>
-							        <li class="list-group-title">A</li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Aaron </div>
-			            					<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Abbie</div>
-			            					<div class="item-after"><a href="tel:0147-88469258">0147-88469258</a></div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Adam</div>
-			            					<div class="item-after"><a href="sms:13986147769">0147-88469258</a></div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Adele</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Agatha</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Agnes</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Albert</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Alexander</div>
-							            </div>
-							          </div>
-							        </li>
-							      </ul>
+								<div class="list-group">
+							     	<ul>
+							        	<li class="list-group-title">A</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Aaron</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Ajax</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Ahos</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							      	</ul>
 							    </div>
+							    
 							    <div class="list-group">
-							      <ul>
-							        <li class="list-group-title">B</li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Bailey</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Barclay</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Bartolo</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Bellamy</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Belle</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Benjamin</div>
-							            </div>
-							          </div>
-							        </li>
-							      </ul>
+							      	<ul>
+							        	<li class="list-group-title">B</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Billy</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Baron</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Bakon</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							      	</ul>
 							    </div>
+							    
 							    <div class="list-group">
-							      <ul>
-							        <li class="list-group-title">C</li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Caiden</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Calvin</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Candy</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Carl</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Cherilyn</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Chester</div>
-							            </div>
-							          </div>
-							        </li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Chloe</div>
-							            </div>
-							          </div>
-							        </li>
-							      </ul>
+							      	<ul>
+							        	<li class="list-group-title">C</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Calvein</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Carl</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Cache</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							      	</ul>
 							    </div>
+							    
 							    <div class="list-group">
-							      <ul>
-							        <li class="list-group-title">V</li>
-							        <li>
-							          <div class="item-content">
-							            <div class="item-inner">
-							              <div class="item-title">Vladimir</div>
-							            </div>
-							          </div>
-							        </li>
-							      </ul>
+							      	<ul>
+							        	<li class="list-group-title">D</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Dave</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Diana</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">During</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							      	</ul>
 							    </div>
-							  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+							    
+							    <div class="list-group">
+							      	<ul>
+							        	<li class="list-group-title">K</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Kobe</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Keere</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Knight</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							      	</ul>
+							    </div>
+							    
+							    <div class="list-group">
+							      	<ul>
+							        	<li class="list-group-title">T</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Trace</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Tarky</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							        	<li>
+							          		<div class="item-content">
+							            		<div class="item-inner">
+							              			<div class="item-title">Titi</div>
+			            							<div class="item-after"><a href="tel:13986147769" class="external">13986147769</a></div>
+							            		</div>
+							          		</div>
+							        	</li>
+							      	</ul>
+							    </div>
+						  	</div>
 	               		</div>
+	               		
+	               		<ul class="list-index"></ul>
 	           		</div>
+	           		
 	           	</div>
-            	
-	           	<!-- 底部工具栏-->
-			  	<div class="toolbar toolbar-bottom tabbar">
-			    	<div class="toolbar-inner">
-			        	<a href="#tab1" class="tab-link open-panel" data-panel="left">
-				            <i class="f7-icons size-50">menu</i>
-				        </a>
-				        <a href="#tab2" class="tab-link">
-				            <i class="f7-icons size-50">compass</i>
-				        </a>
-				        <a href="#tab3" class="tab-link">
-				            <i class="f7-icons size-50">home</i>
-				        </a>
-				        <a href="#tab4" class="tab-link">
-				            <i class="f7-icons size-50">chat</i>
-				        </a>
-				        <a href="#tab5" class="tab-link">
-				            <i class="f7-icons size-50">person</i>
-				        </a>
-			    	</div>
-			  	</div>
-	           	
 	   		</div>
 		</div>
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
-    	
     	
 		<!-- Should be a direct child of BODY -->
 		<div class="login-screen">
@@ -376,9 +329,9 @@
 		      	</div>
 	    	</div>
 	  	</div>
-
     	
     	<script type="text/javascript" src="../plugins/framework7/js/framework7.js"></script>
+    	<script type="text/javascript" src="../plugins/framework7/js/framework7.indexed-list.min.js"></script>
     	<script src="js/contact.js"></script>
     	
   	</body>
