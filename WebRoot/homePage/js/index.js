@@ -10,9 +10,10 @@ layui.use('carousel', function(){
   	//建造实例
   	carousel.render({
     	elem: '#test1',
-    	height: '750px',
+    	height: '600px',
     	width: '100%',
     	arrow: 'hover', 	//显示箭头hover,always
-    	anim: 'fade' 		//切换动画方式
+    	anim: 'fade', 		//切换动画方式
   	});
 });
+
