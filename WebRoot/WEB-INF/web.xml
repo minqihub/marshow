@@ -15,7 +15,12 @@
         <param-name>contextConfigLocation</param-name>          <!-- 应用上下文配置文件 --> 
 		<param-value>/WEB-INF/spring-servlet.xml</param-value>  
     </context-param>
-      
+    
+    <context-param>												<!-- 由Spring载入的Log4j配置文件位置  -->
+       <param-name>log4jConfigLocation</param-name>
+       <param-value>/WEB-INF/log4j.properties</param-value>
+    </context-param>
+    
     <listener>  
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
     </listener>
@@ -25,6 +30,7 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>  
         <load-on-startup>1</load-on-startup>  
     </servlet>
+
 	
 	<error-page>												<!-- 配置错误定向页面 -->
 		<error-code>404</error-code>
@@ -35,6 +41,19 @@
         <servlet-name>spring</servlet-name>  
         <url-pattern>*.do</url-pattern>  
     </servlet-mapping> 
+  
+    <listener>													<!-- Spring log4j Config loader -->
+       <listener-class>
+           org.springframework.web.util.Log4jConfigListener
+       </listener-class>
+    </listener>
+
+    <listener>
+       <listener-class>
+           org.springframework.web.context.ContextLoaderListener
+       </listener-class>
+    </listener>
+  
   
 	<filter>        											<!-- 配置编码过滤器，对所有post请求有效 -->
         <filter-name>characterEncodingFilter</filter-name>  
