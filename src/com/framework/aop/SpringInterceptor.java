@@ -38,7 +38,7 @@ public class SpringInterceptor{  	//先暂停拦截器使用
     	
     	//对访问路径进行登陆授信判断（@Controll包含trust则无需登录）
     	if(!servletPath.startsWith("/trust")){
-    		Map flagMap = Login.checkLogin(request);
+    		Map flagMap = Login.checkLogin(request, response);
     		if(flagMap.get("MSGID").toString().equals("E")){
     			return false;
     		}

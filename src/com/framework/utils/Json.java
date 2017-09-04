@@ -232,7 +232,8 @@ public class Json {
 		}
 		Object obj = toJsonObject(object);
 		if (!(obj instanceof JSONArray)) {
-			obj = new JSONArray().fluentAdd(object);
+//			obj = new JSONArray().fluentAdd(object);
+			obj = new JSONArray().parseArray(object.toString());
 		}
 		return (JSONArray) obj;
 	}
