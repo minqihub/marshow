@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  	<head>
+    	<title>物业报修</title>
+  		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  		<meta name="apple-mobile-web-app-capable" content="yes">
+  		<meta name="theme-color" content="#2196f3">
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.min.css">
+     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.colors.min.css">
+     	
+     	<style type="text/css">
+     	.button {
+     		border: 1px solid;
+     	}
+     	</style>
+     	
+  	</head>
+  
+  	<body>
+		
+		<div class="content-block-title">报修详情</div>
+		<form id="my-form" class="list-block">
+		 	<ul>
+		 	
+		 	    <li>
+			   		<div class="item-content">
+			        	<div class="item-inner">
+			          		<div class="item-title label">报修人：</div>
+			          		<div class="item-input">
+			            		<input name="name" type="text" placeholder="您的姓名">
+			          		</div>
+			        	</div>
+			      	</div>
+				</li>
+				
+		 	    <li>
+			   		<div class="item-content">
+			        	<div class="item-inner">
+			          		<div class="item-title label">联系电话：</div>
+			          		<div class="item-input">
+			            		<input name="mobile" type="text" placeholder="您的联系电话">
+			          		</div>
+			        	</div>
+			      	</div>
+				</li>
+				
+		 	    <li>
+			   		<div class="item-content">
+			        	<div class="item-inner">
+			          		<div class="item-title label">报修地点：</div>
+			          		<div class="item-input">
+			            		<input name="address" type="text" placeholder="选择您报修的地点" readonly id="picker-dependent">
+			          		</div>
+			        	</div>
+			      	</div>
+				</li>
+				
+				<li class="align-top">
+      				<div class="item-content">
+<!--         				<div class="item-media"><i class="icon icon-form-comment"></i></div> -->
+        				<div class="item-inner">
+          					<div class="item-title label">详细信息：</div>
+          					<div class="item-input">
+            					<textarea name="remark"></textarea>
+          					</div>
+        				</div>
+      				</div>
+    			</li>
+
+		 	</ul>
+		 	
+			<div class="content-block">
+  				<a href="#" class="button form-to-json">提交</a>
+			</div>
+		 	
+		</form>
+		
+
+		
+		
+		
+		
+    	<script type="text/javascript" src="../plugins/framework7/js/framework7.js"></script>
+    	<script src="js/repair.js"></script>
+		
+  	</body>
+</html>

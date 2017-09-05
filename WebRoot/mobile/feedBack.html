@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  	<head>
+    	<title>意见反馈</title>
+  		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  		<meta name="apple-mobile-web-app-capable" content="yes">
+  		<meta name="theme-color" content="#2196f3">
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.min.css">
+     	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.colors.min.css">
+     	
+     	<style type="text/css">
+     	.button {
+     		border: 1px solid;
+     	}
+     	</style>
+     	
+  	</head>
+  
+  	<body>
+		
+		<div class="views">
+  			<div class="view view-main">
+		
+				<div class="content-block-title">反馈详情</div>
+				<form id="my-form" class="list-block">
+				 	<ul>
+				 	
+				 	    <li>
+					   		<a href="#" class="item-link smart-select" data-back-on-select="true" data-open-in="picker" data-picker-close-text="完成">
+		        			 	<select name="feedBacktype">
+						        	<option value="key1" selected>投诉</option>
+						        	<option value="key2">举报</option>
+						          	<option value="key3">建议</option>
+						        </select>
+						        <div class="item-content">
+						          	<div class="item-inner">
+						            	<div class="item-title">类型</div>
+						        		<div class="item-after">投诉</div>
+						          	</div>
+						     	</div>
+		      				</a>
+						</li>
+						
+				 	    <li>
+					   		<div class="item-content">
+					        	<div class="item-inner">
+					          		<div class="item-title label">报修人：</div>
+					          		<div class="item-input">
+					            		<input name="name" type="text" placeholder="姓名">
+					          		</div>
+					        	</div>
+					      	</div>
+						</li>
+						
+				 	    <li>
+					   		<div class="item-content">
+					        	<div class="item-inner">
+					          		<div class="item-title label">联系电话：</div>
+					          		<div class="item-input">
+					            		<input name="mobile" type="text" placeholder="联系电话">
+					          		</div>
+					        	</div>
+					      	</div>
+						</li>
+						
+				 	    <li>
+					   		<div class="item-content">
+					        	<div class="item-inner">
+					          		<div class="item-title label">发生时间：</div>
+					          		<div class="item-input">
+					            		<input name="time" type="text" placeholder="选择日期" readonly id="calendar-input">
+					          		</div>
+					        	</div>
+					      	</div>
+						</li>
+						
+				 	    <li>
+					   		<div class="item-content">
+					        	<div class="item-inner">
+					          		<div class="item-title label">报修地点：</div>
+					          		<div class="item-input">
+					            		<input name="address" type="text" placeholder="选择报修的地点" readonly id="picker-dependent">
+					          		</div>
+					        	</div>
+					      	</div>
+						</li>
+						
+						<li class="align-top">
+		      				<div class="item-content">
+		<!--         				<div class="item-media"><i class="icon icon-form-comment"></i></div> -->
+		        				<div class="item-inner">
+		          					<div class="item-title label">详细信息：</div>
+		          					<div class="item-input">
+		            					<textarea name="remark"></textarea>
+		          					</div>
+		        				</div>
+		      				</div>
+		    			</li>
+		
+				 	</ul>
+				 	
+					<div class="content-block">
+		  				<a href="#" class="button form-to-json">提交</a>
+					</div>
+				 	
+				</form>
+				
+		
+			</div>
+		</div>
+		
+		
+		
+    	<script type="text/javascript" src="../plugins/framework7/js/framework7.js"></script>
+    	<script src="js/feedBack.js"></script>
+		
+  	</body>
+</html>
