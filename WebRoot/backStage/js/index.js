@@ -38,7 +38,7 @@ shadeMobile.on('click', function() {
  * 1.jumpUrl测试环境是/marshow/xx/x.html；而正是环境无需项目名，即/xx/x.html
  * 2.正式环境运行缓存，去掉Math的随机数
  */
-$('a').on('click', function() {
+$('a').on('click', function() {debugger
 	var jumpUrl = $(this).attr("jumpUrl");
 	if(!form.isNull(jumpUrl)){
 //		$("#iframe").attr("src", jumpUrl+"?rid="+Math.random());
