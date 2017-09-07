@@ -41,24 +41,39 @@ shadeMobile.on('click', function() {
 $('a').on('click', function() {debugger
 	var jumpUrl = $(this).attr("jumpUrl");
 	if(!form.isNull(jumpUrl)){
-//		$("#iframe").attr("src", jumpUrl+"?rid="+Math.random());
+		var name = $(this)[0].innerHTML;					//菜单名称
+		var allNames = $(".layui-tab-title")[0].innerText;	//选项卡所有的菜单名
 		
 		//原有的选中变为非选中状态
 		$(".layui-this").attr("class", "");
 		$(".layui-tab-item.layui-show").attr("class", "layui-tab-item");
 		
-		var name = $(this)[0].innerHTML;
-		var title = '<li class="layui-this">' + name + '</li>';
-		$(".layui-tab-title").append(title);
-
-		var content = '<div class="layui-tab-item layui-show"><iframe src="' + "/marshow" + jumpUrl + "?rid="+Math.random() + '"></iframe></div>';
-		$(".layui-tab-content").append(content);
-		
-		//手机端选择后，自动隐藏导航
-		$('body').removeClass('site-mobile');
-		
-		//动态加载的需init一下
-		layui.element.init();
+		if(allNames.indexOf(name) == -1){	//不是重复点击
+			var title = '<li class="layui-this">' + name + '</li>';
+			$(".layui-tab-title").append(title);
+			var content = '<div class="layui-tab-item layui-show"><iframe src="' + "/marshow" + jumpUrl + "?rid="+Math.random() + '"></iframe></div>';
+			$(".layui-tab-content").append(content);
+			
+			//手机端选择后，自动隐藏导航
+			$('body').removeClass('site-mobile');
+			//动态加载的需init一下
+			layui.element.init();
+		}else{
+			var childTitles = $(".layui-tab-title")[0].children;
+			for ( var i = 0; i < childTitles.length; i++) {
+				if(childTitles[i].innerText.indexOf(name) != -1){
+					childTitles[i].className =  "layui-this";
+					break;
+				}
+			}
+			var childContents = $(".layui-tab-content")[0].children;
+			for ( var j = 0; j < childContents.length; j++) {
+				if(childContents[i].innerHTML.indexOf(jumpUrl) != -1){
+					childContents[i].className =  "layui-tab-item layui-show";
+					break;
+				}
+			}
+		}
 	}else{
 //		alert("不需要切换iframe里的内容");
 	}

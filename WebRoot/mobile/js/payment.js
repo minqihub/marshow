@@ -57,4 +57,14 @@ var endTime = myApp.picker({
 $$('.form-to-json').on('click', function(){
 	var formData = myApp.formToJSON('#my-form');
 	alert(JSON.stringify(formData));
-}); 
+});
+
+//水费列表的点击事件
+$$('#tab1 > div.list-block > ul > li > a > div.item-inner').on('click', function () {debugger
+	//获取当前id
+	var id = $$(this)[0].children[1].innerText;
+	//打开popup
+	myApp.popup('.popup-about');
+});
+
+
