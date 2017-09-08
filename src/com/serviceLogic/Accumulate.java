@@ -1,10 +1,10 @@
 package com.serviceLogic;
 
 /**
- * 评价
+ * 积分
  * @author minqi
  *
  */
-public class Evaluate {
+public class Accumulate {
 
 }
