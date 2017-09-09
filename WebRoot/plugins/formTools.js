@@ -305,8 +305,14 @@ form.formatMoney = function(money, flag){
 	return newMoney;
 };
 
-
-
+//项目头名称
+form.getprojectName = function(){debugger
+	if(location.port != ""){
+		return "/marshow";
+	}else{
+		return "";
+	}
+};
 
 //项目头名称
 form.projectName = {
@@ -315,7 +321,7 @@ form.projectName = {
 	"ResourceUrl" : "jlo2oResource"
 };
 
-//域名、端口
+//域名、端口(http://localhost:8080)
 form.headUrl = location.protocol + "//" + location.host;
 
 //项目头名称，获取当前访问路径_2017-08-03 19:11:15

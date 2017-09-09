@@ -1,5 +1,4 @@
 var myApp = new Framework7({
-    swipePanel: 'right',		//滑动打开侧边栏
     material: true,				//确定主题
     modalTitle: "提示",			//弹窗的相关配置(Alert, Confirm, Prompt)
     modalButtonOk: "确定",

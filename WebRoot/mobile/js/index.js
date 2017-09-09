@@ -71,7 +71,7 @@ $$('.right.sliding').on('click', function () {
 //图标导航
 $$('.col-25').on('click', function () {
 	var jumpUrl = $$(this).attr("jumpUrl");
-	window.location.href = "/marshow" + jumpUrl;
+	window.location.href = form.getprojectName() + jumpUrl;
 });
 
 //底部工具栏切换效果
