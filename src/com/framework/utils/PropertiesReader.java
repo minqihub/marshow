@@ -18,7 +18,10 @@ public class PropertiesReader {
      * 配置文件默认放在workspace-->项目根目录下。例../workspace\MQFrame\v1.config
      * 如果部署到web服务器上，则路径变为bin目录下
      */
-    private static String fileName = System.getProperty("user.dir") + System.getProperty("file.separator") + "v1.config";
+    private static String fileName =  PropertiesReader.class.getClassLoader().getResource("/").getPath().replace("classes", "v1.config");
+    //初始化的v1.config路径：/D:/apache-tomcat-7.0.81/webapps/marshow/WEB-INF/classes/
+//    private static String fileName = System.getProperty("user.dir") + System.getProperty("file.separator") + "v1.config";
+    //初始化的v1.config路径：D:\MyEclipse2017_CI7\v1.config
     
     /**
      * 构造方法，加载配置文件
@@ -26,7 +29,9 @@ public class PropertiesReader {
      */
     private PropertiesReader(){ 
         try {
+        	System.out.println("！！！！！！！初始化的v1.config路径："+fileName);
 			properties.load(new FileInputStream(fileName));
+			System.out.println("................................................"+fileName);
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("MQFrame：未找到配置文件");
 		} catch (IOException e) {

@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.sun.corba.se.spi.ior.MakeImmutable;
 
 /**
  * 文件处理公共类

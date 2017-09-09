@@ -34,7 +34,7 @@ public class Order {
 
 		//查找订单数据
 		JSONObject sendJson = new JSONObject();
-		sendJson.put("", value);
+		sendJson.put("", "");
 		
 		Map returnMap = new HashMap();
 		returnMap.put("MSGID", "S");

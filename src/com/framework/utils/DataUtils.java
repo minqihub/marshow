@@ -19,8 +19,6 @@ import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.sun.xml.internal.bind.v2.TODO;
-
 /**
  * 普通字符数据处理类
  * @author minqi

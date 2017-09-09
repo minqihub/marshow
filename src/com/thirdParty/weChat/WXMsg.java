@@ -697,7 +697,9 @@ public class WXMsg{
 		if(!DataUtils.isNull(url)) paramsMap.put("url", url);
 		
 		paramsMap.put("data", msgMap);
-		String str = Http.post(Address,Json.toJson(paramsMap), "application/json", 1000, 1000);
+		//TODO 换成HTTPUtils
+		String str =  "";
+//		String str = Http.post(Address,Json.toJson(paramsMap), "application/json", 1000, 1000);
 		System.out.println("！！！！！微信发送消息返回：" + str);
 		return Json.toMap(str);		
 	}

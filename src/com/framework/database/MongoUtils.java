@@ -33,13 +33,13 @@ public class MongoUtils {
 	static MongoClient createClient(String resource){
 		MongoClient mc = null;
 		try{
-				mc = new MongoClient(MONGO_IP, Integer.parseInt(MONGO_PORT));
-				mc = new MongoClient
-					boolean auth = mc.getDB(MONGO_DATABASE).authenticate(MONGO_USERNAME, MONGO_PASSWORD.toCharArray());
-					if(!auth){
-						throw new Exception("MONGO连接失败！用户名或者密码错误");
-					}
-				
+//				mc = new MongoClient(MONGO_IP, Integer.parseInt(MONGO_PORT));
+//				mc = new MongoClient
+//					boolean auth = mc.getDB(MONGO_DATABASE).authenticate(MONGO_USERNAME, MONGO_PASSWORD.toCharArray());
+//					if(!auth){
+//						throw new Exception("MONGO连接失败！用户名或者密码错误");
+//					}
+//				
 			
 		}catch(Exception e){
 			e.printStackTrace();
