@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+import com.framework.utils.DataUtils;
 import com.framework.utils.Json;
 
 /**
@@ -15,6 +16,34 @@ import com.framework.utils.Json;
  *
  */
 public class Order {
+	
+	
+	
+	/**
+	 * 生产订单
+	 * @param json
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map makeOrder(String json, HttpServletRequest request, HttpServletResponse response){
+		Map map = Json.toMap(json);
+		
+		String goodId = map.get("goodId").toString();		//商品编号
+		String buyer = "";									//买家
+		String seller = "";									//卖家
+		String orderTime = DataUtils.getSysTime();			//订单时间
+		
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
