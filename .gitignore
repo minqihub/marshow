@@ -4,4 +4,5 @@
 .mymetadata
 .project
 .settings/
-v1.config
+WebRoot/WEB-INFO/classes
+#v1.config

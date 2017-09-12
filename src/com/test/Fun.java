@@ -1,29 +1,33 @@
 package com.test;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.framework.utils.DataUtils;
 import com.framework.utils.Json;
 
 public class Fun {
 	public static void main(String[] args) {
 		
-		JSONObject json = new JSONObject();
-		json.put("aaa", "aaa111");
+		String nowTime = DataUtils.getSysTime();
+		System.out.println(nowTime);
 		
 		
-		JSONArray ary = new JSONArray();
-		for (int i = 0; i < 3; i++) {
-			JSONObject temp = new JSONObject();
-			temp.put("aaa", "aaa111");
-			ary.add(temp);
-		}
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
 		
-		json.put("list", ary);
+		cal.add(Calendar.HOUR_OF_DAY, -2);
+		Date justNow = cal.getTime();
 		
-		System.out.println("json对象：" + json);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
-		System.out.println("object转JA：" + Json.toJA(json.get("list")));
-		System.out.println("string转JA：" + Json.toJA(json.get("list").toString()));
+		System.out.println(format.format(now));
+		System.out.println(format.format(justNow));
+		
 		
 	}
 }
