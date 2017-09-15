@@ -60,12 +60,12 @@ $$('.confirm-title-ok-cancel').on('click', function () {
 
 //定位
 $$('.left.sliding').on('click', function () {
-	myApp.alert('待开发，定位功能需要调用微信JS-SDK...', '提示');
+	myApp.alert('待开发，定位功能需要调用微信JS-SDK...');
 });
 
 //扫码
 $$('.right.sliding').on('click', function () {
-	myApp.alert('待开发，扫码功能需要调用微信JS-SDK...', '提示');
+	myApp.alert('待开发，扫码功能需要调用微信JS-SDK...');
 });
 
 //图标导航
@@ -77,16 +77,14 @@ $$('.col-25').on('click', function () {
 //底部工具栏切换效果
 $$('.tab-link').on('click', function () {debugger
 	var aaa = $$(this);
-	var others = aaa.siblings();
-	for ( var i = 0; i < others.length; i++) {
-		var oldClassName = others[i].className;
-		if(oldClassName.indexOf("active") != -1){
-			others[i].className = "tab-link";
-		}else if(oldClassName.indexOf("open-panel") != -1){
-			others[i].className = "tab-link open-panel";
-		}
-	}
-	var oldClass = aaa[0].className;
-	aaa.attr("class", oldClass + " active");
-    console.info("afaefeasfasf");
+	
+	aaa[0].children[1].innerHTML += "_fill"; 
+	
+//	var others = aaa.siblings();
+//	for ( var i = 0; i < others.length; i++) {
+//		if(others[i].className.indexOf("tab-link-highlight") != -1){
+//			others[i].children[0].innerHTML = others[i].children[0].innerHTML.replace("_fill", "");
+//		}
+//	}
+	
 });

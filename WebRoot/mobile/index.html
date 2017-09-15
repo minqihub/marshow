@@ -11,35 +11,41 @@
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.colors.min.css">
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7-icons.css">
      	<style type="text/css">
-	     	.toolbar.toolbar-bottom {
-	     		background-color: white;
-	     	}
-	     	.swiper-slide {
+
+/* 	     	.swiper-slide {
 	     		height: 200px;
-	     	}
+	     	} */
+	     	
+	     	/* 轮播图大小 */
 	     	img.swiper-img {
 	     		height: 200px;
 	     		width: 100%;
 	     	}
-	     	
+	     	/* 导航图标大小 */
 	     	img.nav-img {
 	     		height: 40px;
 	     		margin-left: 15px;
-	     	}
-	     	.col-25 {
-	     		
 	     	}
 		  	p.nav-content {
 		  		margin-top: 0px;
 		  		text-align: center;
 		  	}
 		  	
-	      	a.tab-link {
-	     		background-color: #2196f3;
-	     	}
 	     	a.tab-link.active {
 	     		background-color: #63A1D2;
 	     	}
+	     	
+	     	/* 底部foot颜色 */
+			.toolbar.toolbar-bottom {
+	     		background-color: white;
+	     	}
+	     	/* 底部foot图标颜色 */
+	     	.f7-icons {
+	     		color: #3CADAD;
+	     	}
+	     	
+	     	
+	     	
 	     	a.tab-link.active-state {
 	     		background-color: #63A1D2;
 	     	}
@@ -65,45 +71,35 @@
 		<!-- 侧边栏覆盖-->
 		<div class="panel-overlay"></div>
 		
-		<!-- 左面板-->
- 		<div class="panel panel-left panel-reveal">
-     		<div class="content-block">
-     			<p>Left panel goes here</p>
-     		</div>
-		</div>
-		
 		<!-- 右面板-->
  		<div class="panel panel-right panel-reveal">
      		<div class="content-block">
-     		
      			<img src="../images/defaultUserImg3.png" style="border-radius: 50%; width: 50%; margin-left: 25%">
-			  	
-			    <div class="list-block">
-			      <ul>
-			        <li class="item-content button">
-			          <div class="item-media"><i class="icon icon-f7"></i></div>
-			          <div class="item-inner user open-login-screen">
-			            <div class="item-title">个人信息</div>
-			            <div class="item-after">minqi</div>
-			          </div>
-			        </li>
-			        <li class="item-content button">
-			          <div class="item-media"><i class="icon icon-f7"></i></div>
-			          <div class="item-inner user">
-			            <div class="item-title">用户须知</div>
-			          </div>
-			        </li>
-			        <li class="item-content button">
-			          <div class="item-media"><i class="icon icon-f7"></i></div>
-			          <div class="item-inner user">
-			            <div class="item-title">使用帮助</div>
-			          </div>
-			        </li>
-			      </ul>
-			      <div class="list-block-label">List block label text goes here</div>
-			    </div>
-						
-     		</div>
+			  		<div class="list-block">
+			      		<ul>
+			        		<li class="item-content button">
+			          			<div class="item-media"><i class="icon icon-f7"></i></div>
+			          			<div class="item-inner user open-login-screen">
+			            			<div class="item-title">个人信息</div>
+			            			<div class="item-after">minqi</div>
+			          			</div>
+			        		</li>
+			        		<li class="item-content button">
+			          			<div class="item-media"><i class="icon icon-f7"></i></div>
+			          			<div class="item-inner user">
+			            			<div class="item-title">用户须知</div>
+			          			</div>
+			        		</li>
+			        		<li class="item-content button">
+			          			<div class="item-media"><i class="icon icon-f7"></i></div>
+			          			<div class="item-inner user">
+			            			<div class="item-title">使用帮助</div>
+			          			</div>
+			        		</li>
+			      		</ul>
+			      	<div class="list-block-label">List block label text goes here</div>
+				</div>
+			</div>
 		</div>
 		
 		
@@ -142,7 +138,7 @@
 							<div class="swiper-container">
 							    <div class="swiper-wrapper">
 							        <div class="swiper-slide">
-							        	<a href="/marshow/backStage/index.html"><img class="swiper-img" alt="" src="../images/loopImg/mobile1.jpg"></a>
+							        	<a href="http://www.baidu.com"><img class="swiper-img" alt="" src="../images/loopImg/mobile1.jpg"></a>
 							        </div>
 							        <div class="swiper-slide">
 							        	<a href="http://www.baidu.com"><img class="swiper-img" alt="" src="../images/loopImg/mobile2.jpg"></a>
@@ -292,10 +288,10 @@
 	           	</div>
             	
 	           	<!-- 底部工具栏-->
-			  	<div class="toolbar toolbar-bottom tabbar">
+  			  	<div class="toolbar toolbar-bottom tabbar">
 			    	<div class="toolbar-inner">
-			        	<a href="#tab1" class="tab-link open-panel" data-panel="left">
-				            <i class="f7-icons size-50">menu</i>
+			        	<a href="#tab1" class="tab-link">
+				            <i class="f7-icons size-50">bell</i>
 				        </a>
 				        <a href="#tab2" class="tab-link">
 				            <i class="f7-icons size-50">compass</i>
@@ -306,11 +302,12 @@
 				        <a href="#tab4" class="tab-link">
 				            <i class="f7-icons size-50">chat</i>
 				        </a>
-				        <a href="#tab5" class="tab-link">
+				        <a href="#tab5" class="tab-link open-panel" data-panel="right">
 				            <i class="f7-icons size-50">person</i>
 				        </a>
 			    	</div>
 			  	</div>
+
 	           	
 	   		</div>
 		</div>
