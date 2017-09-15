@@ -1,6 +1,10 @@
 layui.use('element', function(){
 	var element = layui.element;
 //	var $ = layui.jquery;
+	debugger
+	//加载默认页面
+	$("iframe").attr("src", form.getprojectName() + "/backStage/userIndex.html");
+	
 	element.init(); //这样element对动态生成的元素才会重新有效
 });
 
@@ -8,8 +12,6 @@ layui.use('element', function(){
 
 
 //将数据打入页面
-
-
 
 //iframe自适应
 $(window).on('resize', function() {
