@@ -18,15 +18,15 @@ import com.framework.service.Login;
  * @author minqi 2017-08-04 15:10:19
  *
  */
-//public class SpringInterceptor implements HandlerInterceptor {
-public class SpringInterceptor{  	//先暂停拦截器使用
+public class SpringInterceptor implements HandlerInterceptor {
+//public class SpringInterceptor{  	//先暂停拦截器使用
     /** 
      * preHandle方法是进行处理器拦截用的，该方法将在Controller处理之前进行调用；
      * SpringMVC中的Interceptor拦截器是链式的，可以同时存在多个Interceptor，SpringMVC会根据声明的前后顺序一个接一个的执行，
      * 而且所有的Interceptor中的preHandle方法都会在Controller方法调用之前调用
 	 * SpringMVC的这种Interceptor链式结构也是可以进行中断的，这种中断方式是令preHandle的返回值为false，此时整个请求就结束了。 
      */  
-//	@Override
+	@Override
     @SuppressWarnings("rawtypes")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     	System.out.println("！！！！！！拦截器preHandle执行了");
@@ -51,10 +51,10 @@ public class SpringInterceptor{  	//先暂停拦截器使用
      * 在Controller的方法调用之后执行，但是它会在DispatcherServlet进行视图的渲染之前执行，也就是说在这个方法中你可以对ModelAndView进行操作。
      * 这个方法的链式结构跟正常访问的方向是相反的，也就是说先声明的Interceptor拦截器该方法反而会后调用 
      */  
-//    @Override
+    @Override
     @SuppressWarnings("rawtypes")
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {  
-    	
+    	System.out.println("！！！！！！拦截器postHandle执行了");
     }  
   
     /** 
@@ -62,9 +62,9 @@ public class SpringInterceptor{  	//先暂停拦截器使用
      * 该方法将在整个请求完成之后，也就是DispatcherServlet渲染了视图执行， 
      * 这个方法的主要作用是用于清理资源的 
      */  
-//    @Override  
+    @Override  
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {  
-    	    	
+    	System.out.println("！！！！！！拦截器afterCompletion执行了");
     }  
       
     

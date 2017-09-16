@@ -50,7 +50,7 @@ public class DataSource {
 	public static BasicDataSource dataSource_Oracle;
 	
 	//
-	public static JdbcTemplate community;
+	public static JdbcTemplate comm;
 	public static JdbcTemplate orcl;
 	
 	
@@ -71,7 +71,7 @@ public class DataSource {
 			dataSource_MySql.setMinIdle(MySQL_MinIdle);				//最小空闲连接。“备用金”最低值
 			dataSource_MySql.setMaxWait(MySQL_MaxWait);				//最大等待时间（毫秒）默认表示无限等待不抛异常
 			
-			community = new JdbcTemplate(dataSource_MySql);
+			comm = new JdbcTemplate(dataSource_MySql);
 		}
 		
 		if(dataSource_Oracle == null){

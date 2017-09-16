@@ -107,7 +107,7 @@ public class MySQLUtils {
 	
 	
 	public static void main(String[] args) {
-		JdbcTemplate community = DataSource.community;
+		JdbcTemplate community = DataSource.comm;
 		
 		MySQLUtils mySql = new MySQLUtils();
 		
