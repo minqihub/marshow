@@ -25,6 +25,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	<body>
    		<p><b>主页待设计</b></p>
    		
+   		<a href="homePage/index.html">点击跳转官方首页</a> 
+		<br/>
+		<p>（建议PC端访问）</p>
    		<a href="backStage/index.html">点击跳转后台PC管理界面</a> 
 		<br/>
 		<p>（建议PC端访问）</p>
