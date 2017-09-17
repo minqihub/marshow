@@ -69,7 +69,7 @@ form.getUrlParams = function(src){
  * 3.建议将所有的.do方法的返回内容进行包装{"data":返回值,"":""}，并强制将返回值map转换为json格式
  * 4.待优化：是否选择加密传输
  */
-form.ajax = function(json,url){debugger
+form.ajax = function(json,url){
 	var ajaxObj = {async : false};
 	ajaxObj['type'] = "POST";
 	ajaxObj['url'] = url;
@@ -78,7 +78,7 @@ form.ajax = function(json,url){debugger
 	ajaxObj['error'] = function(){
 		alert("异步加载失败!");
 	};
-	ajaxObj['success'] = function(data){debugger
+	ajaxObj['success'] = function(data){
 		var type = typeof data;
 		if(type == "object"){
 			returnData = data;
@@ -306,7 +306,7 @@ form.formatMoney = function(money, flag){
 };
 
 //项目头名称
-form.getprojectName = function(){debugger
+form.getprojectName = function(){
 	if(location.port != ""){
 		return "/marshow";
 	}else{
@@ -314,26 +314,8 @@ form.getprojectName = function(){debugger
 	}
 };
 
-//项目头名称
-form.projectName = {
-	"FormUrl" : "marshow",
-	"OutSideWeb" : "",
-	"ResourceUrl" : "jlo2oResource"
-};
-
-//域名、端口(http://localhost:8080)
-form.headUrl = location.protocol + "//" + location.host;
-
-//项目头名称，获取当前访问路径_2017-08-03 19:11:15
-form.getURL = function(key) {
-	var url = "";
-	if(this.projectName[key] == ""){
-		url = this.headUrl + this.projectName[key];
-	}else{
-		url = this.headUrl + "/" + this.projectName[key];
-	}
-	return url;
-};
+//域名、端口(http://localhost:8080/marshow)
+form.getprojectUrl = location.protocol + "//" + location.host + form.getprojectName();
 
 //页面写入JS（动态绝对路径）_2017-08-03 19:19:25
 form.writeJs = function(key, url){debugger

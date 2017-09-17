@@ -22,7 +22,7 @@ public class Authorization {
 		//查询数据库，此password应该是前台MD5加密后的 //TODO
 		
 		String sql = "select password from s_user where mobile = '"+ mobile +"'";
-		Map resultMap = MySQLUtils.sqlQueryForMap(DataSource.community, sql);
+		Map resultMap = MySQLUtils.sqlQueryForMap(DataSource.comm, sql);
 		
 		if(resultMap.get("password").equals(password)){
 			return true;
@@ -61,7 +61,7 @@ public class Authorization {
 		
 		//通过sessionId去用户表中查询信息 TODO 写成存储过程
 		String sql = "select * from s_user where sessionid ='" + sessionId + "'";
-		userInfo = MySQLUtils.sqlQueryForMap(DataSource.community, sql);
+		userInfo = MySQLUtils.sqlQueryForMap(DataSource.comm, sql);
 		
 		
 		

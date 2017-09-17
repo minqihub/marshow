@@ -36,6 +36,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.kevinsawicki.http.HttpRequest;
 
 /**
@@ -105,7 +106,9 @@ public class HttpUtils {
         PrintWriter pw = null;
 		try {
 			pw = response.getWriter();
-            pw.print(data);
+			JSONObject json = new JSONObject();
+			json.put("data", data);
+            pw.print(json);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally{

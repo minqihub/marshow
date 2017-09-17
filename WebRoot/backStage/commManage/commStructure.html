@@ -8,14 +8,86 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     
     <link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all" />
-
+	
+	<style type="text/css">
+	.left {
+		float: left;
+		width: 50%;
+	}
+	.right {
+		float: right;
+		width: 50%;
+	}
+	.layui-input {
+		width: 50%;
+	}
+	
+	
+	
+	
+	</style>
+	
 	</head>
   
 	<body>
 	
-		<blockquote class="layui-elem-quote layui-text">这是定义社区结构：鉴于小伙伴的普遍反馈，先温馨提醒两个常见“问题素如何更新？</blockquote>
+		<blockquote class="layui-elem-quote layui-text">温馨提示：建议节点代码可以遵循一下规则：父节点01，子节点0101，孙节点010101，以此类推，以保证节点代码不会重复</blockquote>
     	定义社区结构. <br>
-    	<ul id="demo"></ul>
+    	
+    	
+    	
+    	
+    	<div class="left">
+    	
+    		<ul id="demo"></ul>
+    		
+    	</div>
+    	
+    	<div class="right">
+    	
+    		
+    	
+    		
+    		<button id="edit" class="layui-btn">
+    			<i class="layui-icon">&#xe642;</i>编辑该节点
+			</button>
+    		<button id="add" class="layui-btn layui-btn-normal">
+				<i class="layui-icon">&#xe608;</i>添加同级节点
+			</button>
+    		<button id="addSub" class="layui-btn layui-btn-normal">
+				<i class="layui-icon">&#xe608;</i>添加子节点
+			</button>
+    		<button id="del" class="layui-btn layui-btn-danger">
+				<i class="layui-icon">&#xe640;</i>删除该节点
+			</button>
+    		<br>
+
+    		<label>当前节点代码：</label>
+    		<input type="text" id="nodeCode" class="layui-input" disabled="disabled"><br>
+    		<label>当前节点名称：</label>
+    		<input type="text" id="nodeName" class="layui-input" disabled="disabled"><br>
+    		
+    		<div id="new" style=" display: none">
+	    		<label>新增节点代码：</label>
+	    		<input type="text" id="newNodeCode" class="layui-input"><br>
+	    		<label>新增节点名称：</label>
+	    		<input type="text" id="newNodeName" class="layui-input"><br>
+    		</div>
+    		
+    		<div id="toolBar" style=" display: none">
+    		 	<button id="submit" class="layui-btn">
+					<i class="layui-icon">&#xe605;</i>提交
+				</button>
+	    		<button id="cancel" class="layui-btn">
+					<i class="layui-icon">&#x1006;</i>取消
+				</button>
+    		</div>
+
+    		
+    		
+    	</div>
+    	
+    	
     	
     	
     	
@@ -29,6 +101,8 @@
     	
     	
   		<script src="../../plugins/layui/layui.js"></script>
+ 		<script src="../../plugins/jquery-3.1.1.js"></script>
+ 		<script src="../../plugins/formTools.js"></script>
 		<script src="js/commStructure.js"></script>
     	
 	</body>

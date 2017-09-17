@@ -84,7 +84,7 @@ public class Login {
 			
 			// TODO 写成存储过程：登陆成功就把sessionId写入数据库
 			String sql = "update s_user set sessionid ='"+sessionId+"' where username = '"+ username+"'";
-			MySQLUtils.sqlExecute(DataSource.community, sql);
+			MySQLUtils.sqlExecute(DataSource.comm, sql);
 			
 			//
 
@@ -161,7 +161,7 @@ public class Login {
 		int row = 0;
 		String sql = "update s_user set password ='" + password + "' where mobile = '" + mobile + "'";
 		try {
-			row = MySQLUtils.sqlExecute(DataSource.community, sql);
+			row = MySQLUtils.sqlExecute(DataSource.comm, sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

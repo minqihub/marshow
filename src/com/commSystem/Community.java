@@ -1,5 +1,6 @@
 package com.commSystem;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.framework.database.DataSource;
 import com.framework.database.MySQLUtils;
 import com.framework.utils.HttpUtils;
@@ -25,7 +28,9 @@ import com.framework.utils.Json;
 @RequestMapping("/community")
 public class Community {
 
-	
+	//查询当前社区的所有结构数据
+	private List list = null;
+	private JdbcTemplate community = DataSource.comm;
 	
 	/**
 	 * 查询社区结构
@@ -34,50 +39,204 @@ public class Community {
 	 * @return
 	 * http://localhost:8080/marshow/community/getStructure.do
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping("/getStructure.do")
 	public List getStructure(String json, HttpServletResponse response){
 		Map data = Json.toJO(json);
-		
-		//TODO 测试数据
-		data.put("commId", "comm0001");
-		
-		
-		JdbcTemplate community = DataSource.comm;
-		String sql = "SELECT * FROM C_CommStructure WHERE commId = '" + data.get("commId") +"'";
+
+		String sql = "SELECT * FROM C_CommStructure WHERE commId = '" + data.get("commId") +"' AND validMark = '1' ORDER BY code";
 		List list = MySQLUtils.sqlQueryForList(community, sql);
-		System.out.println(list);
-		HttpUtils.printString(response, list);
-		return list;
+		this.list = list;
+		
+		//处理数据
+		List resultList = handleData(null, null);
+
+		HttpUtils.printString(response, resultList);
+		return resultList;
+	}
+	
+	/**
+	 * 处理数据，以满足layui要求
+	 * @param list 总数据
+	 * @param code 需要递归查询的当前节点代码
+	 * @return {name: '父节点2',code:'02', children: [{name: '子节点21',code:'0201', children: [{name: '子节点211',code:'020101'}]}]}
+	 */
+	@SuppressWarnings("rawtypes")
+	private List handleData(JSONArray jsonAry, String code){
+		if(jsonAry == null){									//首次，获取顶级结构
+			JSONArray returnAry = new JSONArray();
+			for (int i = 0; i < this.list.size(); i++) {
+				JSONObject row = Json.toJO(this.list.get(i));
+				if(row.getString("isFirst").equals("1")){		//查询顶级结构
+//					JSONObject temp = new JSONObject();
+//					temp.put("name", row.get("name"));
+//					temp.put("code", row.get("code"));
+//					returnAry.add(temp);
+					returnAry.add(row);
+				}
+			}
+			return handleData(returnAry, null);					//递归
+		}else if(code == null){
+			for (int i = 0; i < jsonAry.size(); i++) {			//获取顶级节点的子节点
+				JSONObject row = Json.toJO(jsonAry.get(i));
+				row.put("children", handleData(jsonAry, row.get("code").toString()));
+			}
+			return jsonAry;
+		}else{													//递归产生子节点的（子节点）*n
+			JSONArray childAry = new JSONArray();
+			for (int i = 0; i < this.list.size(); i++) {
+				JSONObject row = Json.toJO(this.list.get(i));
+				if(row.get("sjCode") != null && row.getString("sjCode").equals(code)){
+//					JSONObject childJson = new JSONObject();
+//					childJson.put("name", row.getString("name"));
+//					childJson.put("code", row.getString("code"));
+//					childJson.put("children", handleData(childAry, row.get("code").toString()));
+//					childAry.add(childJson);
+					row.put("children", handleData(childAry, row.get("code").toString()));
+					childAry.add(row);
+				}
+			}			
+			return childAry;
+		}
 	}
 	
 	
-	
-	
-	
 	/**
-	 * 定义社区结构
+	 * 修改社区结构
 	 * @param json
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/defineStructure.do")
-	public Map defineStructure(String json, HttpServletResponse response){
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping("/updateStructure.do")
+	public Map updateStructure(String json, HttpServletResponse response){
+		Map data = Json.toJO(json);
 		
+		String option = data.get("option").toString();
+		JSONObject choosedNode = Json.toJO(data.get("choosedNode"));
 		
-		
-		return new HashMap();
+		Map returnMap = new HashMap();
+		if(option.equals("edit")){						//修改节点
+			returnMap = edit(data, choosedNode);
+		}else if(option.equals("add")){					//新增同级节点
+			returnMap = add(data, choosedNode);
+		}else if(option.equals("addSub")){				//新增子节点
+			returnMap = addSub(data, choosedNode);
+		}else if(option.equals("del")){					//删除节点
+			returnMap = del(data, choosedNode);
+		}else{
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "未识别的操作类型");
+		}
+		HttpUtils.printString(response, returnMap);
+		return returnMap;
 	}
 	
+	/**
+	 * 修改节点
+	 * @param data
+	 * @param choosedNode
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private Map edit(Map data, JSONObject choosedNode){
+		Map returnMap = new HashMap();
+		Map map = new HashMap();
+		map.put("commId", choosedNode.getString("commId"));
+		map.put("code", choosedNode.getString("code"));
+		map.put("name", data.get("name"));
+		String sql = "UPDATE C_CommStructure SET name = ?name WHERE code = ?code AND commId = ?commId";
+		try {
+			MySQLUtils.sqlExecuteMap(community, sql, map);
+			returnMap.put("MSGID", "S");
+			returnMap.put("MESSAGE", "修改成功");
+		} catch (SQLException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "修改失败：" + e);
+		}
+		return returnMap;
+	}
 	
+	/**
+	 * 新增同级节点
+	 * @param data
+	 * @param choosedNode
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private Map add(Map data, JSONObject choosedNode){
+		Map returnMap = new HashMap();
+		Map map = new HashMap();
+		map.put("commId", choosedNode.getString("commId"));
+		map.put("sjCode", choosedNode.getString("sjCode"));
+		map.put("isLast", choosedNode.getString("isLast"));
+		map.put("isFirst", choosedNode.getString("isFirst"));
+		map.put("newNodeCode", data.get("newNodeCode"));
+		map.put("newNodeName", data.get("newNodeName"));
+		String sql = "INSERT INTO C_CommStructure (`commId`, `name`, `code`, `sjCode`, `isLast`, `isFirst`) VALUES (?commId, ?newNodeName, ?newNodeCode, ?sjCode, ?isLast, ?isFirst);";
+		try {
+			MySQLUtils.sqlExecuteMap(community, sql, map);
+			returnMap.put("MSGID", "S");
+			returnMap.put("MESSAGE", "新增成功");
+		} catch (SQLException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "新增失败：" + e);
+		}
+		return returnMap;
+	}
 	
+	/**
+	 * 新增子级节点
+	 * @param data
+	 * @param choosedNode
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private Map addSub(Map data, JSONObject choosedNode){
+		//TODO 新增子节点注意：如果在原有的末级节点下新增它的子节点，那么原有的末级标记变为非末级
+		Map returnMap = new HashMap();
+		Map map = new HashMap();
+		map.put("commId", choosedNode.getString("commId"));
+		map.put("code", choosedNode.getString("code"));
+		map.put("isLast", choosedNode.getString("isLast"));
+		map.put("isFirst", choosedNode.getString("isFirst"));
+		map.put("newNodeCode", data.get("newNodeCode"));
+		map.put("newNodeName", data.get("newNodeName"));
+		String sql = "INSERT INTO C_CommStructure (`commId`, `name`, `code`, `sjCode`, `isLast`, `isFirst`) VALUES (?commId, ?newNodeName, ?newNodeCode, ?code, '1', '0');";
+		try {
+			MySQLUtils.sqlExecuteMap(community, sql, map);
+			returnMap.put("MSGID", "S");
+			returnMap.put("MESSAGE", "新增成功");
+		} catch (SQLException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "新增失败：" + e);
+		}
+		return returnMap;
+	}
 	
-	
-	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	/**
+	 * 删除节点
+	 * @param data
+	 * @param choosedNode
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private Map del(Map data, JSONObject choosedNode){
+		//TODO 需先判断是否含有子节点，一并删除？？？
+		Map returnMap = new HashMap();
+		Map map = new HashMap();
+		map.put("commId", choosedNode.getString("commId"));
+		map.put("code", choosedNode.getString("code"));
+		String sql = "UPDATE C_CommStructure SET validMark = '0' WHERE code = ?code AND commId = ?commId";
+		try {
+			MySQLUtils.sqlExecuteMap(community, sql, map);
+			returnMap.put("MSGID", "S");
+			returnMap.put("MESSAGE", "删除成功");
+		} catch (SQLException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "删除失败：" + e);
+		}
+		return returnMap;
 	}
 
 }
