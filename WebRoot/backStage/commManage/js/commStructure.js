@@ -65,18 +65,21 @@ $('#addSub').on('click', function() {
 });
 
 //删除节点（TODO 待confirm）
-$('#del').on('click', function() {
+$('#del').on('click', function() {debugger
 	if($("#nodeName").val() != ""){
 		option = "del";
 		
-		alert("暂不允许删除，待添加判断");
-//		var url = form.getprojectUrl + "/community/updateStructure.do";
-//		var json = {"json":JSON.stringify({"option":option, "choosedNode":choosedNode})};
-//		result = form.ajax(json, url).data;
-//		
-//		if(result.MSGID == "S"){
-//			location.reload();
-//		}
+		if(choosedNode.children.length > 0){
+			alert("您将要删除的节点包含子节点，如果删除，其子节点将会一起被删除。是否确定？");
+		}
+		
+		var url = form.getprojectUrl + "/community/updateStructure.do";
+		var json = {"json":JSON.stringify({"option":option, "choosedNode":choosedNode})};
+		result = form.ajax(json, url).data;
+		
+		if(result.MSGID == "S"){
+			location.reload();
+		}
 	}
 });
 

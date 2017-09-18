@@ -30,7 +30,9 @@ public class SQLConvertor {
             String key = it.next().toString();
             Object value = map.get(key);
             
-            if(value.getClass().getName().equals("java.lang.String")){
+            if(value == null){
+            	sqlTemplate = sqlTemplate.replace(separator+key, "null");
+            }else if(value.getClass().getName().equals("java.lang.String")){
             	sqlTemplate = sqlTemplate.replace(separator+key, "'"+value.toString()+"'");
             }else{
             	sqlTemplate = sqlTemplate.replace(separator+key, value.toString());

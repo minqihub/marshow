@@ -66,12 +66,6 @@ layui.use('table', function(){
 	  		});
 	  	} else if(layEvent === 'edit'){debugger //编辑
 	  		//do something
-	    
-	  		
-	  		tr[0].after("<div style='height: 80px'><p>哈哈哈哈 插入了一行</p></div>");
-  			tr[1].after("<div style='height: 80px'><p>哈哈哈哈 插入了一行</p></div>");
-//	  		tr[2].after("<div style='height: 80px'><p>哈哈哈哈 插入了一行</p></div>");
-	  		
 	  		
 	  		//同步更新缓存对应的值
 	  		obj.update({
