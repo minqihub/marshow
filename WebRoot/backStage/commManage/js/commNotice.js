@@ -27,7 +27,7 @@ layui.use('table', function(){
     	even: true ,	//开启隔行背景
     	size: 'sm' ,	//小尺寸的表格sm\lg
     	skin: 'line' ,	//行边框风格line\row\nob
-    	done: function(res, curr, count){debugger
+    	done: function(res, curr, count){
 		    //如果是异步请求数据方式，res即为你接口返回的信息。
 		    console.log(res);
 		    
@@ -104,7 +104,7 @@ layui.use('laydate', function(){
 		format: 'yyyy-MM-dd HH:mm:ss',
 		trigger: 'click',	//输入框默认focus，非输入框默认click
 		calendar: true,		//是否显示公历节日
-		done:function(value, date){debugger
+		done:function(value, date){
 			if(date.year === 2017 && date.month === 4 && date.date === 21){
 				dateObj.hint("提示：这一天是闵奇的生日");
 			}
@@ -121,14 +121,12 @@ layui.use('laydate', function(){
 	});
 });
 
-//表单控件
+//表单控件（开关字段：关闭状态无数据；开启状态则该字段为"on"）
 layui.use('form', function(){
-	var form = layui.form;
-	var $ = layui.jquery;
-	//开关字段：关闭状态无数据；开启状态则该字段为"on"
+	var formUI = layui.form;
 	
 	//监听提交
-	form.on('submit(formDemo)', function(data){debugger
+	formUI.on('submit(formDemo)', function(data){
 		if(data.field.shareMark == null){
 			data.field.shareMark = "0";
 		}else{
@@ -141,10 +139,14 @@ layui.use('form', function(){
 		
 		var json = {"json": JSON.stringify(data.field)};
 		var url = form.getprojectUrl + "/commNotice/addNotice.do";
-//		var resultData = form.ajax(json, url).data;
-	  
-	  
-		layer.msg(JSON.stringify(data.field));
-    	return false;
+		var resultData = form.ajax(json, url).data;
+		debugger
+		if(resultData.MSGID == "S"){
+			//提交成功后，清空表单
+			return true;		//自动清空表单
+		}else{
+			return false;		//阻止表单提交，页面数据不会丢失
+		}
+//		layer.msg(resultData.MESSAGE);			//TODO 表单刷新过快，导致看不到layer.msg
 	});
 });
