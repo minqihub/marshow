@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>递归算法的问题</title>
+	
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+  	<h1>数据库数据格式：</h1>
+    <p>
+    [
+	{name=南区,  code=01, 		 sjCode=null,   isLast=0, isFirst=1}, 
+	{name=1栋,   code=0101, 	 sjCode=01,     isLast=0, isFirst=0}, 
+	{name=1单元, code=010101, 	 sjCode=0101,   isLast=0, isFirst=0}, 
+	{name=201,   code=010101201, sjCode=010101, isLast=1, isFirst=0}, 
+	{name=202,   code=010101202, sjCode=010101, isLast=1, isFirst=0}, 
+	{name=203,   code=010101203, sjCode=010101, isLast=1, isFirst=0}, 
+	{name=2单元, code=010102,    sjCode=0101,   isLast=0, isFirst=0}, 
+	{name=201,   code=010102201, sjCode=010102, isLast=1, isFirst=0}, 
+	{name=202,   code=010102202, sjCode=010102, isLast=0, isFirst=0}, 
+	{name=203,   code=010102203, sjCode=010102, isLast=1, isFirst=0}, 
+	{name=北区,  code=02,        sjCode=null,   isLast=0, isFirst=1}, 
+	{name=1栋,   code=0201,      sjCode=02,     isLast=0, isFirst=0}, 
+	{name=1单元, code=020101,    sjCode=0201,   isLast=0, isFirst=0}, 
+	{name=201,   code=020101201, sjCode=020101, isLast=1, isFirst=0}, 
+	{name=西区,  code=03,        sjCode=null,   isLast=0, isFirst=1}, 
+	{name=1栋,   code=0301,      sjCode=03,     isLast=1, isFirst=0}
+	]
+    </p>
+    <br>
+    
+    <h1>前端展示要求格式：</h1>
+    <p>
+		[
+		{name: '父节点1',code:'01', children: [{name: '子节点11',code:'0101'} , {name: '子节点12',code:'0102'}]},
+		{name: '父节点2',code:'02', children: [{name: '子节点21',code:'0201', children: [{name: '子节点211',code:'020101'}]}]}
+		];
+    </p>
+    
+    <h1>自己写的垃圾方法：</h1>
+    <p>
+			/**
+	 * 处理数据，以满足layui要求
+	 * @param jsonAry 总数据
+	 * @param code 需要递归查询的当前节点代码
+	 * @return 
+	 */
+	@SuppressWarnings("rawtypes")
+	private List handleData(JSONArray jsonAry, String code){
+		if(jsonAry == null){									//首次，获取顶级结构
+			JSONArray returnAry = new JSONArray();
+			for (int i = 0; i < this.list.size(); i++) {
+				JSONObject row = Json.toJO(this.list.get(i));
+				if(row.getString("isFirst").equals("1")){		//查询顶级结构
+					returnAry.add(row);
+				}
+			}
+			return handleData(returnAry, null);					//递归
+		}else if(code == null){
+			for (int i = 0; i < jsonAry.size(); i++) {			//获取顶级节点的子节点
+				JSONObject row = Json.toJO(jsonAry.get(i));
+				row.put("children", handleData(jsonAry, row.get("code").toString()));
+			}
+			return jsonAry;
+		}else{													//递归产生子节点的（子节点）*n
+			JSONArray childAry = new JSONArray();
+			for (int i = 0; i < this.list.size(); i++) {
+				JSONObject row = Json.toJO(this.list.get(i));
+				if(row.get("sjCode") != null && row.getString("sjCode").equals(code)){
+					row.put("children", handleData(childAry, row.get("code").toString()));
+					childAry.add(row);
+				}
+			}			
+			return childAry;
+		}
+	}
+    </p>
+    
+  </body>
+</html>

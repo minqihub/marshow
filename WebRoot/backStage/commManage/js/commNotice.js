@@ -29,47 +29,34 @@ layui.use('table', function(){
     	skin: 'line' ,	//行边框风格line\row\nob
     	done: function(res, curr, count){
 		    //如果是异步请求数据方式，res即为你接口返回的信息。
-		    console.log(res);
+//		    console.log(res);
 		    
 		    //得到当前页码
-		    console.log(curr); 
+//		    console.log(curr); 
 		    
 		    //得到数据总量
-		    console.log(count);
+//		    console.log(count);
 		}
 	});
-	
-	//监听checkbox
-	table.on('checkbox(test)', function(obj){debugger
-		console.log(obj.checked); 	//当前是否选中状态
-		console.log(obj.data); 		//选中行的相关数据
-		console.log(obj.type); 		//如果触发的是全选，则为：all，如果触发的是单选，则为：one
-	});
-	
-	
+
 	//监听工具条
 	table.on('tool(test)', function(obj){debugger 		//注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-		var data = obj.data; //获得当前行数据
-	  	var layEvent = obj.event; //获得 lay-event 对应的值
-	  	var tr = obj.tr; //获得当前行 tr 的DOM对象
+		var data = obj.data; 		//获得当前行数据
+	  	var layEvent = obj.event; 	//获得 lay-event 对应的值
+	  	var tr = obj.tr; 			//获得当前行 tr 的DOM对象
 	 
-	  	if(layEvent === 'detail'){debugger //查看
+	  	if(layEvent === 'detail'){debugger 			//查看
 	  		//do somehing
 	  		
-	  	} else if(layEvent === 'del'){ //删除
+	  	} else if(layEvent === 'del'){ 				//删除
 	  		layer.confirm('真的删除行么', function(index){
 	  			obj.del(); //删除对应行（tr）的DOM结构
 	  			layer.close(index);
 	  			//向服务端发送删除指令
 	  		});
-	  	} else if(layEvent === 'edit'){debugger //编辑
+	  	} else if(layEvent === 'edit'){debugger 	//编辑
 	  		//do something
 	  		
-	  		//同步更新缓存对应的值
-	  		obj.update({
-	  			username: '123',
-	  			title: 'xxx'
-	  		});
 	  	}
 	});
 	
