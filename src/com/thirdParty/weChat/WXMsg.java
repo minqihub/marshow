@@ -688,7 +688,7 @@ public class WXMsg{
 	public Map sendWeChatMsg(String appid, String template_id, String openid, Map msgMap, String url) throws Exception{
     	Map paramsMap = new HashMap();
 		//获取access_token
-        String access_token = WXTools.getAccessToken();
+        String access_token = "";
 
 		//发送消息
 		String Address = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+access_token;

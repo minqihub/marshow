@@ -50,6 +50,12 @@ public class WXTools {
 	private static final String WECHAT_APPID = property.getProperty("WECHAT_APPID");
 	private static final String WECHAT_APPSECRET = property.getProperty("WECHAT_APPSECRET");
 
+	//微信服务器token
+	private static final String TOKEN = "marshow";
+	
+	
+	
+	
 	/**
 	 * 绑定微信账号
 	 * @param json
@@ -73,80 +79,49 @@ public class WXTools {
 	 * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140183
 	 * @return
 	 */
-	@RequestMapping("/getWeChatToken.do")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map getWeChatToken(String json, HttpServletResponse response){
-		Map data = Json.toMap(json);
-		String serviceId = data.get("serviceId").toString();
-		
-		Map returnMap = new HashMap();
-		
+	public Map getWeChatToken(String appid){
 		//查询已有的access_token、api_ticket是否过期
-		String sql = "SELECT * FROM C_WeChatSign WHERE serviceId = '"+ serviceId +"'";
+		String sql = "SELECT * FROM C_WeChatSign WHERE appid = '"+ appid +"'";
 		JdbcTemplate comm = DataSource.comm;
 		Map tokenMap = MySQLUtils.sqlQueryForMap(comm, sql);
 		
+		Map returnMap = new HashMap();
 		if(System.currentTimeMillis() / 1000 - Integer.parseInt(tokenMap.get("timestamp").toString()) > 7000){
-			returnMap = getWeChatToken2(serviceId);
+			try {
+				String url1 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + tokenMap.get("secret");
+				Map access_tokenMap  = HttpUtils.doGet(url1, null, null);
+				String access_token = access_tokenMap.get("access_token").toString();
+				
+				String url2 = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + access_token + "&type=jsapi";
+				Map api_ticketMap  = HttpUtils.doGet(url2, null, null);
+				String api_ticket = api_ticketMap.get("ticket").toString();
+				
+				returnMap.put("MSGID", "S");
+				returnMap.put("appid", tokenMap.get("appid"));
+				returnMap.put("access_token", access_token);
+				returnMap.put("api_ticket", api_ticket);
+				returnMap.put("timestamp", System.currentTimeMillis() / 1000);
+				returnMap.put("serviceId", tokenMap.get("serviceId"));
+				
+				//更新access_token、api_ticket
+				String updateSql = "UPDATE C_WeChatSign SET `access_token`=?access_token, `api_ticket`=?api_ticket, `timestamp`=?timestamp WHERE `serviceId`=?serviceId";
+				MySQLUtils.sqlExecuteMap(comm, updateSql, returnMap);
+			} catch (SQLException e1) {
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", "写入数据库失败");
+			} catch (Exception e) {
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", "获取token失败");
+			}
 		}else{
 			returnMap.put("MSGID", "S");
 			returnMap.put("appid", tokenMap.get("appid"));
 			returnMap.put("access_token", tokenMap.get("access_token"));
 			returnMap.put("api_ticket", tokenMap.get("api_ticket"));
 		}
-		
-		HttpUtils.printString(response, returnMap);
 		return returnMap;
 	}
-
-	
-	/**
-	 * 后台通过serviceId获取
-	 * @param serviceId
-	 * @return
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Map getWeChatToken2(String serviceId){
-		Map returnMap = new HashMap();
-		JdbcTemplate comm = DataSource.comm;
-
-		String sql = "SELECT * FROM C_WeChatSign WHERE serviceId = '"+ serviceId +"'";
-		Map tokenMap = MySQLUtils.sqlQueryForMap(comm, sql);
-		
-		try {
-			String url1 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + tokenMap.get("appid") + "&secret=" + tokenMap.get("secret");
-			Map access_tokenMap  = HttpUtils.doGet(url1, null, null);
-			String access_token = access_tokenMap.get("access_token").toString();
-			
-			String url2 = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + access_token + "&type=jsapi";
-			Map api_ticketMap  = HttpUtils.doGet(url2, null, null);
-			String api_ticket = api_ticketMap.get("ticket").toString();
-			
-			returnMap.put("MSGID", "S");
-			returnMap.put("appid", tokenMap.get("appid"));
-			returnMap.put("access_token", access_token);
-			returnMap.put("api_ticket", api_ticket);
-			returnMap.put("timestamp", System.currentTimeMillis() / 1000);
-			returnMap.put("serviceId", serviceId);
-			
-			//更新access_token、api_ticket
-			String updateSql = "UPDATE C_WeChatSign SET `access_token`=?access_token, `api_ticket`=?api_ticket, `timestamp`=?timestamp WHERE `serviceId`=?serviceId";
-			MySQLUtils.sqlExecuteMap(comm, updateSql, returnMap);
-		} catch (SQLException e1) {
-			returnMap.put("MSGID", "E");
-			returnMap.put("MESSAGE", "写入数据库失败");
-		} catch (Exception e) {
-			returnMap.put("MSGID", "E");
-			returnMap.put("MESSAGE", "获取token失败");
-		}
-		return returnMap;
-	}
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * 获取微信用户openid
@@ -171,9 +146,9 @@ public class WXTools {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public static Map getWeChatUserInfo(String openId){
+	public Map getWeChatUserInfo(String openId){
 		
-		Map tokenMap = getWeChatToken2("");
+		Map tokenMap = getWeChatToken("");
 		String access_token = tokenMap.get("access_token").toString();
 		String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + access_token + "&openid=" + openId + "&lang=zh_CN";
 		
@@ -194,11 +169,11 @@ public class WXTools {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping("/getWeixinImg.do")
-	public static String getWeixinImg(String imgName, String imgUrl) throws Exception{
+	public String getWeixinImg(String imgName, String imgUrl) throws Exception{
 		//http://localhost:8080/jlo2o/trust/weiXinShop/getWeixinImg.do
  
 		//获取access_token
-		Map tokenMap = getWeChatToken2("");
+		Map tokenMap = getWeChatToken("appid");
 		String access_token = tokenMap.get("access_token").toString();
         URL urlObj = new URL("https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=" + access_token); 
         
@@ -279,29 +254,34 @@ public class WXTools {
 
 	
 	
-	
+	/**
+	 * 微信公众平台通过验证TOKEN，开启服务
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping("/service")
-	public void service(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping("/checkToken.do")
+	public void checkToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getMethod().toLowerCase().equals("get")) {
-			
 			//验证服务器地址有效性：微信服务器将发送GET请求到填写的服务器地址URL上，GET请求携带四个参数
-	        String signature = request.getParameter("signature");
-	        String timestamp = request.getParameter("timestamp");
-	        String nonce = request.getParameter("nonce");
-	        String echostr = request.getParameter("echostr");
+	        String signature = request.getParameter("signature");	//微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数
+	        String timestamp = request.getParameter("timestamp");	//时间戳
+	        String nonce = request.getParameter("nonce");			//随机数
+	        String echostr = request.getParameter("echostr");		//随机字符串
 	        
-	        String preSign = "signature=" + signature + "&timestamp=" + timestamp + "&nonce=" + nonce + "&echostr=" + echostr;
-	        System.out.println(preSign);
+	        String prama = "signature=" + signature + "&timestamp=" + timestamp + "&nonce=" + nonce + "&echostr=" + echostr;
+	        System.out.println("微信服务器发来的参数："+prama);
 
-	        if(checkSignature(signature, timestamp, nonce)){
+	        if(checkSignature(this.TOKEN, signature, timestamp, nonce)){
+	        	System.out.println("验签成功，是微信发来的消息");
 	        	PrintWriter out = response.getWriter();
 	            out.print(echostr);
 	            out.flush();
 	            out.close();
 	        }
 		}else {
-			Enumeration enu=request.getParameterNames();  
+			Enumeration enu = request.getParameterNames();  
 			while(enu.hasMoreElements()){  
 				String paraName=(String)enu.nextElement();  
 				System.out.println(paraName+" : "+request.getParameter(paraName));  
@@ -311,36 +291,33 @@ public class WXTools {
 	
 	/**
 	 * 验证签名
+	 * 将token、timestamp、nonce三个参数进行字典序排序
+	 * 将三个参数字符串拼接成一个字符串进行sha1加密
+	 * 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
 	 * @param signature
 	 * @param timestamp
 	 * @param nonce
 	 * @return
 	 */
-    public static boolean checkSignature(String signature, String timestamp, String nonce) {
-        String[] arr = new String[] {timestamp, nonce};
-        //排序
-        Arrays.sort(arr);
-
-        //生成字符串
-        StringBuffer content = new StringBuffer();
+	@RequestMapping("/getWeixinImg.do")
+    public static boolean checkSignature(String token, String signature, String timestamp, String nonce) {
+        String[] arr = new String[] {token, timestamp, nonce};
+        Arrays.sort(arr);									//排序
+        
+        StringBuffer content = new StringBuffer();			//生成字符串
         for (int i = 0; i < arr.length; i++) {
             content.append(arr[i]);
         }
-
-        //sha1加密
-        String temp = getSha1(content.toString());
-        
-        System.out.println(temp);
-
+       
+        String temp = getSha1(content.toString()); 			//sha1加密
         return temp.equals(signature);
-
     }
 	
 	
 	
 	/**
 	 * 微信js-sdk签名
-	 * @param json 参数serviceId；url
+	 * @param json 参数serviceId；appid；url
 	 * @param response
 	 * @return
 	 * @throws Exception
@@ -349,11 +326,13 @@ public class WXTools {
 	@RequestMapping("/weChatJsSign.do")
 	public Map<String, String> weChatJsSign(String json, HttpServletResponse response){
 		Map data = Json.toMap(json);
+		
+		String appid = "wx46e8fbea0168eb02";
 		String url = data.get("url").toString();
 		
         Map<String, String> returnMap = new HashMap<String, String>();
         
-        Map tokenMap = getWeChatToken(json, response);							//获取js的api_ticket
+        Map tokenMap = getWeChatToken(appid);							//获取js的api_ticket
         
         String jsapi_ticket = tokenMap.get("api_ticket").toString();
         String nonce_str = create_nonce_str();
