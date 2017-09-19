@@ -131,7 +131,7 @@ public class HttpUtils {
     	HttpGet request = new HttpGet(buildUrl(url, querys));
     	
     	//拼接头部
-    	if(headers.isEmpty() || headers == null){
+    	if(headers == null){
     		request.addHeader("Content-Type", "application/x-www-form-urlencoded");		//默认头部
     	}else{
             for (Map.Entry<String, String> e : headers.entrySet()) {

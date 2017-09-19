@@ -70,7 +70,7 @@ public class CommNotice {
 		returnJson.put("count", list.size());
 		returnJson.put("data", list);
 		
-//		{ code: 0,  msg: "", count: 1000, data: [] } 
+//		{ code: 0,  msg: "", count: 1000, data: [数据] } 
 		
         PrintWriter pw = null;
 		try {

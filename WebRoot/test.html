@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html>
   	<head>
-    	<title>test.html</title>
+    	<title>测试微信jsapi</title>
 	
-    	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-    	<meta http-equiv="description" content="this is my page">
     	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    
-    	<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
-
-
-
-	
 	
   	</head>
   
@@ -25,26 +17,61 @@
 		<script type="text/javascript" src="plugins/jquery-3.1.1.js"></script>
    		<script type="text/javascript">
 		debugger
+		
+		//获取微信js配置参数
+		var json = {"json":JSON.stringify({"serviceId":"ser0001", "url":window.location.href})};
+		var url = form.getprojectUrl + "/wxTools/weChatJsSign.do";
+		var wxConfig = form.ajax(json, url).data;
+		
 		wx.config({
-		    debug: true, 	// 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-		    appId: '', 		// 必填，公众号的唯一标识
-		    timestamp: , 	// 必填，生成签名的时间戳
-		    nonceStr: '', 	// 必填，生成签名的随机串
-		    signature: '',	// 必填，签名，见附录1
-		    jsApiList: [] 	// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+		    debug: true, 						// 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		    appId: wxConfig.appid, 				// 必填，公众号的唯一标识
+		    timestamp: wxConfig.timestamp, 		// 必填，生成签名的时间戳
+		    nonceStr: wxConfig.nonceStr, 		// 必填，生成签名的随机串
+		    signature: wxConfig.signature,		// 必填，签名，见附录1
+		    jsApiList: ['getLocation'] 			// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 		});
 		
-		// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
-		wx.ready(function(){
-			
-    	});
-		
 		// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-		wx.error(function(res){
-			
+		wx.error(function(res){debugger
+			alert("config信息验证失败："+ res);
+    	});
+    	
+		// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+		wx.ready(function(){debugger
+			alert("config信息验证完毕");
     	});
 		
+		wx.checkJsApi({
+		    jsApiList: ['chooseImage', 'getLocation', 'scanQRCode'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+		    success: function(res) {debugger
+		        // 以键值对的形式返回，可用的api值true，不可用为false
+		        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+		        alert("检测js接口结果："+ JSON.stringify(res));
+		    }
+		});
 		
+		//获取地理位置
+		wx.getLocation({
+		    type: 'gcj02', 						// 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+		    success: function (res) {debugger
+		    	alert("获取的地理位置数据："+ JSON.stringify(res));
+		        var latitude = res.latitude; 	// 纬度，浮点数，范围为90 ~ -90
+		        var longitude = res.longitude; 	// 经度，浮点数，范围为180 ~ -180。
+		        var speed = res.speed; 			// 速度，以米/每秒计
+		        var accuracy = res.accuracy; 	// 位置精度
+		    }
+		});
+		
+		//微信扫一扫
+/* 		wx.scanQRCode({
+		    needResult: 1, 						// 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+		    scanType: ["qrCode","barCode"], 	// 可以指定扫二维码还是一维码，默认二者都有
+		    success: function (res) {debugger
+		    	alert("微信扫一扫数据："+ JSON.stringify(res));
+			    var result = res.resultStr; 	// 当needResult 为 1 时，扫码返回的结果
+			}
+		}); */
 		
 		</script>
 		
