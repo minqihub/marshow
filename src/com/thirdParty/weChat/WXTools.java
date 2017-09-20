@@ -46,16 +46,8 @@ import com.thirdParty.weChat.wxInterface.WXServiceMsg;
 @RequestMapping("/wxTools")
 public class WXTools {
 
-	private static PropertiesReader property = PropertiesReader.getInstance();
-	
-	//初始化微信配置
-	private static final String WECHAT_APPID = property.getProperty("WECHAT_APPID");
-	private static final String WECHAT_APPSECRET = property.getProperty("WECHAT_APPSECRET");
-
 	//微信服务器token
-	private static final String TOKEN = "marshow";
-	
-	
+	private static final String TOKEN = PropertiesReader.getInstance().getProperty("WECHAT_TOKEN");
 	
 	
 	/**
