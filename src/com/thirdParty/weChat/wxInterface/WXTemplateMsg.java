@@ -1,4 +1,4 @@
-package com.thirdParty.weChat;
+package com.thirdParty.weChat.wxInterface;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -12,11 +12,11 @@ import com.framework.utils.Json;
 
 
 /**
- * 发送微信消息
+ * 发送微信模板消息
  */
 @Controller
 @RequestMapping("/trust/wXMsg")
-public class WXMsg{
+public class WXTemplateMsg{
 	
 	/**
 	 * 注册成功消息模板

@@ -1,4 +1,4 @@
-package com.thirdParty.weChat;
+package com.thirdParty.weChat.wxInterface;
 
 import java.awt.image.DataBufferUShort;
 import java.io.BufferedReader;

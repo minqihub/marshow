@@ -35,6 +35,7 @@ import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 import com.framework.utils.PropertiesReader;
 import com.framework.utils.XmlUtils;
+import com.thirdParty.weChat.wxInterface.WXServiceMsg;
 
 /**
  * 微信工具类
@@ -81,7 +82,7 @@ public class WXTools {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map getWeChatToken(String appid){
+	public static Map getWeChatToken(String appid){
 		//查询已有的access_token、api_ticket是否过期
 		String sql = "SELECT * FROM C_WeChatSign WHERE appid = '"+ appid +"'";
 		JdbcTemplate comm = DataSource.comm;
@@ -265,6 +266,8 @@ public class WXTools {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/checkToken.do")
 	public void checkToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		PrintWriter out = response.getWriter();
+		
 		//通过验证TOKEN，开启服务
 		if(request.getMethod().toLowerCase().equals("get")) {
 			//验证服务器地址有效性：微信服务器将发送GET请求到填写的服务器地址URL上，GET请求携带四个参数
@@ -278,7 +281,6 @@ public class WXTools {
 
 	        if(checkSignature(this.TOKEN, signature, timestamp, nonce)){
 	        	System.out.println("验签成功，是微信发来的消息");
-	        	PrintWriter out = response.getWriter();
 	            out.print(echostr);
 	            out.flush();
 	            out.close();
@@ -300,9 +302,13 @@ public class WXTools {
 			Map receiveData = XmlUtils.xmlToMap(request);
 			
 			System.out.println("微信推送来的xml转换成map：" + receiveData);
+			//{Content=123123, CreateTime=1505878925, ToUserName=gh_4cd6ce95f880, FromUserName=oz29Y0rzM_1KT1CyySU_Zh7nPJYA, MsgType=text, MsgId=6467700735044133770}
 			
-			
-			
+			String replyStr = WXServiceMsg.autoReply_test(receiveData);
+			//自动回复，即对微信推送的响应
+            out.print(replyStr);
+            out.flush();
+            out.close();
 		}
 	}
 	
