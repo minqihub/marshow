@@ -67,7 +67,8 @@ public class WXTools {
 	public static boolean bindWeChat(String json, HttpServletResponse response){
 		Map data = Json.toMap(json);
 		
-		
+		String code = data.get("code").toString();
+		String appid = data.get("appid").toString();
 		
 		
 		return true;
@@ -127,12 +128,18 @@ public class WXTools {
 	
 	/**
 	 * 获取微信用户openid
-	 * @param code 通过页面获取的微信用户的code
+	 * @param code 页面用户授权获得的code
+	 * @param appid 公众号appid
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public static String getOpenId(String code){
-	   	String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + WECHAT_APPID + "&secret=" + WECHAT_APPSECRET + "&code=" + code + "&grant_type=authorization_code";
+	public static String getOpenId(String code, String appid){
+		
+		//通过appid查询数据库中的secret配置
+		
+		String secret = "";
+		
+	   	String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + secret + "&code=" + code + "&grant_type=authorization_code";
 	   	Map resultMap = null;
 	   	try {
 			resultMap = HttpUtils.doGet(url, null, null);
@@ -148,11 +155,10 @@ public class WXTools {
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public Map getWeChatUserInfo(String openId){
-		
-		Map tokenMap = getWeChatToken("");
+	public Map getWeChatUserInfo(String openid, String appid){
+		Map tokenMap = getWeChatToken(appid);
 		String access_token = tokenMap.get("access_token").toString();
-		String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + access_token + "&openid=" + openId + "&lang=zh_CN";
+		String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + access_token + "&openid=" + openid + "&lang=zh_CN";
 		
 		Map resultMap = null;
 		try {
@@ -258,7 +264,6 @@ public class WXTools {
 	
 	/**
 	 * 接收微信公众平台的推送
-	 * 
 	 * @param request
 	 * @param response
 	 * @throws Exception
@@ -313,7 +318,7 @@ public class WXTools {
 	}
 	
 	/**
-	 * 验证签名
+	 * 验证签名，验证是否是微信服务器发来的
 	 * 将token、timestamp、nonce三个参数进行字典序排序
 	 * 将三个参数字符串拼接成一个字符串进行sha1加密
 	 * 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
@@ -322,7 +327,6 @@ public class WXTools {
 	 * @param nonce
 	 * @return
 	 */
-	@RequestMapping("/getWeixinImg.do")
     public static boolean checkSignature(String token, String signature, String timestamp, String nonce) {
         String[] arr = new String[] {token, timestamp, nonce};
         Arrays.sort(arr);									//排序

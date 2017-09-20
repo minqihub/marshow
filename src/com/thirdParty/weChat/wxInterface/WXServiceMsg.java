@@ -34,37 +34,28 @@ public class WXServiceMsg {
 	
 	
 	/**
-	 * 公众号接收消息后，自动回复
+	 * 公众号被动发送（自动回复）
 	 * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140543
-	 * @param receiveData
+	 * @param receiveData 用户发送的消息，示例：{Content=123123, CreateTime=1505878925, ToUserName=gh_4cd6ce95f880, FromUserName=oz29Y0rzM_1KT1CyySU_Zh7nPJYA, MsgType=text, MsgId=6467700735044133770}
 	 */
 	@SuppressWarnings("rawtypes")
 	public static String autoReply_test(Map receiveData){
-		//{Content=123123, CreateTime=1505878925, ToUserName=gh_4cd6ce95f880, FromUserName=oz29Y0rzM_1KT1CyySU_Zh7nPJYA, MsgType=text, MsgId=6467700735044133770}
-		
 		String replyText = "";
 		
 		if(receiveData.get("MsgType").toString().equals(MsgType_text)){
 			replyText = "测试自动回复。您发送的是文本消息，内容：" + receiveData.get("Content");
-
 		}else if(receiveData.get("MsgType").toString().equals(MsgType_image)){
 			replyText = "测试自动回复。您发送的是图片消息，图片链接：" + receiveData.get("PicUrl");
-
 		}else if(receiveData.get("MsgType").toString().equals(MsgType_voice)){
 			replyText = "测试自动回复。您发送的是语音消息，媒体Id：" + receiveData.get("MediaId") + "；语音识别结果：" + receiveData.get("Recognition");
-
 		}else if(receiveData.get("MsgType").toString().equals(MsgType_video)){
 			replyText = "测试自动回复。您发送的是视频消息，媒体Id：" + receiveData.get("MediaId") + "；视频缩略图Id：" + receiveData.get("ThumbMediaId");
-
 		}else if(receiveData.get("MsgType").toString().equals(MsgType_shortvideo)){
 			replyText = "测试自动回复。您发送的是短视频消息，媒体Id：" + receiveData.get("MediaId") + "；段视频缩略图Id：" + receiveData.get("ThumbMediaId");
-
 		}else if(receiveData.get("MsgType").toString().equals(MsgType_location)){
 			replyText = "测试自动回复。您发送的是地址信息，经度：" + receiveData.get("Location_Y") + "，纬度：" + receiveData.get("Location_X") + "；地理位置信息：" + receiveData.get("Label");
-
 		}else if(receiveData.get("MsgType").toString().equals(MsgType_link)){
 			replyText = "测试自动回复。您发送的是链接信息，标题：" + receiveData.get("Title") + "，描述：" + receiveData.get("Description") + "；链接：" + receiveData.get("Url");
-
 		}
 		
 		String replyXml = "<xml>"
@@ -74,7 +65,6 @@ public class WXServiceMsg {
 				+ "<MsgType><![CDATA[text]]></MsgType>"
 				+ "<Content><![CDATA[" + replyText + "]]></Content>"
 				+ "</xml>";
-		
 		return replyXml;
 	}
 	
@@ -85,7 +75,7 @@ public class WXServiceMsg {
 	
 	
 	/**
-	 * 发送文本消息；请求方式POST
+	 * 公众号主动发送文本消息
 	 * @param appid
 	 * @param json 参数openid、content
 	 * @return
@@ -122,7 +112,7 @@ public class WXServiceMsg {
 	}
 	
 	/**
-	 * 发送图片消息；请求方式POST
+	 * 公众号主动发送图片消息
 	 * @param appid
 	 * @param json 参数openid、media_id
 	 * @return
@@ -160,7 +150,7 @@ public class WXServiceMsg {
 	
 	
 	/**
-	 * 发送语音消息；请求方式POST
+	 * 公众号主动发送语音消息
 	 * @param appid
 	 * @param json 参数openid、media_id
 	 * @return
@@ -198,7 +188,7 @@ public class WXServiceMsg {
 	
 	
 	/**
-	 * 发送视频消息；请求方式POST
+	 * 公众号主动发送视频消息
 	 * @param appid
 	 * @param json 参数openid、video
 	 * @return
@@ -211,7 +201,7 @@ public class WXServiceMsg {
 		String url = DEPLOY_URL + tokenMap.get("access_token");
 		
 		JSONObject sendJson = new JSONObject();
-		sendJson.put("touser", data.get("openid"));			//用户openid
+		sendJson.put("touser", data.get("openid"));
 		sendJson.put("msgtype", "video");
 		
 		JSONObject video = new JSONObject();
@@ -224,7 +214,7 @@ public class WXServiceMsg {
 		if(!DataUtils.isNull(data.get("kf_account"))){
 			//以指定客服身份回复
 			JSONObject customservice = new JSONObject();
-			customservice.put("kf_account", data.get("kf_account"));		//"test1@kftest"
+			customservice.put("kf_account", data.get("kf_account"));
 			sendJson.put("customservice", customservice);
 		}
 		
@@ -232,7 +222,7 @@ public class WXServiceMsg {
 		try {
 			returnMap = HttpUtils.doPostString(url, null, null, sendJson.toString());
 		} catch (Exception e) {
-			
+			returnMap.put("", "");
 		}
 		return returnMap;
 	}
