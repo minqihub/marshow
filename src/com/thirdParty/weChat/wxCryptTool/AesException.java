@@ -1,5 +1,9 @@
-package com.thirdParty.weChat;
+package com.thirdParty.weChat.wxCryptTool;
 
+/**
+ * 自定义的异常，用于指明具体错误信息
+ *
+ */
 @SuppressWarnings("serial")
 public class AesException extends Exception {
 
@@ -51,7 +55,7 @@ public class AesException extends Exception {
 		return code;
 	}
 
-	AesException(int code) {
+	public AesException(int code) {
 		super(getMessage(code));
 		this.code = code;
 	}

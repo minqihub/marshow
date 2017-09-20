@@ -1,4 +1,4 @@
-package com.framework.utils;
+package com.thirdParty.weChat.wxCryptTool;
 
 import java.io.StringReader;
 
@@ -9,8 +9,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
-import com.qq.weixin.mp.aes.AesException;
 
 /**
  * XMLParse class
@@ -43,7 +41,7 @@ public class XMLParse {
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException("xml解析失败");
+			throw new AesException(AesException.ParseXmlError);
 		}
 	}
 

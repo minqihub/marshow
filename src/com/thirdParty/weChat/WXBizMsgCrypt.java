@@ -2,15 +2,22 @@ package com.thirdParty.weChat;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Random;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.framework.utils.XMLParse;
+import com.framework.utils.XmlUtils;
+import com.thirdParty.weChat.wxCryptTool.AesException;
+import com.thirdParty.weChat.wxCryptTool.ByteGroup;
+import com.thirdParty.weChat.wxCryptTool.PKCS7Encoder;
+import com.thirdParty.weChat.wxCryptTool.SHA1;
+import com.thirdParty.weChat.wxCryptTool.XMLParse;
 
 
 /**
@@ -29,32 +36,31 @@ import com.framework.utils.XMLParse;
  * </ol>
  */
 public class WXBizMsgCrypt {
-	static Charset CHARSET = Charset.forName("utf-8");
-	Base64 base64 = new Base64();
-	byte[] aesKey;
-	String token;
-	String appId;
+	
+	private static Charset CHARSET = Charset.forName("utf-8");
+	private Base64 base64 = new Base64();
+	private byte[] aesKey;
+	private String token;
+	private String appId;
 
 	/**
 	 * 构造函数
 	 * @param token 公众平台上，开发者设置的token
 	 * @param encodingAesKey 公众平台上，开发者设置的EncodingAESKey
 	 * @param appId 公众平台appid
-	 * 
 	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
 	 */
 	public WXBizMsgCrypt(String token, String encodingAesKey, String appId) throws AesException {
 		if (encodingAesKey.length() != 43) {
 			throw new AesException(AesException.IllegalAesKey);
 		}
-
 		this.token = token;
 		this.appId = appId;
 		aesKey = Base64.decodeBase64(encodingAesKey + "=");
 	}
 
 	// 生成4个字节的网络字节序
-	byte[] getNetworkBytesOrder(int sourceNumber) {
+	private byte[] getNetworkBytesOrder(int sourceNumber) {
 		byte[] orderBytes = new byte[4];
 		orderBytes[3] = (byte) (sourceNumber & 0xFF);
 		orderBytes[2] = (byte) (sourceNumber >> 8 & 0xFF);
@@ -64,7 +70,7 @@ public class WXBizMsgCrypt {
 	}
 
 	// 还原4个字节的网络字节序
-	int recoverNetworkBytesOrder(byte[] orderBytes) {
+	private int recoverNetworkBytesOrder(byte[] orderBytes) {
 		int sourceNumber = 0;
 		for (int i = 0; i < 4; i++) {
 			sourceNumber <<= 8;
@@ -73,8 +79,11 @@ public class WXBizMsgCrypt {
 		return sourceNumber;
 	}
 
-	// 随机生成16位字符串
-	String getRandomStr() {
+	/**
+	 *  随机生成16位字符串
+	 * @return
+	 */
+	private String getRandomStr() {
 		String base = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 		Random random = new Random();
 		StringBuffer sb = new StringBuffer();
@@ -87,12 +96,11 @@ public class WXBizMsgCrypt {
 
 	/**
 	 * 对明文进行加密.
-	 * 
 	 * @param text 需要加密的明文
 	 * @return 加密后base64编码的字符串
 	 * @throws AesException aes加密失败
 	 */
-	String encrypt(String randomStr, String text) throws AesException {
+	public String encrypt(String randomStr, String text) throws AesException {
 		ByteGroup byteCollector = new ByteGroup();
 		byte[] randomStrBytes = randomStr.getBytes(CHARSET);
 		byte[] textBytes = text.getBytes(CHARSET);
@@ -134,12 +142,11 @@ public class WXBizMsgCrypt {
 
 	/**
 	 * 对密文进行解密.
-	 * 
 	 * @param text 需要解密的密文
 	 * @return 解密得到的明文
 	 * @throws AesException aes解密失败
 	 */
-	String decrypt(String text) throws AesException {
+	private String decrypt(String text) throws AesException {
 		byte[] original;
 		try {
 			// 设置解密模式为AES的CBC模式
@@ -276,5 +283,6 @@ public class WXBizMsgCrypt {
 		String result = decrypt(echoStr);
 		return result;
 	}
+	
 
 }

@@ -1,8 +1,8 @@
-package com.thirdParty.weChat;
+package com.thirdParty.weChat.wxCryptTool;
 
 import java.util.ArrayList;
 
-class ByteGroup {
+public class ByteGroup {
 	ArrayList<Byte> byteContainer = new ArrayList<Byte>();
 
 	public byte[] toBytes() {

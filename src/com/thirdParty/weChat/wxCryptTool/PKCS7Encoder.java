@@ -1,4 +1,4 @@
-package com.thirdParty.weChat;
+package com.thirdParty.weChat.wxCryptTool;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * 提供基于PKCS7算法的加解密接口.
  */
-class PKCS7Encoder {
+public class PKCS7Encoder {
 	static Charset CHARSET = Charset.forName("utf-8");
 	static int BLOCK_SIZE = 32;
 
@@ -16,7 +16,7 @@ class PKCS7Encoder {
 	 * @param count 需要进行填充补位操作的明文字节个数
 	 * @return 补齐用的字节数组
 	 */
-	static byte[] encode(int count) {
+	public static byte[] encode(int count) {
 		// 计算需要填充的位数
 		int amountToPad = BLOCK_SIZE - (count % BLOCK_SIZE);
 		if (amountToPad == 0) {
@@ -37,7 +37,7 @@ class PKCS7Encoder {
 	 * @param decrypted 解密后的明文
 	 * @return 删除补位字符后的明文
 	 */
-	static byte[] decode(byte[] decrypted) {
+	public static byte[] decode(byte[] decrypted) {
 		int pad = (int) decrypted[decrypted.length - 1];
 		if (pad < 1 || pad > 32) {
 			pad = 0;
@@ -51,7 +51,7 @@ class PKCS7Encoder {
 	 * @param a 需要转化的数字
 	 * @return 转化得到的字符
 	 */
-	static char chr(int a) {
+	public static char chr(int a) {
 		byte target = (byte) (a & 0xFF);
 		return (char) target;
 	}

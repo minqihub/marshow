@@ -34,6 +34,7 @@ import com.framework.database.MySQLUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 import com.framework.utils.PropertiesReader;
+import com.framework.utils.XmlUtils;
 
 /**
  * 微信工具类
@@ -255,7 +256,8 @@ public class WXTools {
 	
 	
 	/**
-	 * 微信公众平台通过验证TOKEN，开启服务
+	 * 接收微信公众平台的推送
+	 * 
 	 * @param request
 	 * @param response
 	 * @throws Exception
@@ -263,6 +265,7 @@ public class WXTools {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping("/checkToken.do")
 	public void checkToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		//通过验证TOKEN，开启服务
 		if(request.getMethod().toLowerCase().equals("get")) {
 			//验证服务器地址有效性：微信服务器将发送GET请求到填写的服务器地址URL上，GET请求携带四个参数
 	        String signature = request.getParameter("signature");	//微信加密签名，signature结合了开发者填写的token参数和请求中的timestamp参数、nonce参数
@@ -280,12 +283,26 @@ public class WXTools {
 	            out.flush();
 	            out.close();
 	        }
+		//其他推送
 		}else {
+			System.out.println("访问了checkToken.do的post请求");
 			Enumeration enu = request.getParameterNames();  
 			while(enu.hasMoreElements()){  
-				String paraName=(String)enu.nextElement();  
-				System.out.println(paraName+" : "+request.getParameter(paraName));  
+				String paraName = (String)enu.nextElement();  
+				System.out.println(paraName+" : "+request.getParameter(paraName));
+				//打印示例
+//				signature : 176420ad047b9de82c8527d059266dd689fd5620
+//				timestamp : 1505874851
+//				nonce : 324757106
+//				openid : oz29Y0rzM_1KT1CyySU_Zh7nPJYA
 			}
+			
+			Map receiveData = XmlUtils.xmlToMap(request);
+			
+			System.out.println("微信推送来的xml转换成map：" + receiveData);
+			
+			
+			
 		}
 	}
 	
