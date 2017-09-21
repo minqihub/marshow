@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSONObject;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
+import com.thirdParty.weChat.wxInterface.WXMenu;
+import com.thirdParty.weChat.wxInterface.WXService;
 
 @Controller
 @RequestMapping("/test")
@@ -66,17 +68,19 @@ public class Test {
 	}
 	
 	@RequestMapping("/fun2.do")
-	public Map fun2(String json, HttpServletResponse response) throws IOException{
-		System.out.println("传入的json是："+json);
+	public void fun2(String json, HttpServletResponse response) throws IOException{
+		//http://localhost:8080/marshow/test/fun2.do
 		
-		Map map = new HashMap();
-		map.put("MSGID", "s");
-		map.put("MESSAGE", "恭喜调用成功");
+		String appid = "wxa64a805a9fd3d634";
+//		JSONObject sendJson = new JSONObject();
+//		sendJson.put("kf_account", "preName@gh_a1ebce799aff");
+//		sendJson.put("nickname", "小闵");
+//		WXService.addService(appid, sendJson.toString());
 		
 		
 		
+		WXMenu.creatMenu(appid, null);
 		
-		return map;
 	}
 	
 	

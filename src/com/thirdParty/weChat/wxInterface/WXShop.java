@@ -65,6 +65,8 @@ public class WXShop extends DBHandler {
 	public Map addShop(String json) throws Exception{
 		Map storeMap = Json.toMap(json);
 
+		String appid = storeMap.get("appid").toString();
+		
 		//准备地址信息
 		JSONArray addressList = Json.toJA(storeMap.get("address"));
 		String province = "",city = "",district = "",address = "";
@@ -90,7 +92,7 @@ public class WXShop extends DBHandler {
 			String imgName = (j+1)+".jpg";		//图片名称
 			String imgUrl = row.get("FILE_URL") + "";
 			JSONObject photo_url = new JSONObject();
-			photo_url.put("photo_url", WXTools.getWeixinImg(imgName, imgUrl));
+			photo_url.put("photo_url", WXTools.getWeixinImg(imgName, imgUrl, appid));
 			photo_list.add(photo_url);
 		}
 		
@@ -127,7 +129,6 @@ public class WXShop extends DBHandler {
 		JSONObject business = new JSONObject();
 		business.put("business", base_info);
 		
-		String appid = storeMap.get("appid").toString();
 		String access_token = WXTools.getWeChatToken(appid).get("access_token").toString();
 		String url = "http://api.weixin.qq.com/cgi-bin/poi/addpoi?access_token=" + access_token;
 		

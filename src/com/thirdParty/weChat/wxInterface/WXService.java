@@ -4,13 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 import com.thirdParty.weChat.WXTools;
 
 /**
  * 微信公众号客服
- * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547
+ * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547 老
+ * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1458044813 新
  * @author minqi 2017-09-20 13:04:11
  *
  */
@@ -23,16 +25,15 @@ public class WXService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public Map addService(String appid, String json){
+	public static Map addService(String appid, String json){
 		Map data = Json.toMap(json);
 		
 		Map tokenMap = WXTools.getWeChatToken(appid);
 		String url = "https://api.weixin.qq.com/customservice/kfaccount/add?access_token=" + tokenMap.get("access_token");
 		
 		JSONObject sendJson = new JSONObject();
-		sendJson.put("kf_account", data.get("test1@test"));		//账号前缀@公众号微信号
-		sendJson.put("nickname", data.get("客服1"));
-		sendJson.put("password", data.get("pswmd5"));
+		sendJson.put("kf_account", data.get("kf_account"));		//完整客服帐号，格式为：帐号前缀@公众号微信号，帐号前缀最多10个字符，必须是英文、数字字符或者下划线，后缀为公众号微信号，长度不超过30个字符
+		sendJson.put("nickname", data.get("nickname"));			//昵称
 		
 		Map returnMap = new HashMap();
 		try {
@@ -51,7 +52,7 @@ public class WXService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public Map editService(String appid, String json){
+	public static Map editService(String appid, String json){
 		Map data = Json.toMap(json);
 		
 		Map tokenMap = WXTools.getWeChatToken(appid);
@@ -78,7 +79,7 @@ public class WXService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public Map delService(String appid, String json){
+	public static Map delService(String appid, String json){
 		Map data = Json.toMap(json);
 		
 		Map tokenMap = WXTools.getWeChatToken(appid);
@@ -107,7 +108,7 @@ public class WXService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public Map setServiceHeadImg(String appid, String json){
+	public static Map setServiceHeadImg(String appid, String json){
 		Map data = Json.toMap(json);
 		
 		Map tokenMap = WXTools.getWeChatToken(appid);
@@ -132,7 +133,7 @@ public class WXService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public Map getAllService(String appid, String json){
+	public static Map getAllService(String appid, String json){
 		Map data = Json.toMap(json);
 		
 		Map tokenMap = WXTools.getWeChatToken(appid);

@@ -143,7 +143,7 @@ public class HttpUtils {
         HttpResponse response = httpClient.execute(request);
         
         //获取响应状态
-        System.out.println(response.getStatusLine()); 							//HTTP/1.1 200 OK
+//      System.out.println(response.getStatusLine()); 							//HTTP/1.1 200 OK
         
         //获取返回内容
 	    String result1 = EntityUtils.toString(response.getEntity());
@@ -196,9 +196,7 @@ public class HttpUtils {
 	
 	/**
 	 * Post String
-	 * 
-	 * @param host
-	 * @param path
+	 * @param url
 	 * @param headers
 	 * @param querys
 	 * @param body
@@ -210,10 +208,16 @@ public class HttpUtils {
     	HttpClient httpClient = wrapClient(url);
 
     	HttpPost request = new HttpPost(buildUrl(url, querys));
-        for (Map.Entry<String, String> e : headers.entrySet()) {
-        	request.addHeader(e.getKey(), e.getValue());
-        }
-
+    	if(headers != null){
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+            	request.addHeader(e.getKey(), e.getValue());
+            }
+    	}else{
+    		request.addHeader("Content-type","application/json; charset=utf-8");
+    	}
+        
+        request.setHeader("Accept", "application/json");
+        
         if (StringUtils.isNotBlank(body)) {
         	request.setEntity(new StringEntity(body, "utf-8"));
         }
@@ -222,11 +226,12 @@ public class HttpUtils {
         HttpResponse response = httpClient.execute(request);
         
         //获取响应状态
-        System.out.println(response.getStatusLine()); 							//HTTP/1.1 200 OK
+//      System.out.println(response.getStatusLine()); 							//HTTP/1.1 200 OK
         
         //获取返回内容
 	    String result1 = EntityUtils.toString(response.getEntity());
 	    String result2 = new String(result1.getBytes("ISO8859-1"),"utf-8");		//字符乱码
+	    System.out.println("postString返回结果："+result2);
         return Json.toMap(result2);
     }
 	
