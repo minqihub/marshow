@@ -68,9 +68,6 @@ public class WXServiceMsg {
 		return replyXml;
 	}
 	
-	
-	
-	
 	/**
 	 * 将消息转发给客服
 	 * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140543
@@ -78,52 +75,15 @@ public class WXServiceMsg {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static String autoReply_toService(Map receiveData){
-		String replyText = "";
-		
-		if(receiveData.get("MsgType").toString().equals(MsgType_text)){
-			replyText = "测试自动回复。您发送的是文本消息，内容：" + receiveData.get("Content");
-		}else if(receiveData.get("MsgType").toString().equals(MsgType_image)){
-			replyText = "测试自动回复。您发送的是图片消息，图片链接：" + receiveData.get("PicUrl");
-		}else if(receiveData.get("MsgType").toString().equals(MsgType_voice)){
-			replyText = "测试自动回复。您发送的是语音消息，媒体Id：" + receiveData.get("MediaId") + "；语音识别结果：" + receiveData.get("Recognition");
-		}else if(receiveData.get("MsgType").toString().equals(MsgType_video)){
-			replyText = "测试自动回复。您发送的是视频消息，媒体Id：" + receiveData.get("MediaId") + "；视频缩略图Id：" + receiveData.get("ThumbMediaId");
-		}else if(receiveData.get("MsgType").toString().equals(MsgType_shortvideo)){
-			replyText = "测试自动回复。您发送的是短视频消息，媒体Id：" + receiveData.get("MediaId") + "；段视频缩略图Id：" + receiveData.get("ThumbMediaId");
-		}else if(receiveData.get("MsgType").toString().equals(MsgType_location)){
-			replyText = "测试自动回复。您发送的是地址信息，经度：" + receiveData.get("Location_Y") + "，纬度：" + receiveData.get("Location_X") + "；地理位置信息：" + receiveData.get("Label");
-		}else if(receiveData.get("MsgType").toString().equals(MsgType_link)){
-			replyText = "测试自动回复。您发送的是链接信息，标题：" + receiveData.get("Title") + "，描述：" + receiveData.get("Description") + "；链接：" + receiveData.get("Url");
-		}
-		
+		//转发给客服
 		String replyXml = " <xml>"
 				+ "<ToUserName><![CDATA[touser]]></ToUserName>"
 				+ "<FromUserName><![CDATA[fromuser]]></FromUserName>"
-				+ "<CreateTime>1399197672</CreateTime>"
+				+ "<CreateTime>" + WXTools.create_timestamp() + "</CreateTime>"
 				+ "<MsgType><![CDATA[transfer_customer_service]]></MsgType>"
 				+ "</xml>";
-				
-				
-				
-				
-				
-				
-				
-//				"<xml>"
-//				+ "<ToUserName><![CDATA[" + receiveData.get("FromUserName") + "]]></ToUserName>"
-//				+ "<FromUserName><![CDATA[" + receiveData.get("ToUserName") + "]]></FromUserName>"
-//				+ "<CreateTime>" + WXTools.create_timestamp() + "</CreateTime>"
-//				+ "<MsgType><![CDATA[text]]></MsgType>"
-//				+ "<Content><![CDATA[" + replyText + "]]></Content>"
-//				+ "</xml>";
 		return replyXml;
 	}
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * 公众号主动发送文本消息

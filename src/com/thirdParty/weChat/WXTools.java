@@ -169,11 +169,11 @@ public class WXTools {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping("/getWeixinImg.do")
-	public String getWeixinImg(String imgName, String imgUrl) throws Exception{
+	public static String getWeixinImg(String imgName, String imgUrl, String appid) throws Exception{
 		//http://localhost:8080/jlo2o/trust/weiXinShop/getWeixinImg.do
  
 		//获取access_token
-		Map tokenMap = getWeChatToken("appid");
+		Map tokenMap = getWeChatToken(appid);
 		String access_token = tokenMap.get("access_token").toString();
         URL urlObj = new URL("https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=" + access_token); 
         
@@ -251,18 +251,16 @@ public class WXTools {
 	    	return "";
 	    }
 	}
-
-	
 	
 	/**
 	 * 接收微信公众平台的推送
-	 * @param request
-	 * @param response
+	 * @param request GET：开启微信服务器的验证；POST：推送消息或事件
+	 * @param response GET：原样返回echostr参数即验证成功；POST：返回指定xml格式即为自动回复
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping("/checkToken.do")
-	public void checkToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping("/receiveService.do")
+	public void receiveService(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		PrintWriter out = response.getWriter();
 		
 		//通过验证TOKEN，开启服务
@@ -277,18 +275,17 @@ public class WXTools {
 	        System.out.println("微信服务器发来的参数："+prama);
 
 	        if(checkSignature(this.TOKEN, signature, timestamp, nonce)){
-	        	System.out.println("验签成功，是微信发来的消息");
+	        	System.out.println("验签成功，是微信发来的消息，已开启微信服务器");
 	            out.print(echostr);
 	            out.flush();
 	            out.close();
 	        }
 		//其他推送
 		}else {
-			System.out.println("访问了checkToken.do的post请求");
 			Enumeration enu = request.getParameterNames();  
 			while(enu.hasMoreElements()){  
 				String paraName = (String)enu.nextElement();  
-				System.out.println(paraName+" : "+request.getParameter(paraName));
+//				System.out.println(paraName+" : "+request.getParameter(paraName));
 				//打印示例
 //				signature : 176420ad047b9de82c8527d059266dd689fd5620
 //				timestamp : 1505874851
@@ -297,7 +294,6 @@ public class WXTools {
 			}
 			
 			Map receiveData = XmlUtils.xmlToMap(request);
-			
 			System.out.println("微信推送来的xml转换成map：" + receiveData);
 			//{Content=123123, CreateTime=1505878925, ToUserName=gh_4cd6ce95f880, FromUserName=oz29Y0rzM_1KT1CyySU_Zh7nPJYA, MsgType=text, MsgId=6467700735044133770}
 			
@@ -308,6 +304,7 @@ public class WXTools {
             out.close();
 		}
 	}
+	
 	
 	/**
 	 * 验证签名，验证是否是微信服务器发来的
