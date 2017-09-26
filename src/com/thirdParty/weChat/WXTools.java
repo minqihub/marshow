@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSONObject;
 import com.framework.database.DataSource;
 import com.framework.database.MySQLUtils;
+import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 import com.framework.utils.PropertiesReader;
@@ -66,7 +67,20 @@ public class WXTools {
 		return true;
 	}
 	
-	
+	/**
+	 * 获取存在数据库的微信全配置；注意此方法返回数据不允许返回到客户端
+	 * @param appid
+	 * @return
+	 */
+	public static Map getWeChatConfig(String appid){
+		//TODO 待定取哪个表
+		
+		
+		Map returnMap = new HashMap();
+		returnMap.put("secret", "fe0a94fd03c020d7530e7f023e9e472c");		//微信提供的测试公众号的secret
+		
+		return returnMap;
+	}
 	
 	
 	/**
@@ -119,25 +133,37 @@ public class WXTools {
 	}
 	
 	/**
-	 * 获取微信用户openid
+	 * 获取网页授权access_token，同时可获取微信用户openid
 	 * @param code 页面用户授权获得的code
 	 * @param appid 公众号appid
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public static String getOpenId(String code, String appid){
+	@RequestMapping("/getOpenId.do")
+	public static String getOpenId(String json, HttpServletResponse response){
+		Map data = Json.toMap(json);
+		
+		if(DataUtils.isNull(data.get("code")) || DataUtils.isNull(data.get("appid"))){
+			HttpUtils.printString(response, "");
+			return "";
+		}
+		
+		String code = data.get("code").toString();
+		String appid = data.get("appid").toString();
 		
 		//通过appid查询数据库中的secret配置
-		
-		String secret = "";
+		Map configMap = getWeChatConfig(appid);
+		Object secret = configMap.get("secret");
 		
 	   	String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + secret + "&code=" + code + "&grant_type=authorization_code";
 	   	Map resultMap = null;
 	   	try {
 			resultMap = HttpUtils.doGet(url, null, null);
 		} catch (Exception e) {
-			e.printStackTrace();
+			HttpUtils.printString(response, "");
+			return "";
 		}
+	   	HttpUtils.printString(response, "");
 		return resultMap.get("openid").toString();
 	}
 	
@@ -333,7 +359,7 @@ public class WXTools {
 	
 	/**
 	 * 微信js-sdk签名
-	 * @param json 参数serviceId；appid；url
+	 * @param json 参数appid；url
 	 * @param response
 	 * @return
 	 * @throws Exception
@@ -343,23 +369,21 @@ public class WXTools {
 	public Map<String, String> weChatJsSign(String json, HttpServletResponse response){
 		Map data = Json.toMap(json);
 		
-		String appid = "wx46e8fbea0168eb02";
+		String appid = data.get("appid").toString();
 		String url = data.get("url").toString();
 		
         Map<String, String> returnMap = new HashMap<String, String>();
         
-        Map tokenMap = getWeChatToken(appid);							//获取js的api_ticket
+        //获取js的api_ticket
+        Map tokenMap = getWeChatToken(appid);							
         
         String jsapi_ticket = tokenMap.get("api_ticket").toString();
         String nonce_str = create_nonce_str();
         String timestamp = create_timestamp();
-        
-        String signature = "";
 
         //注意这里参数名必须全部小写，且必须有序
         String preSign = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonce_str + "&timestamp=" + timestamp + "&url=" + url;
-        System.out.println(preSign);
-
+        String signature = "";
         try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();

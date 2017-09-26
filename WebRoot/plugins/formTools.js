@@ -1,8 +1,7 @@
-//前台工具类
-
+/**
+ * 前台工具类
+ */
 var form = {};
-
-
 
 //登陆（密码加密；登陆成功后将userInfo写到cookie中，并设置有效期）
 form.login = function(json){
@@ -45,21 +44,22 @@ form.getClient = function(){
 	}
 };
 
-//获取url参数_2017-08-03 17:47:29
-form.getUrlParams = function(src){
+//获取url指定参数_2017-08-03 17:47:29
+form.getUrlParams = function(key){
 	var json = {};
+	var src = window.location.href;
 	var paramaters = src.substring(src.indexOf("?") + 1, src.length);
 	if(src.indexOf("?") != -1 && !form.isNull(paramaters)){
 		paramaters = paramaters.split("&");
 		for( var i=0; i<paramaters.length; i++ ){
 			var paramater = paramaters[i];
-			var key = paramater.substring(0, paramater.indexOf("="));
-			var value = paramater.substring(paramater.indexOf("=") + 1, paramater.length);
-//			json[key] = value;
-			json[key] = decodeURI(value);	//解决url参数中文乱码
+			var k = paramater.substring(0, paramater.indexOf("="));
+			var v = paramater.substring(paramater.indexOf("=") + 1, paramater.length);
+//			json[k] = value;
+			json[k] = decodeURI(v);	//解决url参数中文乱码
 		}
 	}
-	return json;
+	return json[key];
 };
 
 //同步加载_2017-08-03 21:04:01

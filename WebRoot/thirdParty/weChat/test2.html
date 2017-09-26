@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  	<head>
+    	<title>测试微信jsapi</title>
+	
+    	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	
+  	</head>
+  
+  	<body>
+    	测试微信JS-SDK. <br>
+    	
+    	<a id="qrCode" href="javascript:;">扫一扫</a>
+    	<br/><br/>
+    	
+    	<a id="location" href="javascript:;">获取地理位置</a>
+    	<br/><br/>
+  	
+    	<a id="openLocation" href="javascript:;">打开地址</a>
+    	<br/><br/>
+    	
+    	<a id="chooseImage" href="javascript:;">选择照片</a>
+    	<br/><br/>
+    	
+    	<a id="getCode" href="javascript:;">获取code</a>
+    	<br/><br/>
+    	
+    	<a id="share1" href="javascript:;">自定义分享朋友圈</a>
+    	<br/><br/>
+    	
+    	<a id="luyin" href="javascript:;">开始录音</a>
+    	<br/><br/>
+    	
+    	<a id="luyinend" href="javascript:;">结束录音</a>
+    	<br/><br/>
+    	
+    	
+    	
+    	
+    	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script type="text/javascript" src="js-sdk.js"></script>
+  		<script type="text/javascript" src="../../plugins/formTools.js"></script>
+		<script type="text/javascript" src="../../plugins/jquery-3.1.1.js"></script>
+   		<script type="text/javascript">
+		
+		$('#location').on('click', function() {debugger
+			var data = {};
+			data.appid = "";
+			var locationData = weChatJs.getLocation(data, function(res){debugger
+			
+			});
+			
+		});
+		
+		
+		$('#qrCode').on('click', function() {debugger
+			var data = {};
+			data.appid = "";
+			var qrCode = weChatJs.scanQRCode(data,function(res){debugger
+			
+			});
+		});
+
+		$('#openLocation').on('click', function() {debugger
+			var data = {};
+			data.appid = "";
+			data.lat = lat;
+			data.lon = lon;
+			data.name = "新华路";
+			data.address = "哈哈哈鬼知道什么地址";
+			data.url = "http://www.baidu.com";
+			var qrCode = weChatJs.openLocation(data);
+		});
+		
+		$('#chooseImage').on('click', function() {debugger
+			var data = {};
+			data.appid = "";
+			weChatJs.chooseImage(data);
+		});
+		
+		$('#getCode').on('click', function() {debugger
+			var data = {};
+			data.appid = "wxa64a805a9fd3d634";
+			weChatJs.jumpGetCode(data);
+		});
+		
+		$('#share1').on('click', function() {debugger
+			var data = {};
+			data.appid = "";
+			weChatJs.onMenuShareTimeline(data);
+		});
+
+		$('#luyin').on('click', function() {debugger
+			var data = {};
+			data.appid = "";
+			weChatJs.startRecord(data);
+		});
+		
+		$('#luyinend').on('click', function() {debugger
+			var data = {};
+			data.appid = "";
+			weChatJs.stopRecord(data, function(res) {
+				alert(res.localId);
+			});
+		});
+		
+		
+		
+		</script>
+		
+  	</body>
+</html>
