@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>setUp.html</title>
+	<head>
+		<title>setUp.html</title>
 	
-    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-    <meta http-equiv="description" content="this is my page">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    
-    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
-  </head>
+		<link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all" />
+		<style type="text/css">
+		#imgView > img {
+			height: 100px;
+		}
+		</style>
+  	</head>
   
-  <body>
-    系统设置主页. <br>
-  </body>
+  	<body>
+    	系统设置主页. <br>
+    	
+    	<button type="button" class="layui-btn" id="test1">
+  			<i class="layui-icon">&#xe67c;</i>选择图片
+		</button>
+    	
+    	<button type="button" class="layui-btn" id="upload">点击上传</button>
+    	
+    	<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+			预览图：
+			<div class="layui-upload-list" id="imgView"></div>
+		</blockquote>
+    	
+    	
+    	
+    	
+    	
+    	
+		<script src="../plugins/layui/layui.js"></script>
+		<script src="../plugins/formTools.js"></script>
+		<script src="js/setUp.js"></script>
+  	</body>
 </html>
