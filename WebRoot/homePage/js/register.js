@@ -3,6 +3,73 @@ var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
 
+//第一步
+$('.btnNext1').on('click', function() {debugger
+	var mobile = $("input[name='mobile']").val();
+	var password = $("input[name='password']").val();
+	var repassword = $("input[name='repassword']").val();
+
+	if(form.isNull(password) || form.isNull(repassword)){
+		$("#tips1")[0].innerText = '"密码都不填完，是要上天啊"';
+		$("#tips1").shake(3, 10, 400);
+		return;
+	}else if(password != repassword){
+		$("#tips1")[0].innerText = '"给我俩扯犊子呢，两次密码都不一样"';
+		$("#tips1").shake(3, 10, 400);
+		return;
+	}
+	
+	
+	if(form.isPhone(mobile)){
+		var json = {"json": JSON.stringify({"mobile" : mobile})};
+		var url = form.getprojectUrl + "/trust/regist/checkMobileExist.do";
+		var resultData = form.ajax(json, url).data;
+		debugger
+		if(resultData.MSGID == "S"){		//手机号正确，且未被使用
+			if(animating) return false;
+			animating = true;
+			
+			current_fs = $(this).parent();
+			next_fs = $(this).parent().next();
+			
+			$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+			
+			next_fs.show(); 
+			current_fs.animate({opacity: 0}, {
+				step: function(now, mx) {
+					scale = 1 - (1 - now) * 0.2;
+					left = (now * 50)+"%";
+					opacity = 1 - now;
+					current_fs.css({'transform': 'scale('+scale+')'});
+					next_fs.css({'left': left, 'opacity': opacity});
+				}, 
+				duration: 800, 
+				complete: function(){
+					current_fs.hide();
+					animating = false;
+				}, 
+				easing: 'easeInOutBack'
+			});
+		}else{								//手机号已存在
+			$("#tips1")[0].innerText = '"手机号都能跟别人重复，你说你厉不厉害"';
+			$("#tips1").shake(3, 10, 400);
+		}
+	}else{									//手机号不正确
+		$("#tips1")[0].innerText = '"你是不是瞎填手机号，打你哦"';
+		$("#tips1").shake(3, 10, 400);
+	}
+	
+	
+});
+
+
+//第二步
+$('.btnNext2').on('click', function() {debugger
+	
+});
+
+
+/*
 $(".next").click(function(){
 	if(animating) return false;
 	animating = true;
@@ -37,6 +104,9 @@ $(".next").click(function(){
 		easing: 'easeInOutBack'
 	});
 });
+*/
+
+
 
 $(".previous").click(function(){
 	if(animating) return false;
@@ -76,3 +146,21 @@ $(".previous").click(function(){
 $(".submit").click(function(){
 	return false;
 })
+
+/**
+ * 元素抖动效果
+ * $("#tips1").shake(2, 10, 400);
+ * $("抖动元素").shake(次数, 距离, 持续时间);
+ */
+jQuery.fn.shake = function (intShakes /*Amount of shakes*/, intDistance /*Shake distance*/, intDuration /*Time duration*/) {
+	this.each(function () {
+		var jqNode = $(this);
+		jqNode.css({ position: 'relative' });
+		for (var x = 1; x <= intShakes; x++) {
+			jqNode.animate({ left: (intDistance * -1) }, (((intDuration / intShakes) / 4)))
+			.animate({ left: intDistance }, ((intDuration / intShakes) / 2))
+			.animate({ left: 0 }, (((intDuration / intShakes) / 4)));
+		}
+	});
+	return this;
+}

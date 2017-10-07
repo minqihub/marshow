@@ -17,6 +17,8 @@ form.checkLogin = function(){
 	var url = this.getprojectUrl + "/trust/login/checkLogin.do";
 	var returnData = this.ajax(json, url).data;
 	if(returnData.MSGID == "S"){
+		//登陆成功，存储用户信息
+		window.localStorage.setItem("userInfo", JSON.stringify(returnData));
 		return true;
 	}
 	return false;
@@ -250,7 +252,7 @@ form.isEmail = function(value){
 //检查手机号
 form.isPhone = function(value){debugger
 	var regMobile = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
-	if(!JL.isNull(value) && !isNaN(value) && regMobile.test(value)){
+	if(!this.isNull(value) && !isNaN(value) && regMobile.test(value)){
 		return true;
 	}
 	return false;
