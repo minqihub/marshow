@@ -14,12 +14,11 @@ form.login = function(json){
 form.checkLogin = function(){
 	var redirectUrl = location.href;
 	var json = {"json":JSON.stringify({})};
-	var url = this.getURL("FormUrl") + "/trust/login/checkLogin.do";
-	var returnData = this.ajax(json, url);
+	var url = this.getprojectUrl + "/trust/login/checkLogin.do";
+	var returnData = this.ajax(json, url).data;
 	if(returnData.MSGID == "S"){
 		return true;
 	}
-	window.lacation.href = this.getURL("FormUrl") + "/login.html?" + redirectUrl;
 	return false;
 };
 

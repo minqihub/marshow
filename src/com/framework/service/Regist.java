@@ -15,67 +15,105 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.framework.database.DBHandler;
 import com.framework.database.DataSource;
+import com.framework.database.SQLConvertor;
+import com.framework.utils.DataUtils;
+import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
+import com.framework.utils.PropertiesReader;
 
 /**
  * 注册类
- * @author minqi 2017-07-29 09:08:34
+ * @author minqi 2017-10-06 19:15:45
  *
  */
 @Controller
-@RequestMapping("/regist")
+@RequestMapping("/trust/regist")
 public class Regist extends DBHandler{
+	
+	//配置文件读取对象
+	public static PropertiesReader property = PropertiesReader.getInstance();
+	
+	//默认管理员头像
+	private static final String default_Admin_Logo = property.getProperty("defaultAdminLogo");
+	//默认用户头像
+	private static final String default_User_Logo = property.getProperty("defaultUserLogo");
+	
+	private static JdbcTemplate comm = DataSource.comm;
 	
 	
 	/**
 	 * 基本注册方法
-	 * @param json
+	 * @param json 用户填手机号时，已做重复性检查
 	 * @param response
 	 * @throws SQLException 
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/regist.do")
-	public Map regist(String json, HttpServletRequest request) throws SQLException{
+	public Map regist(String json, HttpServletRequest request, HttpServletResponse response){
 		Map map = Json.toMap(json);
 		
+		Map returnMap = new HashMap();
+		Map insertMap = new HashMap();
+
+		try{
+			insertMap.put("userId", request.getSession().getId());
+			insertMap.put("mobile", map.get("mobile").toString());
+			insertMap.put("password", map.get("password").toString());
+			insertMap.put("nickName", map.get("mobile").toString());
+			insertMap.put("logoImg", this.default_User_Logo);
+			insertMap.put("registTime", DataUtils.getSysTime());
+			
+			//角色标记：1社区超管；2社区管理员；3社区居民；4社区商户
+			insertMap.put("roleMark", map.get("roleMark").toString());
+			
+			String sql = "INSERT INTO S_User (`userId`, `mobile`, `nickName`, `logoImg`, `passWord`, `registTime`, `roleMark`) "
+					+ "VALUES (?userId, ?mobile, ?nickName, ?logoImg, ?password, ?registTime, ?roleMark)";
+			
+			sqlExecuteMap(comm, sql, insertMap);
+
+			returnMap.put("MSGID", "S");
+			returnMap.put("MESSAGE", "注册成功");
+			
+		} catch (NullPointerException e){
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "必填字段请填写完整");
+		} catch (SQLException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "数据库异常");
+		}
 		
-		
-		
-		
-		
-		return new HashMap();
+		HttpUtils.printString(response, returnMap);
+		return returnMap;
 	}
 	
 	/**
-	 * 检查字段是否存在
-	 * @param key
-	 * @param value
+	 * 检查手机号是否存在
+	 * @param json
+	 * @param response
 	 * @return
 	 */
-	private boolean checkExist(String key, Object value){
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping("/checkMobileExist.do")
+	public Map checkMobileExist(String json, HttpServletResponse response){
+		Map data = Json.toMap(json);
 		
+		Map map = new HashMap();
+		map.put("mobile", data.get("mobile").toString());
 		
+		String sqlTemplate = "SELECT * FROM S_User WHERE mobile LIKE ?mobile";
 		
+		Map result = sqlQueryForMap(comm, SQLConvertor.format(sqlTemplate, map));
 		
-		return true;
-	}
-	
-	
-	
-	private void returnData(String jsonString, HttpServletResponse response){
-		PrintWriter pw = null;
-		try{
-			try {
-				pw = response.getWriter();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			pw.print(jsonString);
-		}finally{
-			if(pw != null){
-				pw.close();
-		    }
+		Map returnMap = new HashMap();
+		if(result.isEmpty()){
+			returnMap.put("MSGID", "S");
+			returnMap.put("MESSAGE", "mobile不重复");
+		}else{
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "mobile重复");
 		}
+		HttpUtils.printString(response, returnMap);
+		return returnMap;
 	}
 	
 	

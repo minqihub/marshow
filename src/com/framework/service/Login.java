@@ -9,12 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
+import com.framework.database.DBHandler;
 import com.framework.database.DataSource;
 import com.framework.database.MySQLUtils;
+import com.framework.database.SQLConvertor;
+import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 
@@ -25,7 +30,7 @@ import com.framework.utils.Json;
  */
 @Controller
 @RequestMapping("/trust/login")
-public class Login {
+public class Login{
 
 	//loginType[]
 	private static final String[] loginType = {"手机号登陆","微信登陆","QQ登陆","微博登陆"};
@@ -33,6 +38,8 @@ public class Login {
 	
 	private static final int Default_CookieAge = 2*60*60;			//默认的cookie有效期为2小时（普通登陆）
 	private static final int ShutDown_CookieAge = -1;				//关闭浏览器即失效（用于陌生机器的访客登陆）
+	
+	private static JdbcTemplate comm = DataSource.comm;
 	
 	/**
 	 * 登陆方法
@@ -43,58 +50,62 @@ public class Login {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/login.do")
-	public Map login(String json, HttpServletRequest request, HttpServletResponse response) throws SQLException{
-		//http://localhost:8080/marshow/trust/login/login.do
-		JSONObject data = Json.toJO(json);
-		String username = data.getString("username");
-		String password = data.getString("password");
-		
-		boolean flag = false;
-		
-		//判断前台传来的登陆类型
-		switch (data.getInteger("loginType")) {
-		case 1:			//微信登陆
-			//前台点击微信登陆，获取code，获取openid，在此鉴别是否存在这个传来的openid
-			
-			
-			break;
-		case 2:			//QQ登陆
-				
-			break;
-		case 3:			//微博登陆
-				
-			break;
-		default:		//手机号登陆
-			flag = Authorization.checkUser(username, password);
-			break;
-		}
+	public Map login(String json, HttpServletRequest request, HttpServletResponse response){
+		Map data = Json.toJO(json);
 		
 		
-		Map resultMap = new HashMap();
-		if(flag){
-			resultMap.put("MSGID", "S");
-			resultMap.put("MESSAGE", "登陆成功");
-			
-			//登陆成功后，将sessionId存入cookie
+		Map loginMap = new HashMap();
+		
+		Map returnMap = new HashMap();
+		returnMap.put("MSGID", "E");
+		returnMap.put("MESSAGE", "登陆失败");
+		
+		try {
 			String sessionId = request.getSession().getId();
-			Cookie cookie = new Cookie("ticket", sessionId);
-			cookie.setMaxAge(Default_CookieAge);
-			response.addCookie(cookie);
-			System.out.println("sessionId："+sessionId);
+			Map result = new HashMap();
 			
-			// TODO 写成存储过程：登陆成功就把sessionId写入数据库
-			String sql = "update s_user set sessionid ='"+sessionId+"' where username = '"+ username+"'";
-			MySQLUtils.sqlExecute(DataSource.comm, sql);
+			if(DataUtils.isNull(data.get("loginType"))){					//默认手机号登陆
+				
+				loginMap.put("mobile", data.get("username").toString());
+				loginMap.put("password", data.get("password").toString());
+				
+				String sqlTemplate = "select * from S_User where mobile like ?mobile and password like ?password";
+				result = MySQLUtils.sqlQueryForMap(comm, SQLConvertor.format(sqlTemplate, loginMap));
+				if(!result.isEmpty()){
+					returnMap.put("MSGID", "S");
+					returnMap.put("MESSAGE", "登陆成功");
+				}
+				
+			}else if(data.get("loginType").toString().equals("1")){			//TODO 微信登陆
+				
+			}else if(data.get("loginType").toString().equals("2")){			//TODO QQ登陆
+				
+			}else if(data.get("loginType").toString().equals("3")){			//TODO 微博登陆
+				
+			}
 			
-			//
-
+			//验证成功之后，写入sessionId
+			if(returnMap.get("MSGID").toString().equals("S")){
+				String sql = "UPDATE S_User SET `sessionId`=?sessionId WHERE `userId`=?userId";
+				Map sessionMap = new HashMap();
+				sessionMap.put("userId", result.get("userId").toString());
+				sessionMap.put("sessionId", sessionId);
+				MySQLUtils.sqlExecuteMap(comm, sql, sessionMap);
+			}
 			
-		}else{
-			resultMap.put("MSGID", "E");
-			resultMap.put("MESSAGE", "登陆失败");
+		} catch (EmptyResultDataAccessException e){
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "用户名或密码不存在");
+		} catch (NullPointerException e){
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "必填字段请填写完整");
+		} catch (SQLException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "数据库异常");
 		}
-		HttpUtils.printString(response, Json.toJO(resultMap));
-		return resultMap;
+		
+		HttpUtils.printString(response, returnMap);
+		return returnMap;
 	}
 	
 	
@@ -119,26 +130,16 @@ public class Login {
 	
 	/**
 	 * 检查是否登陆
-	 * 
-	 * @param data
 	 * @param request
+	 * @param response
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/checkLogin.do")
 	public static Map checkLogin(HttpServletRequest request, HttpServletResponse response){
-		
-		
-		
-		
-		//检查cookie
-		
-		//检查session
-		
-		Map resultMap = new HashMap();
-		resultMap.put("MSGID", "S");
-		resultMap.put("MESSAGE", "");
-		return resultMap;
+		Map returnMap = Authorization.getUserInfo(request);
+		HttpUtils.printString(response, returnMap);
+		return returnMap;
 	}
 	
 	

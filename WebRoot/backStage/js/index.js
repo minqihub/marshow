@@ -1,3 +1,9 @@
+debugger
+if(!form.checkLogin()){
+	alert("未登录状态");
+	window.location.href = form.getprojectUrl + "/backStage/login.html";
+}
+
 layui.use('element', function(){
 	var element = layui.element;
 //	var $ = layui.jquery;

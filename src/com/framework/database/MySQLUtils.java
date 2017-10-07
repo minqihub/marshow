@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.framework.utils.SysLog;
@@ -22,6 +23,7 @@ import com.framework.utils.SysLog;
  *	mysql-connector-java-5.1.7-bin.jar
  *	commons-dbcp-1.4.jar
  */
+@SuppressWarnings("unused")
 public class MySQLUtils {
 	
 
@@ -31,7 +33,6 @@ public class MySQLUtils {
 	 * @return 受影响的行数
 	 * @throws SQLException 获取连接失败
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static int sqlExecute(JdbcTemplate jdbcTemp, String sql) throws SQLException{
 		Connection conn = jdbcTemp.getDataSource().getConnection();
 		Statement sta = null;
@@ -70,7 +71,7 @@ public class MySQLUtils {
 	 * @return
 	 * @throws SQLException 
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public static int sqlExecuteMap(JdbcTemplate jdbcTemp, String sql, Map map) throws SQLException{
 		
 		sql = SQLConvertor.format(sql, map);
@@ -84,7 +85,7 @@ public class MySQLUtils {
 	 * @param sql
 	 * @return List集合
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public static List sqlQueryForList(JdbcTemplate jdbcTemp, String sql){
 		
 		return jdbcTemp.queryForList(sql);
@@ -96,37 +97,16 @@ public class MySQLUtils {
 	 * @param sql
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public static Map sqlQueryForMap(JdbcTemplate jdbcTemp, String sql){
-		
-		return jdbcTemp.queryForMap(sql);
-	}
-	
-
-	
-	
-	
-	public static void main(String[] args) {
-		JdbcTemplate community = DataSource.comm;
-		
-		MySQLUtils mySql = new MySQLUtils();
-		
-		String sql = "INSERT INTO student(id,name,sex,age)VALUES(?id,?name,?sex,?age)";
-		
-		Map map = new HashMap();
-		map.put("id", 10066);
-		map.put("name", "王二小");
-		map.put("sex", "男");
-		map.put("age", 56);
-
+		Map returnMap = new HashMap();
 		try {
-			mySql.sqlExecuteMap(community, sql, map);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			returnMap = jdbcTemp.queryForMap(sql);
+		} catch (EmptyResultDataAccessException e){
+			
 		}
-		
-		
+		return returnMap;
 	}
+	
 
 }
