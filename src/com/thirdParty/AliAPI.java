@@ -5,6 +5,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.framework.utils.HttpUtils;
 import com.framework.utils.PropertiesReader;
 
@@ -35,9 +38,10 @@ public class AliAPI {
 	 * 发送验证码
 	 * https://market.aliyun.com/products/57002003/cmapi011900.html?spm=5176.78296.785980.2.jEMY9T
 	 * @return 验证码
+	 * @throws Exception 
 	 */
 	@SuppressWarnings("rawtypes")
-	public static String SMSIdentification() {
+	public static String smsCode(String mobile, String smsCode) throws Exception {
 	    String url = "http://sms.market.alicloudapi.com/singleSendSms";
 	    
 	    Map<String, String> headers = new HashMap<String, String>();
@@ -49,13 +53,8 @@ public class AliAPI {
 	    querys.put("SignName", "SignName");
 	    querys.put("TemplateCode", SMSTemplateCode1);
 
-	    Map resultMap = null;
-	    try {
-	    	resultMap = HttpUtils.doGet(url, headers, querys);
-	    	System.out.println(resultMap);
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    }
+	    Map resultMap = HttpUtils.doGet(url, headers, querys);
+	    System.out.println(resultMap);
 	    return "";
 	}
 
@@ -64,9 +63,10 @@ public class AliAPI {
 	 * 
 	 *{"status":"0","msg":"ok","result":{"shouji":"13986147769","province":"湖北","city":"武汉","company":"中国移动","cardtype":"GSM","areacode":"027"}}
 	 * @param phone
+	 * @throws Exception 
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void getPhoneInfo(String phone) {
+	public static void getPhoneInfo(String phone) throws Exception {
 	    String url = "http://jshmgsdmfb.market.alicloudapi.com/shouji/query";
 	    
 	    Map<String, String> headers = new HashMap<String, String>();
@@ -74,13 +74,8 @@ public class AliAPI {
 	    Map<String, String> querys = new HashMap<String, String>();
 	    querys.put("shouji", phone);
 
-	    Map resultMap = null;
-	    try {
-	    	resultMap = HttpUtils.doGet(url, headers, querys);
-	    	System.out.println(resultMap);
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    }
+	    Map resultMap = HttpUtils.doGet(url, headers, querys);
+	    System.out.println(resultMap);
 	}
 	
 	

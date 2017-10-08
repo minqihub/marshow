@@ -173,6 +173,11 @@ form.getWeek = function(day){debugger
 	return week;
 };
 
+//获取随机字符串
+form.getRandomStr = function(length){debugger
+
+};
+
 form.getType = function(str){debugger
 	if(typeof str == "undefined"){
 		return "undefined";

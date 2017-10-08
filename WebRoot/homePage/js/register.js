@@ -1,7 +1,7 @@
-//jQuery time
-var current_fs, next_fs, previous_fs; //fieldsets
-var left, opacity, scale; //fieldset properties which we will animate
-var animating; //flag to prevent quick multi-click glitches
+var current_fs, next_fs, previous_fs;
+var left, opacity, scale;
+var animating;
+var smsCode;
 
 //第一步
 $('.btnNext1').on('click', function() {debugger
@@ -51,7 +51,7 @@ $('.btnNext1').on('click', function() {debugger
 				easing: 'easeInOutBack'
 			});
 		}else{								//手机号已存在
-			$("#tips1")[0].innerText = '"手机号都能跟别人重复，你说你厉不厉害"';
+			$("#tips1")[0].innerText = '"哎呀，手机号和别人重复了，换个呗"';
 			$("#tips1").shake(3, 10, 400);
 		}
 	}else{									//手机号不正确
@@ -146,6 +146,12 @@ $(".previous").click(function(){
 $(".submit").click(function(){
 	return false;
 })
+
+//获取短信验证码
+var smsCode = function(){
+	var rand = (Math.random()+"").substring(2, 6);
+	console.log(rand);
+}
 
 /**
  * 元素抖动效果
