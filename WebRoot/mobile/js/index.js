@@ -60,12 +60,24 @@ $$('.confirm-title-ok-cancel').on('click', function () {
 
 //定位
 $$('.left.sliding').on('click', function () {
-	myApp.alert('待开发，定位功能需要调用微信JS-SDK...');
+//	myApp.alert('待开发，定位功能需要调用微信JS-SDK...');
+	var data = {};
+	data.appid = "wx46e8fbea0168eb02";
+	weChatJs.getLocation(data, function(res){debugger
+		myApp.alert("获取的地理位置数据："+ JSON.stringify(res));
+	});
 });
 
 //扫码
 $$('.right.sliding').on('click', function () {
-	myApp.alert('待开发，扫码功能需要调用微信JS-SDK...');
+//	myApp.alert('待开发，扫码功能需要调用微信JS-SDK...');
+	var data = {};
+	data.appid = "wx46e8fbea0168eb02";
+	weChatJs.scanQRCode(data,function(res){debugger
+		var qrCode = res.resultStr;
+		myApp.alert("二维码内容：" + qrCode);
+		
+	});
 });
 
 //图标导航

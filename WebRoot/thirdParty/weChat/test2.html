@@ -46,8 +46,8 @@
 		
 		$('#location').on('click', function() {debugger
 			var data = {};
-			data.appid = "";
-			var locationData = weChatJs.getLocation(data, function(res){debugger
+			data.appid = "wx46e8fbea0168eb02";
+			weChatJs.getLocation(data, function(res){debugger
 			
 			});
 			
@@ -56,9 +56,11 @@
 		
 		$('#qrCode').on('click', function() {debugger
 			var data = {};
-			data.appid = "";
-			var qrCode = weChatJs.scanQRCode(data,function(res){debugger
-			
+			data.appid = "wx46e8fbea0168eb02";
+			weChatJs.scanQRCode(data,function(res){debugger
+				var qrCode = res.resultStr;
+				// TODO 
+				
 			});
 		});
 

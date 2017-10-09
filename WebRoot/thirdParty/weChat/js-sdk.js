@@ -66,7 +66,7 @@ weChatJs.scanQRCode = function(data, func){debugger
 	    needResult: 1, 						// 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
 	    scanType: ["qrCode","barCode"], 	// 可以指定扫二维码还是一维码，默认二者都有
 	    success: function (res) {debugger
-	    	alert("微信扫一扫数据："+ JSON.stringify(res));
+//	    	alert("微信扫一扫数据："+ JSON.stringify(res));
 		    var result = res.resultStr; 	// 当needResult 为 1 时，扫码返回的结果
 		    if(typeof func == "function"){
 		    	func(res);
@@ -81,7 +81,7 @@ weChatJs.getLocation = function(data, func){debugger
 	wx.getLocation({
 	    type: 'gcj02', 						// 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 	    success: function (res) {debugger
-	    	alert("获取的地理位置数据："+ JSON.stringify(res));
+//	    	alert("获取的地理位置数据："+ JSON.stringify(res));
 	        var latitude = res.latitude; 	// 纬度，浮点数，范围为90 ~ -90
 	        var longitude = res.longitude; 	// 经度，浮点数，范围为180 ~ -180。
 	        var speed = res.speed; 			// 速度，以米/每秒计
