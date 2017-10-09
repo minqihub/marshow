@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.framework.utils.HttpUtils;
@@ -18,7 +19,7 @@ import com.thirdParty.weChat.wxInterface.WXMenu;
 import com.thirdParty.weChat.wxInterface.WXService;
 
 @Controller
-@RequestMapping("/test")
+@RequestMapping("/trust/test")
 public class Test {
 	
 	@SuppressWarnings("unused")
@@ -46,25 +47,34 @@ public class Test {
 	
 	
 	
-	
+	/**
+	 * http://localhost:8080/marshow/trust/test/fun1.do
+	 * @param json
+	 * @param response
+	 * @throws IOException
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	@ResponseBody
 	@RequestMapping("/fun1.do")
-	public void fun(String json, HttpServletResponse response) throws IOException{
-		System.out.println("传入的json是："+json);
+	public @ResponseBody Map fun(String json, HttpServletResponse response) throws IOException{
 		
-		JSONObject map = new JSONObject();
+		
+		Map map = new HashMap();
+		
 		map.put("MSGID", "s");
 		map.put("MESSAGE", "恭喜调用成功");
+
+		return map;
 		
-		
-		PrintWriter pw = null;
-		try{
-			pw = response.getWriter();
-			pw.print(map);
-		}finally{
-			if(pw != null){
-				pw.close();
-		    }
-		}
+//		PrintWriter pw = null;
+//		try{
+//			pw = response.getWriter();
+//			pw.print(map);
+//		}finally{
+//			if(pw != null){
+//				pw.close();
+//		    }
+//		}
 	}
 	
 	@RequestMapping("/fun2.do")

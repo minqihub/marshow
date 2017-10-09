@@ -40,6 +40,7 @@ public class SpringInterceptor implements HandlerInterceptor {
     	if(!servletPath.startsWith("/trust")){
     		Map flagMap = Login.checkLogin(request, response);
     		if(flagMap.get("MSGID").toString().equals("E")){
+    			System.out.println(flagMap);
     			return false;
     		}
     	}

@@ -6,7 +6,7 @@ var form = {};
 //登陆（密码加密；登陆成功后将userInfo写到cookie中，并设置有效期）
 form.login = function(json){
 	var json = {"json":JSON.stringify(json)};
-	var url = this.getURL("FormUrl") + "/trust/login/login.do";
+	var url = this.getprojectUrl + "/trust/login/login.do";
 	return this.ajax(json, url);
 };
 

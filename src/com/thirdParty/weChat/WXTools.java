@@ -44,7 +44,7 @@ import com.thirdParty.weChat.wxInterface.WXServiceMsg;
  * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140839
  */
 @Controller
-@RequestMapping("/wxTools")
+@RequestMapping("/trust/wxTools")
 public class WXTools {
 
 	//微信服务器token

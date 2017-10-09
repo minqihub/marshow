@@ -33,8 +33,10 @@ public class Authorization {
 		Map returnMap = MySQLUtils.sqlQueryForMap(comm, SQLConvertor.format(sqlTemplate, sessionMap));
 		if(!returnMap.isEmpty()){
 			returnMap.put("MSGID", "S");
+			returnMap.put("MESSAGE", "已登录状态");
 		}else{
 			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "未登录拒绝访问");
 		}
 			
 		return returnMap;

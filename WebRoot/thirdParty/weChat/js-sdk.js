@@ -2,6 +2,7 @@
  * 微信js-sdk合集
  * 注意：	1.调用页面需引用<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
  * 		 	2.调用依赖formTools.js和jquery
+ * 			3.要使用的JS接口名称必须在初始化的时候指定
  */
 var weChatJs = {};
 
@@ -32,7 +33,7 @@ weChatJs.init = function(appid, func){debugger
 	}
 	//获取微信js配置参数
 	var json = {"json":JSON.stringify({"appid":appid, "url":window.location.href})};
-	var url = form.getprojectUrl + "/wxTools/weChatJsSign.do";
+	var url = form.getprojectUrl + "/trust/wxTools/weChatJsSign.do";
 	var wxConfig = form.ajax(json, url).data;
 	
 	wx.config({
@@ -41,13 +42,15 @@ weChatJs.init = function(appid, func){debugger
 	    timestamp: wxConfig.timestamp, 					// 必填，生成签名的时间戳
 	    nonceStr: wxConfig.nonceStr, 					// 必填，生成签名的随机串
 	    signature: wxConfig.signature,					// 必填，签名，见附录1
-	    jsApiList: ['scanQRCode','getLocation','openLocation','chooseImage','uploadImage','downloadImage',
-	    			'onMenuShareTimeline','startRecord','stopRecord'] 		// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	    jsApiList: ['scanQRCode','getLocation','openLocation',
+	    			'chooseImage','uploadImage','downloadImage',
+	    			'onMenuShareTimeline',
+	    			'startRecord','stopRecord'] 		// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 	});
 	
 	// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
 	wx.error(function(res){
-		alert("微信config信息验证失败："+ JSON.stringify(res));
+		alert("微信配置签名验证失败："+ JSON.stringify(res));
 	});
 	
 	// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
@@ -63,10 +66,9 @@ weChatJs.init = function(appid, func){debugger
 weChatJs.scanQRCode = function(data, func){debugger
 	this.init(data.appid);
 	wx.scanQRCode({
-	    needResult: 1, 						// 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+	    needResult: 1, 						// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
 	    scanType: ["qrCode","barCode"], 	// 可以指定扫二维码还是一维码，默认二者都有
-	    success: function (res) {debugger
-//	    	alert("微信扫一扫数据："+ JSON.stringify(res));
+	    success: function (res) {
 		    var result = res.resultStr; 	// 当needResult 为 1 时，扫码返回的结果
 		    if(typeof func == "function"){
 		    	func(res);
@@ -80,8 +82,7 @@ weChatJs.getLocation = function(data, func){debugger
 	this.init(data.appid);
 	wx.getLocation({
 	    type: 'gcj02', 						// 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-	    success: function (res) {debugger
-//	    	alert("获取的地理位置数据："+ JSON.stringify(res));
+	    success: function (res) {
 	        var latitude = res.latitude; 	// 纬度，浮点数，范围为90 ~ -90
 	        var longitude = res.longitude; 	// 经度，浮点数，范围为180 ~ -180。
 	        var speed = res.speed; 			// 速度，以米/每秒计
@@ -110,10 +111,10 @@ weChatJs.openLocation = function(data){debugger
 weChatJs.chooseImage = function(data, func){debugger
 	this.init(data.appid);
 	wx.chooseImage({
-	    count: 1, 									// 默认9
+	    count: 1, 									// 可选择的数量，默认9
 	    sizeType: ['original', 'compressed'], 		// 可以指定是原图还是压缩图，默认二者都有
 	    sourceType: ['album', 'camera'], 			// 可以指定来源是相册还是相机，默认二者都有
-	    success: function (res) {debugger
+	    success: function (res) {
 	        var localIds = res.localIds; 			// 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
 	        if(typeof func == "function"){
 		    	func(res);
@@ -128,7 +129,7 @@ weChatJs.uploadImage = function(data, func){debugger
 	wx.uploadImage({
 	    localId: data.localId, 						// 需要上传的图片的本地ID，由chooseImage接口获得
 	    isShowProgressTips: 1, 						// 默认为1，显示进度提示
-	    success: function (res) {debugger
+	    success: function (res) {
 	    	//上传图片有效期3天，可用微信多媒体接口下载图片到自己的服务器，此处获得的 serverId 即 media_id
 	        var serverId = res.serverId; 			// 返回图片的服务器端ID
 	        if(typeof func == "function"){
@@ -144,7 +145,7 @@ weChatJs.downloadImage = function(data, func){debugger
 	wx.downloadImage({
 	    serverId: data.serverId, 					// 需要下载的图片的服务器端ID，由uploadImage接口获得
 	    isShowProgressTips: 1, 						// 默认为1，显示进度提示
-	    success: function (res) {debugger
+	    success: function (res) {
 	        var localId = res.localId; 				// 返回图片下载后的本地ID
 	        if(typeof func == "function"){
 		    	func(res);
@@ -211,11 +212,52 @@ weChatJs.playVoice = function(data){debugger
 	});
 }
 
+//语音识别
+weChatJs.translateVoice = function(data, func){debugger
+	this.init(data.appid);
+	wx.translateVoice({
+		localId: data.localId, 					// 需要识别的音频的本地Id，由录音相关接口获得
+		isShowProgressTips: 1, 					// 默认为1，显示进度提示
+		success: function (res) {
+			var result = res.translateResult; 	// 语音识别的结果
+	        if(typeof func == "function"){
+		    	func(res);
+		    }
+		}
+	});
+};
 
 
+//上传语音
+weChatJs.uploadVoice = function(data, func){debugger
+	this.init(data.appid);
+	wx.uploadVoice({
+		localId: data.localId, 				// 需要上传的音频的本地ID，由stopRecord接口获得
+		isShowProgressTips: 1, 				// 默认为1，显示进度提示
+	 	success: function (res) {
+	 		//上传语音有效期3天，可用微信多媒体接口下载语音到自己的服务器，此处获得的 serverId 即 media_id
+	 		var serverId = res.serverId; 	// 返回音频的服务器端ID
+	        if(typeof func == "function"){
+		    	func(res);
+		    }
+		}
+	});
+}
 
-
-
+//下载语音
+weChatJs.downloadVoice = function(data, func){debugger
+	this.init(data.appid);
+	wx.downloadVoice({
+	    serverId: data.serverId, 			// 需要下载的音频的服务器端ID，由uploadVoice接口获得
+	    isShowProgressTips: 1, 				// 默认为1，显示进度提示
+	    success: function (res) {
+	        var localId = res.localId; 		// 返回音频的本地ID
+	        if(typeof func == "function"){
+		    	func(res);
+		    }
+	    }
+	});
+}
 
 
 
