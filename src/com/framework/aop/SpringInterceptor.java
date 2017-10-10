@@ -19,8 +19,8 @@ import com.framework.service.Login;
  *
  */
 public class SpringInterceptor implements HandlerInterceptor {
-//public class SpringInterceptor{  	//先暂停拦截器使用
-    /** 
+
+	/** 
      * preHandle方法是进行处理器拦截用的，该方法将在Controller处理之前进行调用；
      * SpringMVC中的Interceptor拦截器是链式的，可以同时存在多个Interceptor，SpringMVC会根据声明的前后顺序一个接一个的执行，
      * 而且所有的Interceptor中的preHandle方法都会在Controller方法调用之前调用

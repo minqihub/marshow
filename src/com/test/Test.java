@@ -22,11 +22,12 @@ import com.thirdParty.weChat.wxInterface.WXService;
 @RequestMapping("/trust/test")
 public class Test {
 	
+	private String deployIP = "";
+	private long deployTime = 0;
+	
 	@SuppressWarnings("unused")
 	@RequestMapping("/getData.do")
 	public void getData(String json, HttpServletRequest request, HttpServletResponse response){
-		
-		
 		
 		
 		Map<String, String[]> paramMap = request.getParameterMap();
@@ -44,37 +45,46 @@ public class Test {
 		System.out.println(dataJson);
 	}
 	
-	
+	/**
+	 * 防止1秒内多次调用
+	 * @param request
+	 * @return
+	 */
+	public boolean defend(HttpServletRequest request){
+		String nowIP = request.getRemoteAddr();					//TODO 获取真实IP的方法
+		long nowTime = System.currentTimeMillis() / 1000;
+		System.out.println("本次IP和时间_"+nowIP+"_"+nowTime);
+		System.out.println("上次IP和时间_"+this.deployIP+"_"+this.deployTime);
+		
+		//首次调用：放行+记录ip和时间
+		if(this.deployIP.equals("") || this.deployTime == 0){
+			this.deployIP = nowIP;
+			this.deployTime = nowTime;
+			return true;
+		//和上次ip不一样且调用间隔时间大于1秒：放行+更新时间
+		}else if(this.deployIP.equals(nowIP) && nowTime - this.deployTime > 1 ){
+			this.deployTime = nowTime;
+			return true;
+		//其他均不放行
+		}else{
+			this.deployTime = nowTime;
+			return false;
+		}
+	}
 	
 	
 	/**
 	 * http://localhost:8080/marshow/trust/test/fun1.do
-	 * @param json
-	 * @param response
-	 * @throws IOException
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-//	@ResponseBody
 	@RequestMapping("/fun1.do")
-	public @ResponseBody Map fun(String json, HttpServletResponse response) throws IOException{
+	public void fun(String json, HttpServletRequest request, HttpServletResponse response){
 		
-		
-		Map map = new HashMap();
-		
-		map.put("MSGID", "s");
-		map.put("MESSAGE", "恭喜调用成功");
-
-		return map;
-		
-//		PrintWriter pw = null;
-//		try{
-//			pw = response.getWriter();
-//			pw.print(map);
-//		}finally{
-//			if(pw != null){
-//				pw.close();
-//		    }
-//		}
+		if(defend(request)){
+			System.out.println("调用成功");
+		}else{
+			System.out.println("被拦截了被拦截了被拦截了被拦截了被拦截了被拦截了");
+		}
 	}
 	
 	@RequestMapping("/fun2.do")
