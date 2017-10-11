@@ -36,6 +36,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    		<a href="mobile/index.html">移动用户界面</a>
 		<p>（建议手机访问，或PC浏览器开发模式）</p>
    		
+		<br/>
+   		<a href="backStage/index2.html">新后台管理</a> 
   	</body>
   	
 </html>
