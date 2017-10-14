@@ -1,10 +1,9 @@
-$(".layui-form").attr("action", form.getprojectName() + "/backStage/index.html");
-
 //设置登陆次数，超过一定次数，则要求输入验证码
 var times = 0;
 
 //表单控件（开关字段：关闭状态无数据；开启状态则该字段为"on"）
-layui.use('form', function(){
+layui.use(['layer', 'form'], function(){
+    var layer = layui.layer;
 	var formUI = layui.form;
 	
 	//监听提交
@@ -15,17 +14,20 @@ layui.use('form', function(){
 		debugger
 		if(resultData.MSGID == "S"){
 			//提交成功后，清空表单
-			return true;		//自动清空表单
+			window.location.href = "index.html";
 		}else{
+			layer.msg("用户名或密码错误！", {icon: 2});
+			//刷新验证码
+//			$('#changeCode').click();
 			times += 1;
-			return false;		//阻止表单提交，页面数据不会丢失
 		}
+		//阻止表单提交，页面数据不会丢失
+		return false;
 	});
 });
 
-
 //enter键监听（layui表单空间已经封装了回车提交事件）
-$(document).on('keydown', function() {debugger
+$(document).on('keydown', function() {
 	var e = window.event;
 	if(e.keyCode === 13) {
 		alert("你按下了回车键");
@@ -33,20 +35,20 @@ $(document).on('keydown', function() {debugger
 });
 
 $('#changeCode').on('click', function() {
-    $('#changeCode > img')[0].src = '../plugins/build/images/GetVerfiyCode.png';
+    $('#changeCode > img')[0].src = '../images/GetVerfiyCode.png';
 });
 
 $('#qqLogin').on('click', function() {
-	alert("QQ登录，要等正式项目完成，有了正式域名之后才能接入");
+	alert("QQ登录，待接入");
 	console.info(times);
 });
 
 $('#wechatLogin').on('click', function() {
-	alert("微信登录，要等正式项目完成，有了正式域名之后才能接入");
+	alert("微信登录，待接入");
 	console.info(times);
 });
 
 $('#weiboLogin').on('click', function() {
-	alert("微博登录，要等正式项目完成，有了正式域名之后才能接入");
+	alert("微博登录，待接入");
 	console.info(times);
 });
