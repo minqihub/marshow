@@ -25,11 +25,15 @@ layui.use('form', function(){
 
 
 //enter键监听（layui表单空间已经封装了回车提交事件）
-$(document).on('keydown', function() {
+$(document).on('keydown', function() {debugger
 	var e = window.event;
 	if(e.keyCode === 13) {
 		alert("你按下了回车键");
 	}
+});
+
+$('#changeCode').on('click', function() {
+    $('#changeCode > img')[0].src = '../plugins/build/images/GetVerfiyCode.png';
 });
 
 $('#qqLogin').on('click', function() {
