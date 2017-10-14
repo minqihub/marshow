@@ -1,9 +1,9 @@
 //设置登陆次数，超过一定次数，则要求输入验证码
 var times = 0;
-
+var layer;
 //表单控件（开关字段：关闭状态无数据；开启状态则该字段为"on"）
 layui.use(['layer', 'form'], function(){
-    var layer = layui.layer;
+    layer = layui.layer;
 	var formUI = layui.form;
 	
 	//监听提交
@@ -51,4 +51,8 @@ $('#wechatLogin').on('click', function() {
 $('#weiboLogin').on('click', function() {
 	alert("微博登录，待接入");
 	console.info(times);
+});
+
+$('#forgetPsw').on('click', function() {
+	widow.location.href = form.getprojectUrl+'/homePage/register.html';
 });

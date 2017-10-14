@@ -1,5 +1,5 @@
 debugger
-/*if(!form.checkLogin()){
+if(!form.checkLogin()){
 	window.location.href = form.getprojectUrl + "/backStage/login.html";
 }
 
@@ -9,7 +9,7 @@ var userInfo = JSON.parse(window.localStorage.getItem("userInfo"));
 $("#logoImg").attr("src", userInfo.logoImg);
 $("#nickName")[0].innerText = userInfo.nickName;
 
-*/
+
 //将数据打入页面
 
 
