@@ -1,0 +1,59 @@
+canvas {
+    position: absolute;
+    z-index: -1;
+}
+
+.kit-login-box header h1 {
+    line-height: normal;
+}
+
+.kit-login-box header {
+    height: auto;
+}
+
+.content {
+    position: relative;
+}
+
+.codrops-demos {
+    position: absolute;
+    bottom: 0;
+    left: 40%;
+    z-index: 10;
+}
+
+.codrops-demos a {
+    border: 2px solid rgba(242, 242, 242, 0.41);
+    color: rgba(255, 255, 255, 0.51);
+}
+
+.kit-pull-right button,
+.kit-login-main .layui-form-item input {
+    background-color: transparent;
+    color: white;
+}
+
+.kit-login-main .layui-form-item input::-webkit-input-placeholder {
+    color: white;
+}
+
+.kit-login-main .layui-form-item input:-moz-placeholder {
+    color: white;
+}
+
+.kit-login-main .layui-form-item input::-moz-placeholder {
+    color: white;
+}
+
+.kit-login-main .layui-form-item input:-ms-input-placeholder {
+    color: white;
+}
+
+.kit-pull-right button:hover {
+    border-color: #009688;
+    color: #009688
+}
+
+img.login-icon {
+	height: 20px;
+}

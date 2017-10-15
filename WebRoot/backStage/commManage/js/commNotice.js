@@ -7,9 +7,8 @@ layui.use('table', function(){
 		elem: '#demo',
 		url: form.getprojectName() + '/commNotice/getNotice.do',
 		where: {"json":JSON.stringify({"commId": "comm0001"})},
-		method: 'post',
 		cols: [[
-		        {field:'jlbh', title: 'jlbh', width:80, sort: true, fixed: true},
+		        {field:'jlbh', title: '编号', width:80, sort: true, fixed: true},
 		        {field:'noticeType', title: '类型', width:80},
 		        {field:'title', title: '标题', width:200},
 		        {field:'content', title: '内容', width:200, sort: true},
@@ -27,7 +26,7 @@ layui.use('table', function(){
     	even: true ,	//开启隔行背景
     	size: 'sm' ,	//小尺寸的表格sm\lg
     	skin: 'line' ,	//行边框风格line\row\nob
-    	done: function(res, curr, count){
+    	done: function(res, curr, count){debugger
 		    //如果是异步请求数据方式，res即为你接口返回的信息。
 //		    console.log(res);
 		    
@@ -60,14 +59,14 @@ layui.use('table', function(){
 	  	}
 	});
 	
-	$('#searchBtn').on('click', function() {debugger
-		reloadObj.reload({
-			where: { //设定异步数据接口的参数
-				id: $('#demoReload').val()
-			}
-		});
-		
-	});
+//	$('#searchBtn').on('click', function() {debugger
+//		reloadObj.reload({
+//			where: { //设定异步数据接口的参数
+//				id: $('#demoReload').val()
+//			}
+//		});
+//		
+//	});
 	
 	
 	//表格重载，只有url接口取数据才行

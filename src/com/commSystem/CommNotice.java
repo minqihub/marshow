@@ -50,18 +50,18 @@ public class CommNotice {
 		System.out.println(list);
 		
 		//TODO 数据库中的时间有小数点的问题
-		for (int i = 0; i < list.size(); i++) {
-			JSONObject row = Json.toJO(list.get(i));
-			
-			java.sql.Timestamp timeFound = (java.sql.Timestamp)row.get("timeFound");
-			java.sql.Timestamp startTime = (java.sql.Timestamp)row.get("startTime");
-			java.sql.Timestamp endTime = (java.sql.Timestamp)row.get("endTime");
-			
-			row.put("timeFound", new SimpleDateFormat("yyyy-MM-dd").format(row.get("timeFound")));
-			row.put("startTime", new SimpleDateFormat("yyyy-MM-dd").format(row.get("startTime")));
-			row.put("endTime", new SimpleDateFormat("yyyy-MM-dd").format(row.get("endTime")));
-		}
-		System.out.println(list);
+//		for (int i = 0; i < list.size(); i++) {
+//			JSONObject row = Json.toJO(list.get(i));
+//			
+//			java.sql.Timestamp timeFound = (java.sql.Timestamp)row.get("timeFound");
+//			java.sql.Timestamp startTime = (java.sql.Timestamp)row.get("startTime");
+//			java.sql.Timestamp endTime = (java.sql.Timestamp)row.get("endTime");
+//			
+//			row.put("timeFound", new SimpleDateFormat("yyyy-MM-dd").format(row.get("timeFound")));
+//			row.put("startTime", new SimpleDateFormat("yyyy-MM-dd").format(row.get("startTime")));
+//			row.put("endTime", new SimpleDateFormat("yyyy-MM-dd").format(row.get("endTime")));
+//		}
+//		System.out.println(list);
 		
 		
 		JSONObject returnJson = new JSONObject();

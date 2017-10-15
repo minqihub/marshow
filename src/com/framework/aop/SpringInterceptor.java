@@ -11,6 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.framework.service.Authorization;
 import com.framework.service.Login;
 
 /**
@@ -38,7 +39,8 @@ public class SpringInterceptor implements HandlerInterceptor {
     	
     	//对访问路径进行登陆授信判断（@Controll包含trust则无需登录）
     	if(!servletPath.startsWith("/trust")){
-    		Map flagMap = Login.checkLogin(request, response);
+//    		Map flagMap = Login.checkLogin(request, response);	//checkLogin方法有response返回，从而影响后面调用方法的response返回
+    		Map flagMap = Authorization.getUserInfo(request);
     		if(flagMap.get("MSGID").toString().equals("E")){
     			System.out.println(flagMap);
     			return false;

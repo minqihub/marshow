@@ -39,20 +39,16 @@ $('#changeCode').on('click', function() {
 });
 
 $('#qqLogin').on('click', function() {
-	alert("QQ登录，待接入");
+	layer.msg("QQ登录，待接入");
 	console.info(times);
 });
 
 $('#wechatLogin').on('click', function() {
-	alert("微信登录，待接入");
+	layer.msg("微信登录，待接入");
 	console.info(times);
 });
 
 $('#weiboLogin').on('click', function() {
-	alert("微博登录，待接入");
+	layer.msg("微博登录，待接入");
 	console.info(times);
-});
-
-$('#forgetPsw').on('click', function() {
-	widow.location.href = form.getprojectUrl+'/homePage/register.html';
 });

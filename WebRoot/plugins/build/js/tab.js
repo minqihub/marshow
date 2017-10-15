@@ -246,7 +246,9 @@ layui.define(['jquery', 'element', 'nprogress', 'utils'], function(exports) {
             };
             var title = options.title,
                 icon = options.icon,
-                url = options.url,
+//                url = options.url,
+                //测试环境与正式环境的区别
+                url = form.getprojectName() + options.url + "?rid=" + Math.random(),
                 id = options.id;
             if (that.tabExists(id)) {
                 that.tabChange(id);
