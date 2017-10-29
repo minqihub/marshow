@@ -47,7 +47,8 @@ public class WXShop extends DBHandler {
 		
 		Map returnMap = null;
 		try {
-			returnMap = HttpUtils.doPostString(url, null, null, range.toString());
+			String resultStr = HttpUtils.doPostString(url, null, null, range.toString());
+			returnMap = Json.toMap(resultStr);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -133,7 +134,8 @@ public class WXShop extends DBHandler {
 		
 		Map returnMap = null;
 		try {
-			returnMap = HttpUtils.doPostString(url, null, null, business.toString());
+			String resultStr = HttpUtils.doPostString(url, null, null, business.toString());
+			returnMap = Json.toMap(resultStr);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,8 +162,9 @@ public class WXShop extends DBHandler {
 		JSONObject sendJson = new JSONObject();
 		sendJson.put("poi_id", poi_id);				//微信的门店id
 		
-		Map resultMap = HttpUtils.doPostString(url, null, null, url);
-		return resultMap;
+		String resultStr = HttpUtils.doPostString(url, null, null, url);
+		Map returnMap = Json.toMap(resultStr);
+		return returnMap;
 	}
 	
 	

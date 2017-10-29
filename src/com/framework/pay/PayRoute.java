@@ -1,5 +1,66 @@
 package com.framework.pay;
 
-public class PayRoute {
+import java.util.HashMap;
+import java.util.Map;
 
+import com.framework.database.DataSource;
+import com.framework.database.MySQLUtils;
+import com.framework.database.SQLConvertor;
+import com.framework.utils.Json;
+
+/**
+ * 支付配置与路由
+ * @author minqi 2017-10-27 22:01:28
+ *
+ */
+public class PayRoute {
+	
+	/**
+	 * 微信统一下单（支付）
+	 */
+	public static final String WeChatPayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+	/**
+	 * 微信退款
+	 */
+	public static final String WeChatRefundUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+	/**
+	 * 微信提现
+	 */
+	public static final String WeChatGetCashUrl = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+	
+	
+	
+	
+	/**
+	 * 支付宝支付
+	 */
+	public static final String AliPayUrl = "";
+	/**
+	 * 支付宝退款
+	 */
+	public static final String AliRefundUrl = "";
+	
+	
+	/**
+	 * 获取支付配置
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static Map getPayConfig(String json) {
+		Map data = Json.toMap(json);
+		
+		Map queryMap = new HashMap();
+		queryMap.put("companyId", data.get("companyId").toString());
+		queryMap.put("payType", data.get("payType").toString());
+		
+		String sqlTemplate = "select * from";
+		
+		String sql = SQLConvertor.format(sqlTemplate, queryMap);
+		
+		Map returnMap = MySQLUtils.sqlQueryForMap(DataSource.comm, sql);
+		return returnMap;
+	}
+	
+	
+	
 }

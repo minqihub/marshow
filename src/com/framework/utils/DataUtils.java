@@ -409,8 +409,6 @@ public class DataUtils {
         input.close();
         return output.toByteArray();
     }
+    
 	
-	public static void main(String[] args) {
-		System.out.println(getRandomStr(4));
-	}
 }

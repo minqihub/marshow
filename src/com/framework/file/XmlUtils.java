@@ -1,109 +1,128 @@
 package com.framework.file;
 
-import java.util.Iterator;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-
-import com.alibaba.fastjson.JSONObject;
-import com.framework.utils.Json;
+import org.dom4j.io.SAXReader;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Xml解析类
- * @author minqi
- *
  */
 public class XmlUtils {
-	
-	
+
 	/**
-	 * @todo 将map转换成xml格式
-	 * @param parameters
-	 * @return
-	 */
-	public static String parseXML(Map parameters) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("<xml>");
-        Set es = parameters.entrySet();
-        Iterator it = es.iterator();
-        while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry)it.next();
-            String k = (String)entry.getKey();
-            String v = (String)entry.getValue();
-            if (null != v && !"".equals(v) && !"appkey".equals(k)) {
-                sb.append("<" + k + ">" + parameters.get(k) + "</" + k + ">\n");
-            }
+     * 从request对象中，将xml转化为Map集合
+     * @param request
+     * @return
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map xmlToMap(HttpServletRequest request) {
+        Map map = new HashMap();
+        SAXReader reader = new SAXReader();
+        InputStream ins = null;
+        try {
+            ins = request.getInputStream();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
-        sb.append("</xml>");
-        return sb.toString();
+        Document doc = null;
+        try {
+            doc = reader.read(ins);
+        } catch (DocumentException e1) {
+            e1.printStackTrace();
+        }
+        Element root = doc.getRootElement();
+        List<Element> list = root.elements();
+        for (Element e : list) {
+            map.put(e.getName(), e.getText());
+        }
+        try {
+            ins.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return map;
     }
 	
-	
-	
-	
-	
-//	public static final String xml = "<?xml version=\"1.0\" encoding=\"GBK\"?><stream><returnRecords>6</returnRecords><status>AAAAAAA</status><statusText>交易成功</statusText><list name=\"userDataList\"><row><ACCBAL>1000000000.00</ACCBAL><CDFG>C</CDFG><CRYTYPE>001</CRYTYPE><HOSTFLW>C99004547001DI</HOSTFLW><HOSTSEQ>1</HOSTSEQ><OPPACCNAME></OPPACCNAME><OPPACCNO>7111010130900000001</OPPACCNO><OPPBANKNO></OPPBANKNO><OPPBRANCHNAME></OPPBRANCHNAME><RESUME></RESUME><TRANAMT>1000000000.00</TRANAMT><TRANDATE>20201017</TRANDATE><TRANTIME>104354</TRANTIME><TRANTYPE>23</TRANTYPE><XTSFAM>0.00</XTSFAM><subAccNo>3110710010091021276</subAccNo></row><row><ACCBAL>999999999.90</ACCBAL><CDFG>D</CDFG><CRYTYPE>001</CRYTYPE><HOSTFLW>J0000000048141</HOSTFLW><HOSTSEQ>1</HOSTSEQ><OPPACCNAME>河南智云联创科技有限公司</OPPACCNAME><OPPACCNO>8110701015200020017</OPPACCNO><OPPBANKNO>711101</OPPBANKNO><OPPBRANCHNAME>中信银行总行营业部</OPPBRANCHNAME><RESUME></RESUME><TRANAMT>0.10</TRANAMT><TRANDATE>20201017</TRANDATE><TRANTIME>115438</TRANTIME><TRANTYPE>23</TRANTYPE><XTSFAM>0.00</XTSFAM><subAccNo>3110710010091021276</subAccNo></row><row><ACCBAL>999999999.80</ACCBAL><CDFG>D</CDFG><CRYTYPE>001</CRYTYPE><HOSTFLW>J0000000036096</HOSTFLW><HOSTSEQ>1</HOSTSEQ><OPPACCNAME>河南智云联创科技有限公司</OPPACCNAME><OPPACCNO>8110701015200020017</OPPACCNO><OPPBANKNO>711101</OPPBANKNO><OPPBRANCHNAME>中信银行总行营业部</OPPBRANCHNAME><RESUME></RESUME><TRANAMT>0.10</TRANAMT><TRANDATE>20201019</TRANDATE><TRANTIME>100029</TRANTIME><TRANTYPE>23</TRANTYPE><XTSFAM>0.00</XTSFAM><subAccNo>3110710010091021276</subAccNo></row><row><ACCBAL>999999999.70</ACCBAL><CDFG>D</CDFG><CRYTYPE>001</CRYTYPE><HOSTFLW>J0000000036240</HOSTFLW><HOSTSEQ>1</HOSTSEQ><OPPACCNAME>河南智云联创科技有限公司</OPPACCNAME><OPPACCNO>8110701015200020017</OPPACCNO><OPPBANKNO>711101</OPPBANKNO><OPPBRANCHNAME>中信银行总行营业部</OPPBRANCHNAME><RESUME></RESUME><TRANAMT>0.10</TRANAMT><TRANDATE>20201019</TRANDATE><TRANTIME>100328</TRANTIME><TRANTYPE>23</TRANTYPE><XTSFAM>0.00</XTSFAM><subAccNo>3110710010091021276</subAccNo></row><row><ACCBAL>999999999.50</ACCBAL><CDFG>D</CDFG><CRYTYPE>001</CRYTYPE><HOSTFLW>J0000000036284</HOSTFLW><HOSTSEQ>1</HOSTSEQ><OPPACCNAME>河南智云联创科技有限公司</OPPACCNAME><OPPACCNO>8110701015200020017</OPPACCNO><OPPBANKNO>711101</OPPBANKNO><OPPBRANCHNAME>中信银行总行营业部</OPPBRANCHNAME><RESUME></RESUME><TRANAMT>0.20</TRANAMT><TRANDATE>20201019</TRANDATE><TRANTIME>100428</TRANTIME><TRANTYPE>23</TRANTYPE><XTSFAM>0.00</XTSFAM><subAccNo>3110710010091021276</subAccNo></row><row><ACCBAL>999999999.20</ACCBAL><CDFG>D</CDFG><CRYTYPE>001</CRYTYPE><HOSTFLW>J0000000038163</HOSTFLW><HOSTSEQ>1</HOSTSEQ><OPPACCNAME>河南智云联创科技有限公司</OPPACCNAME><OPPACCNO>8110701015200020017</OPPACCNO><OPPBANKNO>711101</OPPBANKNO><OPPBRANCHNAME>中信银行总行营业部</OPPBRANCHNAME><RESUME></RESUME><TRANAMT>0.30</TRANAMT><TRANDATE>20201019</TRANDATE><TRANTIME>104430</TRANTIME><TRANTYPE>23</TRANTYPE><XTSFAM>0.00</XTSFAM><subAccNo>3110710010091021276</subAccNo></row></list></stream>";
 
-	//商户附属账户余额查询
-	public static final String xml = "<stream><status>AAAAAAA</status><statusText>交易成功</statusText><list name=\"userDataList\"><row><DJAMT>0.00</DJAMT><KYAMT>0.00</KYAMT><SJAMT>0.00</SJAMT><SUBACCNM>金都瑞园</SUBACCNM><TZAMT>0.00</TZAMT><XSACVL>0.00</XSACVL><subAccNo>3111110034633603832</subAccNo></row></list></stream>";
-	
-//	public static final String xml = "<?xml version=\"1.0\" encoding=\"GBK\"?><stream><status>AAAAAAE</status><statusText>交易成功</statusText><list name=\"userDataList\"><row><stt>0</stt><status>AAAAAAE</status><statusText>交易成功</statusText></row></list></stream>";
-	
-	public JSONObject xmlToJson(String xml) throws DocumentException{
-		Document document = DocumentHelper.parseText(xml); 
-		Element root = document.getRootElement();  				//取得根节点
-		
-		String resultStr = checkChildEle(root);
-        System.out.println(resultStr);
-        
-        System.out.println("-----以上是初始的------以下是转换的json格式-------------------------------");
-
-        JSONObject json = Json.toJO("{" + resultStr + "}");
-        System.out.println(json);
-        return json;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public String checkChildEle(Element element) throws DocumentException{
-		String json = "";
-		List<Element> list = element.elements();		//其所有子节点
-		if (list.size()>0) {							//有子节点
-			for (Element ele : list) {					//循环所有子节点
-				if(ele.getName().equals("list")){		//如果子节点名称是list
-					json += '"' + ele.getName() +'"'+ ":" + '[' + checkChildEle(ele) +"]"; 
-				}else if(ele.getName().equals("row")){	//如果子节点名称是row
-					json += "{"+checkChildEle(ele)+"}";
-				}else {									//其他普通子节点
-					json += "\"" + ele.getName() +'"'+ ":" + '"'+ ele.getText() + "\"," + checkChildEle(ele); 
-				}
-			} 
-		}
-		return json; 
-	}
-
-
-	
-	public static void main(String[] args) {
-		
-		try {
-			
-			XmlUtils x = new XmlUtils();
-			x.xmlToJson(xml);
-			
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	
-	
-	
+    
+    /**
+     * XML格式字符串转换为Map
+     * @param strXML XML字符串
+     * @return XML数据转换后的Map
+     * @throws Exception
+     */
+    public static Map<String, String> xmlToMap(String strXML) throws Exception{
+        Map<String, String> data = new HashMap<String, String>();
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        InputStream stream = new ByteArrayInputStream(strXML.getBytes("UTF-8"));
+        org.w3c.dom.Document doc = documentBuilder.parse(stream);
+        doc.getDocumentElement().normalize();
+        NodeList nodeList = doc.getDocumentElement().getChildNodes();
+        for (int idx = 0; idx < nodeList.getLength(); ++idx) {
+            Node node = nodeList.item(idx);
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                org.w3c.dom.Element element = (org.w3c.dom.Element) node;
+                data.put(element.getNodeName(), element.getTextContent());
+            }
+        }
+        stream.close();
+        return data;
+    }
+    
+    /**
+     * 将Map转换为XML格式的字符串
+     * @param data Map类型数据
+     * @return XML格式的字符串
+     * @throws Exception
+     */
+    public static String mapToXml(Map<String, String> data) throws Exception{
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        org.w3c.dom.Document document = documentBuilder.newDocument();
+        org.w3c.dom.Element root = document.createElement("xml");
+        document.appendChild(root);
+        for (String key: data.keySet()) {
+            String value = data.get(key);
+            if (value == null) {
+                value = "";
+            }
+            value = value.trim();
+            org.w3c.dom.Element filed = document.createElement(key);
+            filed.appendChild(document.createTextNode(value));
+            root.appendChild(filed);
+        }
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        DOMSource source = new DOMSource(document);
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+        transformer.transform(source, result);
+        String output = writer.getBuffer().toString(); //.replaceAll("\n|\r", "");
+     	writer.close();
+        return output;
+    }
+    
 }

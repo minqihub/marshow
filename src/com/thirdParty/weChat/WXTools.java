@@ -31,11 +31,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSONObject;
 import com.framework.database.DataSource;
 import com.framework.database.MySQLUtils;
+import com.framework.file.XmlUtils;
 import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 import com.framework.utils.PropertiesReader;
-import com.framework.utils.XmlUtils;
 import com.thirdParty.weChat.wxInterface.WXServiceMsg;
 
 /**
@@ -50,22 +50,6 @@ public class WXTools {
 	//微信服务器token
 	private static final String TOKEN = PropertiesReader.getInstance().getProperty("WECHAT_TOKEN");
 	
-	
-	/**
-	 * 绑定微信账号
-	 * @param json
-	 * @param response
-	 * @return
-	 */
-	public static boolean bindWeChat(String json, HttpServletResponse response){
-		Map data = Json.toMap(json);
-		
-		String code = data.get("code").toString();
-		String appid = data.get("appid").toString();
-		
-		
-		return true;
-	}
 	
 	/**
 	 * 获取存在数据库的微信全配置；注意此方法返回数据不允许返回到客户端
@@ -137,53 +121,34 @@ public class WXTools {
 	 * @param code 页面用户授权获得的code
 	 * @param appid 公众号appid
 	 * @return
+	 * @throws Exception 
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping("/getOpenId.do")
-	public static String getOpenId(String json, HttpServletResponse response){
+	public static String getOpenId(String json) throws Exception{
 		Map data = Json.toMap(json);
-		
-		if(DataUtils.isNull(data.get("code")) || DataUtils.isNull(data.get("appid"))){
-			HttpUtils.printString(response, "");
-			return "";
-		}
 		
 		String code = data.get("code").toString();
 		String appid = data.get("appid").toString();
-		
-		//通过appid查询数据库中的secret配置
-		Map configMap = getWeChatConfig(appid);
-		Object secret = configMap.get("secret");
+		String secret = data.get("secret").toString();
 		
 	   	String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + secret + "&code=" + code + "&grant_type=authorization_code";
-	   	Map resultMap = null;
-	   	try {
-			resultMap = HttpUtils.doGet(url, null, null);
-		} catch (Exception e) {
-			HttpUtils.printString(response, "");
-			return "";
-		}
-	   	HttpUtils.printString(response, "");
-		return resultMap.get("openid").toString();
+	   	Map resultMap = HttpUtils.doGet(url, null, null);
+	   	return resultMap.get("openid").toString();
 	}
 	
 	/**
 	 * 获取微信用户详细信息
 	 * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140839
 	 * @return
+	 * @throws Exception 
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public Map getWeChatUserInfo(String openid, String appid){
+	public Map getWeChatUserInfo(String openid, String appid) throws Exception{
 		Map tokenMap = getWeChatToken(appid);
 		String access_token = tokenMap.get("access_token").toString();
 		String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + access_token + "&openid=" + openid + "&lang=zh_CN";
 		
-		Map resultMap = null;
-		try {
-			resultMap = HttpUtils.doGet(url, null, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Map resultMap = HttpUtils.doGet(url, null, null);
 		return resultMap;
 	}
 	

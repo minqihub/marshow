@@ -204,7 +204,7 @@ public class HttpUtils {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Map doPostString(String url, Map<String, String> headers, Map<String, String> querys, String body) throws Exception {    	
+	public static String doPostString(String url, Map<String, String> headers, Map<String, String> querys, String body) throws Exception {    	
     	HttpClient httpClient = wrapClient(url);
 
     	HttpPost request = new HttpPost(buildUrl(url, querys));
@@ -224,15 +224,15 @@ public class HttpUtils {
         
         //发起请求
         HttpResponse response = httpClient.execute(request);
-        
         //获取响应状态
 //      System.out.println(response.getStatusLine()); 							//HTTP/1.1 200 OK
         
         //获取返回内容
 	    String result1 = EntityUtils.toString(response.getEntity());
 	    String result2 = new String(result1.getBytes("ISO8859-1"),"utf-8");		//字符乱码
-	    System.out.println("postString返回结果："+result2);
-        return Json.toMap(result2);
+	    
+	    System.out.println("postString返回结果：" + result2);
+	    return result2;
     }
 	
 	/**
