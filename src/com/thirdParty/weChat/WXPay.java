@@ -42,7 +42,7 @@ import com.framework.utils.Json;
 public class WXPay {
 	
 	/**
-	 * 微信支付
+	 * 微信客户端支付
 	 * 微信内H5调起支付；是否调用成功，根据"MSGID":"S"且"flag":"1"判断
 	 * @param XmlData 所需参数：添加了注释的变量
 	 * @param request
@@ -161,7 +161,7 @@ public class WXPay {
 	
 	/**
 	 * 微信扫码支付
-	 * 微信内H5调起支付；是否调用成功，根据"MSGID":"S"且"flag":"1"判断
+	 * 是否调用成功，根据"MSGID":"S"且"flag":"1"判断
 	 * @param XmlData 所需参数：添加了注释的变量
 	 * @param request
 	 * @return
@@ -323,7 +323,7 @@ public class WXPay {
 					"<sign>" + sign + "</sign>" + 
 					"</xml>";
 
-			//退款请求需要证书的双向验证；因为ClientCustomSSL.doRefund()方法被改动过，所以按此形式拼接configMap参数过去
+			//退款请求需要证书的双向验证；因为deployWithCert()方法被改动过，所以按此形式拼接configMap参数过去
 			String refundUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
 			Map configMap = new HashMap();
 			configMap.put("certPath", certPath);
@@ -383,7 +383,6 @@ public class WXPay {
         FileInputStream instream = new FileInputStream(new File(configMap.get("certPath").toString()));	//P12文件目录
         try {
             keyStore.load(instream, configMap.get("mch_id").toString().toCharArray());						//这里写密码..默认是你的MCHID
-            
         } finally {
             instream.close();
         }
@@ -411,11 +410,9 @@ public class WXPay {
             CloseableHttpResponse response = httpclient.execute(httpost);
             try {
                 HttpEntity entity = response.getEntity();
-
-                String jsonStr = EntityUtils
-    					.toString(response.getEntity(), "UTF-8");
+                String jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");
                 EntityUtils.consume(entity);
-               return jsonStr;
+                return jsonStr;
             } finally {
                 response.close();
             }

@@ -236,6 +236,48 @@ public class HttpUtils {
     }
 	
 	/**
+	 * Post String
+	 * @param url
+	 * @param headers
+	 * @param querys
+	 * @param body
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Map doPostStringForMap(String url, Map<String, String> headers, Map<String, String> querys, String body) throws Exception {    	
+    	HttpClient httpClient = wrapClient(url);
+
+    	HttpPost request = new HttpPost(buildUrl(url, querys));
+    	if(headers != null){
+            for (Map.Entry<String, String> e : headers.entrySet()) {
+            	request.addHeader(e.getKey(), e.getValue());
+            }
+    	}else{
+    		request.addHeader("Content-type","application/json; charset=utf-8");
+    	}
+        
+        request.setHeader("Accept", "application/json");
+        
+        if (StringUtils.isNotBlank(body)) {
+        	request.setEntity(new StringEntity(body, "utf-8"));
+        }
+        
+        //发起请求
+        HttpResponse response = httpClient.execute(request);
+        //获取响应状态
+//      System.out.println(response.getStatusLine()); 							//HTTP/1.1 200 OK
+        
+        //获取返回内容
+	    String result1 = EntityUtils.toString(response.getEntity());
+	    String result2 = new String(result1.getBytes("ISO8859-1"),"utf-8");		//字符乱码
+	    
+	    System.out.println("postStringForMap返回结果：" + result2);
+	    return Json.toMap(result2);
+    }
+	
+	
+	/**
 	 * Post stream
 	 * 
 	 * @param host

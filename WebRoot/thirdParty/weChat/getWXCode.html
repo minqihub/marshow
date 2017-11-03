@@ -8,9 +8,6 @@
 
 <body>
     <script>
-/*         if(!sessionStorage.getItem("ordermx")){
-            location.href=pub_url+"/o2o/projects/shopJL/page/index.html";
-        } */
         var GWC = {
             version: '1.1.0',
             urlParams: {},
@@ -53,16 +50,12 @@
                 }
             },
             doRedirect: function() {
-            	//http://localhost:8080/marshow/getWeChatCode.html?appid="+appid+"&scope=snsapi_base&grant_type=authorization_code&redirect_uri="+forwardUrl+"&STATE=#wechat_redirect";
-            	//http://localhost:8080/marshow/getWeChatCode.html?appid=""&scope=snsapi_base&grant_type=authorization_code&redirect_uri=""&STATE=#wechat_redirect";
-            
                 var code = GWC.urlParams['code'];
                 var appId = GWC.urlParams['appid'];
                 var scope = GWC.urlParams['scope'] || 'snsapi_base';
                 var state = GWC.urlParams['state'];		//自定义字段
                 var redirectUri;
-                if (!code) {
-                	debugger;
+                if (!code) {debugger;
                     //第一步，没有拿到code，跳转至微信授权页面获取code
                     redirectUri = GWC.appendParams('https://open.weixin.qq.com/connect/oauth2/authorize#wechat_redirect', {
                         'appid': appId,
@@ -72,14 +65,12 @@
                         'state': state,
                     });
                 } else {
-                	debugger;
                     //第二步，从微信授权页面跳转回来，已经获取到了code，再次跳转到实际所需页面
                     redirectUri = GWC.appendParams(GWC.urlParams['redirect_uri'], {
                         'code': code,
                         'state': state
                     });
                 }
-              	debugger;
                 location.href = redirectUri;
             }
         };

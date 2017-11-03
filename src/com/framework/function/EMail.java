@@ -75,7 +75,7 @@ public class EMail {
 	 * @param title 邮件主题
 	 * @param content 邮件正文
 	 */
-	public static void sendMail(String receiveMail,String sendName, String title, String content){
+	public static void sendMail(String receiveMail, String sendName, String title, String content){
 		Session session = getMailSession();
 		
         // 3. 创建一封邮件

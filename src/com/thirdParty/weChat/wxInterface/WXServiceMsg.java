@@ -115,7 +115,7 @@ public class WXServiceMsg {
 		
 		Map returnMap = new HashMap();
 		try {
-			returnMap = HttpUtils.doPostString(url, null, null, sendJson.toString());
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
 		} catch (Exception e) {
 			
 		}
@@ -152,7 +152,7 @@ public class WXServiceMsg {
 		
 		Map returnMap = new HashMap();
 		try {
-			returnMap = HttpUtils.doPostString(url, null, null, sendJson.toString());
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
 		} catch (Exception e) {
 			
 		}
@@ -190,7 +190,7 @@ public class WXServiceMsg {
 		
 		Map returnMap = new HashMap();
 		try {
-			returnMap = HttpUtils.doPostString(url, null, null, sendJson.toString());
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
 		} catch (Exception e) {
 			
 		}
@@ -231,7 +231,7 @@ public class WXServiceMsg {
 		
 		Map returnMap = new HashMap();
 		try {
-			returnMap = HttpUtils.doPostString(url, null, null, sendJson.toString());
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
 		} catch (Exception e) {
 			returnMap.put("", "");
 		}

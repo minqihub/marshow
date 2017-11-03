@@ -47,7 +47,7 @@ public class WXMenu {
 		
 		Map returnMap = new HashMap();
 		try {
-			returnMap = HttpUtils.doPostString(url, null, null, sendJson.toString());
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
 		} catch (Exception e) {
 			
 		}
