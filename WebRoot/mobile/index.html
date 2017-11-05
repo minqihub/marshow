@@ -10,11 +10,32 @@
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.min.css">
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7.material.colors.min.css">
      	<link rel="stylesheet" href="../plugins/framework7/css/framework7-icons.css">
+     	
+    	<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css" media="all" />
+     	
      	<style type="text/css">
-
-/* 	     	.swiper-slide {
-	     		height: 200px;
-	     	} */
+			
+			/* header背景色 */
+ 	     	.navbar {
+	     		background-color: white;
+	     	} 
+	     	
+	     	/* css图标 */
+	     	i.fa {
+	     		color: #3CADAD;
+	     	}
+	     	
+	     	/* 全局字体 */
+	     	div,p,.item-title,.nav-content {
+	     		font-family: microsoft yahei;
+	     	}
+	     	
+	     	/* header定位 */
+	     	.navbar-inner > .left > #location {
+	     		margin-left: 10px;
+	     		color: #3CADAD;
+	     	}
+	     	
 	     	
 	     	/* 轮播图大小 */
 	     	img.swiper-img {
@@ -43,8 +64,6 @@
 	     	.f7-icons {
 	     		color: #3CADAD;
 	     	}
-	     	
-	     	
 	     	
 	     	a.tab-link.active-state {
 	     		background-color: #63A1D2;
@@ -78,20 +97,21 @@
 			  		<div class="list-block">
 			      		<ul>
 			        		<li class="item-content button">
-			          			<div class="item-media"><i class="icon icon-f7"></i></div>
+			          			<!-- <div class="item-media"><i class="icon icon-f7"></i></div> -->
+			          			<div class="item-media"><i class="fa fa-user-circle-o fa-lg"></i></div>
 			          			<div class="item-inner user open-login-screen">
 			            			<div class="item-title">个人信息</div>
 			            			<div class="item-after">minqi</div>
 			          			</div>
 			        		</li>
 			        		<li class="item-content button">
-			          			<div class="item-media"><i class="icon icon-f7"></i></div>
+			          			<div class="item-media"><i class="fa fa-info-circle fa-lg"></i></div>
 			          			<div class="item-inner user">
 			            			<div class="item-title">用户须知</div>
 			          			</div>
 			        		</li>
 			        		<li class="item-content button">
-			          			<div class="item-media"><i class="icon icon-f7"></i></div>
+			          			<div class="item-media"><i class="fa fa-question-circle-o fa-lg"></i></div>
 			          			<div class="item-inner user">
 			            			<div class="item-title">使用帮助</div>
 			          			</div>
@@ -116,11 +136,16 @@
 		            	<div class="navbar">
 		              		<div class="navbar-inner">
 		                		<div class="left sliding">
-		                			<img alt="获取定位" src="../images/location.png" style="height: 28px;margin-left: 15px;">
+									<i class="fa fa-street-view fa-lg" style="margin-left: 15px;"></i>
+									<div id="location" class="font-yahei">点击定位</div>
+		                			<!-- <i id="locationLoading" class="fa fa-spinner fa-pulse"></i> -->
 								</div>
-		                		<div class="center">当前社区：幸福花园小区</div>
+<!-- 		                		<div class="center">
+		                			当前社区：幸福花园小区
+		                			<i class="fa fa-spinner fa-pulse"></i>
+	                			</div> -->
 		                		<div class="right sliding">
-		                			<img alt="点击扫码" src="../images/scan.png" style="height: 30px;margin-right: 15px;">
+                        			<i class="fa fa-qrcode fa-lg" style="margin-right: 15px;"></i>
 								</div>
 		              		</div>
 		            	</div>
@@ -197,7 +222,7 @@
 	   						<div class="list-block button" style="padding-bottom: 40px; border-top-style: outset;">
 						 		<div class="item-inner">
 						      		<div class="item-title">社区通知：</div>
-						       		<div class="item-after">查看更多↓</div>
+						       		<div class="item-after"><i class="fa fa-angle-double-right fa-lg"></i></div>
 						      	</div>
 							</div>
 							<div class="card demo-card-header-pic">
@@ -227,7 +252,7 @@
 	   						<div class="list-block button" style="padding-bottom: 40px; border-top-style: outset;">
 						 		<div class="item-inner">
 						      		<div class="item-title">社区活动：</div>
-						       		<div class="item-after">查看更多↓</div>
+						       		<div class="item-after"><i class="fa fa-angle-double-right fa-lg"></i></div>
 						      	</div>
 							</div>
 						    
