@@ -64,6 +64,10 @@ $$('.left.sliding').on('click', function () {
 	var data = {};
 	data.appid = "wx46e8fbea0168eb02";
 	weChatJs.getLocation(data, function(res){debugger
+
+		window.sessionStorage.setItem("locationRes", "")
+		
+		
 		$$('#location')[0].innerText = "经" + res.longitude + "纬" + res.latitude;
 //		$$('#locationLoading').attr("style","display:none");
 //		myApp.alert("获取的地理位置数据："+ JSON.stringify(res));
