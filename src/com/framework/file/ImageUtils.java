@@ -40,8 +40,17 @@ public class ImageUtils extends FileUtils {
 	//MySQL数据库参数
 	private static String FileDir = property.getProperty("FileDir");
 	
-	
-	
+	/**
+	 * 抓取网络图片
+	 * @param url
+	 * @return 本地服务器图片路径
+	 */
+	public static Map getNetImg(String url){
+		
+		
+		
+		return null;
+	}
 	
 	
 	/**

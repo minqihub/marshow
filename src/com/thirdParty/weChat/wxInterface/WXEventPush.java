@@ -9,20 +9,9 @@ import java.util.Map;
  */
 public class WXEventPush {
 	
-	//微信门店审核结果推送
-	private static final String poi_check_notify = "poi_check_notify";
-
-	//扫码推事件的事件推送
-	private static final String scancode_push = "scancode_push";
-
-	//成功连接Wi-Fi事件推送
-	private static final String WifiConnected = "WifiConnected";
-	
-	
-	
-	
-	
-	
+	private static final String poi_check_notify = "poi_check_notify";			//微信门店审核结果推送
+	private static final String scancode_push = "scancode_push";				//扫码推事件的事件推送
+	private static final String WifiConnected = "WifiConnected";				//成功连接Wi-Fi事件推送
 	
 	/**
 	 * 微信事件推送路由
@@ -30,7 +19,6 @@ public class WXEventPush {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static Map wxPushRoute(Map receiveData){
-		
 		// TODO 记录推送的消息
 		
 		String Event = receiveData.get("Event").toString();
@@ -45,7 +33,7 @@ public class WXEventPush {
 			wxWifiPush(receiveData);
 			
 		} else {
-			System.out.println("其他推送");
+			System.out.println("其他推送未捕捉");
 		}
 		
 		

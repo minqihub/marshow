@@ -7,12 +7,16 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONObject;
 import com.framework.utils.DataUtils;
+import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
+import com.thirdParty.weChat.WXTools;
 
 
 /**
  * 发送微信模板消息
+ * 所有的first、remark参数，均可使用\n进行换行，以此优化格式和补充模板的不足
  */
 @Controller
 @RequestMapping("/trust/wXMsg")
@@ -20,53 +24,60 @@ public class WXTemplateMsg{
 	
 	/**
 	 * 注册成功消息模板
-	{{first.DATA}}
-	注册账号：{{keyword1.DATA}}
-	注册时间：{{keyword2.DATA}}
-	{{remark.DATA}}
+	 * {{first.DATA}}
+	 * 注册账号：{{keyword1.DATA}}
+	 * 注册时间：{{keyword2.DATA}}
+	 * {{remark.DATA}}
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping("/registMsg.do")
-	public Map registMsg(String json) throws Exception {
+	public Map registMsg(String json) {
 		Map map = Json.toMap(json);
 		String templateId_short = "OPENTM409413579";
 
-//测试写死数据	
-//		map.put("header", "尊敬的用户：感谢您的注册，易商网城竭诚为您服务！");
-//		map.put("userId", "13911445566");
-//		map.put("servicePhone", "027-82800111");
-//		map.put("url", "");
-//		map.put("openId", "obVLrjokoId8PFcPxBF73OUBWlRA");
-//		map.put("appid", "wxd6a3cd6fd304a872");
-		
-		Map msgMap = new LinkedHashMap();
-		Map tmp = new LinkedHashMap();
-		String color = "#173177";
-		
-		tmp.put("value", map.get("header"));
-		tmp.put("color", color);
-		msgMap.put("first", tmp);
-		
-		tmp = new LinkedHashMap();
-		tmp.put("value", encryptMobile(map.get("userId")));
-		tmp.put("color", color);
-		msgMap.put("keyword1", tmp);
-		
-		tmp = new LinkedHashMap();
-		tmp.put("value", DataUtils.getSysTime());
-		tmp.put("color", color);
-		msgMap.put("keyword2", tmp);
-		
-		tmp = new LinkedHashMap();
-		tmp.put("value", "客服电话：" + map.get("servicePhone"));
-		tmp.put("color", color);
-		msgMap.put("remark", tmp);
-		
-		String url = "";
-		if(!DataUtils.isNull(map.get("url"))) url = map.get("url").toString();
+		Map returnMap = new HashMap();
+		try {
+			String appid = map.get("appid").toString();
+			String openid = map.get("openid").toString();
+			String registId = map.get("registId").toString();
+			String registTime = map.get("registTime").toString();
+			
+			Map msgMap = new LinkedHashMap();
+			Map tmp = new LinkedHashMap();
+			String color = "#173177";
+			
+			tmp.put("value", map.get("first"));
+			tmp.put("color", color);
+			msgMap.put("first", tmp);
+			
+			tmp = new LinkedHashMap();
+			tmp.put("value", encryptMobile(registId));
+			tmp.put("color", color);
+			msgMap.put("keyword1", tmp);
+			
+			tmp = new LinkedHashMap();
+			tmp.put("value", registTime);
+			tmp.put("color", color);
+			msgMap.put("keyword2", tmp);
+			
+			tmp = new LinkedHashMap();
+			tmp.put("value", map.get("remark"));
+			tmp.put("color", color);
+			msgMap.put("remark", tmp);
+			
+			String url = !DataUtils.isNull(map.get("url")) ? map.get("url").toString() : "";
 
-		String template_id = getTemplateId(map.get("appid").toString(), templateId_short);
-		return sendWeChatMsg(map.get("appid").toString(), template_id, map.get("openId").toString(), msgMap, url);
+			String template_id = getTemplateId(appid, templateId_short);
+			Map access_tokenMap = WXTools.getWeChatToken(appid);
+			
+			if(access_tokenMap.get("MSGID").toString().equals("S")){
+				String access_token = returnMap.get("access_token").toString();
+				returnMap = sendWeChatMsg(access_token, template_id, openid, msgMap, url);
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少必要参数");
+		}
+		return returnMap;
 	}
 	
 	
@@ -664,7 +675,7 @@ public class WXTemplateMsg{
 	 * @throws Exception 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public String getTemplateId(String appid, String templateId_short) throws Exception{
+	public String getTemplateId(String appid, String templateId_short){
 		Map queryMap = new HashMap();
 		queryMap.put("template_bh", templateId_short);
 		queryMap.put("appid", appid);
@@ -676,32 +687,40 @@ public class WXTemplateMsg{
 	
 	/**
 	 * 发送公众号消息
-	 * @param appid 公众号appid
+	 * @param access_token
 	 * @param template_id 微信消息模板（公众平台添加后才有）
 	 * @param openid 用户openid
 	 * @param msgMap 消息内容
-	 * @param url 消息跳转路径（可空）
+	 * @param jumpUrl 消息跳转路径（可空）
 	 * @return
-	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map sendWeChatMsg(String appid, String template_id, String openid, Map msgMap, String url) throws Exception{
-    	Map paramsMap = new HashMap();
-		//获取access_token
-        String access_token = "";
+	public Map sendWeChatMsg(String access_token, String template_id, String openid, Map msgMap, String jumpUrl){
 
-		//发送消息
-		String Address = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+access_token;
-		paramsMap.put("touser", openid);
-		paramsMap.put("template_id", template_id);
-		if(!DataUtils.isNull(url)) paramsMap.put("url", url);
+		//准备数据
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("touser", openid);
+		sendJson.put("template_id", template_id);
+		sendJson.put("data", msgMap);
+		if(!DataUtils.isNull(jumpUrl)){
+			sendJson.put("url", jumpUrl);
+		}
 		
-		paramsMap.put("data", msgMap);
-		//TODO 换成HTTPUtils
-		String str =  "";
-//		String str = Http.post(Address,Json.toJson(paramsMap), "application/json", 1000, 1000);
-		System.out.println("！！！！！微信发送消息返回：" + str);
-		return Json.toMap(str);		
+		Map returnMap = new HashMap();
+		try {
+			//发送消息
+			String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_token;
+			returnMap =  HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
+			if(returnMap.get("").toString().equals("0")){
+				returnMap.put("MSGID", "S");
+			}else{
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", returnMap.get(""));
+		}
+		return returnMap;		
 	}
 	
 
