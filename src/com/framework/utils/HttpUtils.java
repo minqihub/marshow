@@ -98,22 +98,24 @@ public class HttpUtils {
     /**
      * 因为过滤器对.do方法返回进行了包装，对于外部接口访问本项目的.do方法时，按照给定参数进行页面返回，
      * （过滤器中的该方法：包装视图，让前台访问.do方法时，返回json格式的视图，以便前台ajax方法方便获取返回值）
-     * @param response
+     * @param response 非前台调用时，response可以为null
      * @param data
      * @throws Exception
      */
     public static void printString(HttpServletResponse response, Object data){
-        PrintWriter pw = null;
-		try {
-			pw = response.getWriter();
-			JSONObject json = new JSONObject();
-			json.put("data", data);
-            pw.print(json);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally{
-            pw.close();
-        }
+    	if(response != null){
+            PrintWriter pw = null;
+    		try {
+    			pw = response.getWriter();
+    			JSONObject json = new JSONObject();
+    			json.put("data", data);
+                pw.print(json);
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		} finally{
+                pw.close();
+            }
+    	}
     }
 	
 	/**

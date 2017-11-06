@@ -28,6 +28,8 @@ public class WXTemplateMsg{
 	 * 注册账号：{{keyword1.DATA}}
 	 * 注册时间：{{keyword2.DATA}}
 	 * {{remark.DATA}}
+	 * @param json
+	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map registMsg(String json) {

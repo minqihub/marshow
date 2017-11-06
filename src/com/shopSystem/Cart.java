@@ -27,7 +27,7 @@ public class Cart {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public List findCart(String json, HttpServletRequest request, HttpServletResponse response){
+	public List queryCart(String json, HttpServletRequest request, HttpServletResponse response){
 		Map map = Json.toMap(json);
 		
 		String userId = map.get("userId").toString();
@@ -72,6 +72,39 @@ public class Cart {
 		
 		
 		return null;
+	}
+	
+	/**
+	 * 修改购物车商品
+	 * @param json
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map updateCart(String json, HttpServletRequest request, HttpServletResponse response){
+		Map map = Json.toMap(json);
+
+		String userId = map.get("userId").toString();
+		String goodId = map.get("goodId").toString();					//商品编码
+		
+		Map returnMap = new HashMap();
+		
+		//删除购物车
+		try {
+			
+		} catch (Exception e) {
+			//回滚
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "删除失败");
+		}
+		
+		
+		returnMap.put("MSGID", "S");
+		returnMap.put("MESSAGE", "删除成功");
+		
+		
+		return returnMap;
 	}
 	
 	/**

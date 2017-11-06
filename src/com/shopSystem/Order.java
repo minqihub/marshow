@@ -20,14 +20,13 @@ public class Order {
 	
 	
 	/**
-	 * 生产订单
+	 * 生成订单
 	 * @param json
-	 * @param request
 	 * @param response
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map makeOrder(String json, HttpServletRequest request, HttpServletResponse response){
+	public Map createOrder(String json, HttpServletResponse response){
 		Map map = Json.toMap(json);
 		
 		String goodId = map.get("goodId").toString();		//商品编号
@@ -39,10 +38,36 @@ public class Order {
 	}
 	
 	
+
+	/**
+	 * 
+	 * @param json
+	 * @param response
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map queryOrder(String json, HttpServletResponse response){
+		Map map = Json.toMap(json);
+		
+		
+		return null;
+	}
 	
 	
-	
-	
+
+	/**
+	 * 
+	 * @param json
+	 * @param response
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map updateOrder(String json, HttpServletResponse response){
+		Map map = Json.toMap(json);
+		
+		
+		return null;
+	}
 	
 	
 	
