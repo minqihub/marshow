@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +48,12 @@ public class ImageUtils extends FileUtils {
 	 * @return 本地服务器图片路径
 	 */
 	public static Map getNetImg(String url){
-		
+		try {
+			URL imgUrl = new URL(url);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		return null;
