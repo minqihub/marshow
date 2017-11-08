@@ -101,7 +101,7 @@
 			          			<div class="item-media"><i class="fa fa-user-circle-o fa-lg"></i></div>
 			          			<div class="item-inner user open-login-screen">
 			            			<div class="item-title">个人信息</div>
-			            			<div class="item-after">minqi</div>
+			            			<div class="item-after">点击登陆</div>
 			          			</div>
 			        		</li>
 			        		<li class="item-content button">
@@ -116,10 +116,10 @@
 			            			<div class="item-title">使用帮助</div>
 			          			</div>
 			        		</li>
-			        		<li class="item-content button">
+			        		<li class="item-content button jump" jumpUrl="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyOTAxMTE1MQ==&scene=124#wechat_redirect">
 			          			<div class="item-media"><i class="fa fa-weixin fa-lg"></i></div>
 			          			<div class="item-inner user">
-			            			<div class="item-title"><a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyOTAxMTE1MQ==&scene=124#wechat_redirect">关注公众号</a></div>
+			            			<div class="item-title"><a>关注公众号</a></div>
 			          			</div>
 			        		</li>
 			      		</ul>
@@ -187,16 +187,16 @@
 							<!-- 图标导航 -->
 							<div class="content-block">
 						      	<div class="row">
-						        	<div class="col-25" jumpUrl="/mobile/contact.html">
-										<img class="nav-img" alt="" src="../images/navImg/notice.png">
+						        	<div class="col-25" jumpUrl="/mobile/notice.html">
+										<img class="nav-img" alt="" src="../images/navImg/bell.png">
 										<p class="nav-content">社区通知</p>
 									</div>
 						        	<div class="col-25" jumpUrl="/mobile/contact.html">
-										<img class="nav-img" alt="" src="../images/navImg/phone.png">
+										<img class="nav-img" alt="" src="../images/navImg/phonebook.png">
 										<p class="nav-content">物管电话</p>
 									</div>
 						        	<div class="col-25" jumpUrl="/mobile/payment.html">
-										<img class="nav-img" alt="" src="../images/navImg/bill.png">
+										<img class="nav-img" alt="" src="../images/navImg/payment.png">
 										<p class="nav-content">缴费管理</p>
 									</div>
 						        	<div class="col-25" jumpUrl="/mobile/repair.html">
@@ -210,16 +210,16 @@
 										<img class="nav-img" alt="" src="../images/navImg/warning.png">
 										<p class="nav-content">意见反馈</p>
 									</div>
-						        	<div class="col-25" jumpUrl="/mobile/contact.html">
-										<img class="nav-img" alt="" src="../images/navImg/key.png">
-										<p class="nav-content">一键开门</p>
+						        	<div class="col-25" jumpUrl="/mobile/identify.html">
+										<img class="nav-img" alt="" src="../images/navImg/shield.png">
+										<p class="nav-content">身份令牌</p>
 									</div>
 						        	<div class="col-25" jumpUrl="/mobile/market.html">
 										<img class="nav-img" alt="" src="../images/navImg/shop.png">
 										<p class="nav-content">交易市场</p>
 									</div>
-						        	<div class="col-25" jumpUrl="/mobile/contact.html">
-										<img class="nav-img" alt="" src="../images/navImg/add.png">
+						        	<div class="col-25" jumpUrl="">
+										<img class="nav-img" alt="" src="../images/navImg/more.png">
 										<p class="nav-content">更多功能</p>
 									</div>
 						      	</div>
@@ -292,8 +292,9 @@
 	   						<p>Page content goes here</p>
 	   						<p>Page content goes here</p>
 	   						<p>Page content goes here</p>
-	   						<a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyOTAxMTE1MQ==&scene=124#wechat_redirect">关注公众号</a>
-			          			
+	   						<p><a class="jump" jumpUrl="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyOTAxMTE1MQ==&scene=124#wechat_redirect">关注公众号</a></p>
+	   						<p><a class="jump" jumpUrl="http://www.baidu.com">百度</a></p>
+			          		
 	   						<p>Page content goes here</p>
 	   						<p>Page content goes here</p>
 	   						<p>Page content goes here</p>
@@ -392,7 +393,8 @@
     	<script type="text/javascript" src="../plugins/framework7/js/framework7.min.js"></script>
     	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 		<script type="text/javascript" src="../thirdParty/weChat/js-sdk.js"></script>
-		<script type="text/javascript" src="../plugins/jquery-3.1.1.js"></script>
+<!-- 		<script type="text/javascript" src="../plugins/jquery-3.1.1.js"></script> -->
+		<script type="text/javascript" src="../plugins/jquery-3.2.1.slim.min.js"></script>
 		<script type="text/javascript" src="../plugins/formTools.js"></script>
     	<script type="text/javascript" src="js/index.js"></script>
     	

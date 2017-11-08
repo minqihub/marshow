@@ -107,4 +107,8 @@ $$('.tab-link').on('click', function () {debugger
 	
 });
 
-
+//解决跨域链接跳转问题
+$$('.jump').on('click', function () {
+	var jumpUrl = $$(this).attr("jumpUrl");
+	window.location.href = jumpUrl;
+});
