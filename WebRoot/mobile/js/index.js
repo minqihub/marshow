@@ -12,7 +12,7 @@ var $$ = Dom7;
 // Add view
 var mainView = myApp.addView('.view-main', {
 	// Because we want to use dynamic navbar, we need to enable it for this view:
-//	dynamicNavbar: true
+	//	dynamicNavbar: true
 });
 
 //轮播图
@@ -86,16 +86,41 @@ $$('.right.sliding').on('click', function () {
 	});
 });
 
-//图标导航
-$$('.col-25').on('click', function () {
+//内部跳转，兼容开发模式的项目名
+$$('.jumpIn').on('click', function () {
 	var jumpUrl = $$(this).attr("jumpUrl");
 	window.location.href = form.getprojectName() + jumpUrl;
+});
+
+//外部跳转，解决跨域链接跳转问题
+$$('.jumpOut').on('click', function () {
+	var jumpUrl = $$(this).attr("jumpUrl");
+	window.location.href = jumpUrl;
 });
 
 //底部工具栏切换效果
 $$('.tab-link').on('click', function () {debugger
 	var aaa = $$(this);
-	
+	var bbb = $$(this).siblings();
+
+	var innerText = aaa[0].children[1].innerHTML;
+	if(innerText.indexOf("_fill") == -1){				//选中的动作
+		aaa[0].children[1].innerHTML += "_fill";
+		
+		for (var i = 0; i < bbb.length; i++) {			//兄弟节点不选中
+			if(bbb[i].className == "tab-link"){
+				
+				var inner2 = bbb[i].children[0].innerHTML;
+				if(inner2.indexOf("_fill") != -1){
+					bbb[i].children[0].innerHTML.repeat("_fill");
+				}
+			}
+		}
+		
+		
+	}
+
+
 	aaa[0].children[1].innerHTML += "_fill"; 
 	
 //	var others = aaa.siblings();
@@ -107,8 +132,18 @@ $$('.tab-link').on('click', function () {debugger
 	
 });
 
-//解决跨域链接跳转问题
-$$('.jump').on('click', function () {
-	var jumpUrl = $$(this).attr("jumpUrl");
-	window.location.href = jumpUrl;
-});
+
+
+
+//获取轮播图数据
+
+//获取社区通知信息
+
+
+
+
+
+
+
+
+

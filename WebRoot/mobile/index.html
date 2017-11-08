@@ -116,7 +116,7 @@
 			            			<div class="item-title">使用帮助</div>
 			          			</div>
 			        		</li>
-			        		<li class="item-content button jump" jumpUrl="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyOTAxMTE1MQ==&scene=124#wechat_redirect">
+			        		<li class="item-content button jumpOut" jumpUrl="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyOTAxMTE1MQ==&scene=124#wechat_redirect">
 			          			<div class="item-media"><i class="fa fa-weixin fa-lg"></i></div>
 			          			<div class="item-inner user">
 			            			<div class="item-title"><a>关注公众号</a></div>
@@ -187,38 +187,38 @@
 							<!-- 图标导航 -->
 							<div class="content-block">
 						      	<div class="row">
-						        	<div class="col-25" jumpUrl="/mobile/notice.html">
+						        	<div class="col-25 jumpIn" jumpUrl="/mobile/comm/notice.html">
 										<img class="nav-img" alt="" src="../images/navImg/bell.png">
 										<p class="nav-content">社区通知</p>
 									</div>
-						        	<div class="col-25" jumpUrl="/mobile/contact.html">
+						        	<div class="col-25 jumpIn" jumpUrl="/mobile/comm/contact.html">
 										<img class="nav-img" alt="" src="../images/navImg/phonebook.png">
 										<p class="nav-content">物管电话</p>
 									</div>
-						        	<div class="col-25" jumpUrl="/mobile/payment.html">
+						        	<div class="col-25 jumpIn" jumpUrl="/mobile/comm/payment.html">
 										<img class="nav-img" alt="" src="../images/navImg/payment.png">
 										<p class="nav-content">缴费管理</p>
 									</div>
-						        	<div class="col-25" jumpUrl="/mobile/repair.html">
+						        	<div class="col-25 jumpIn" jumpUrl="/mobile/comm/repair.html">
 										<img class="nav-img" alt="" src="../images/navImg/repair.png">
 										<p class="nav-content">物业报修</p>
 									</div>
 						      	</div>
 						      	
 						      	<div class="row">
-						        	<div class="col-25" jumpUrl="/mobile/feedBack.html">
+						        	<div class="col-25 jumpIn" jumpUrl="/mobile/comm/feedBack.html">
 										<img class="nav-img" alt="" src="../images/navImg/warning.png">
 										<p class="nav-content">意见反馈</p>
 									</div>
-						        	<div class="col-25" jumpUrl="/mobile/identify.html">
+						        	<div class="col-25 jumpIn" jumpUrl="/mobile/comm/identify.html">
 										<img class="nav-img" alt="" src="../images/navImg/shield.png">
 										<p class="nav-content">身份令牌</p>
 									</div>
-						        	<div class="col-25" jumpUrl="/mobile/market.html">
+						        	<div class="col-25 jumpIn" jumpUrl="/mobile/shop/market.html">
 										<img class="nav-img" alt="" src="../images/navImg/shop.png">
 										<p class="nav-content">交易市场</p>
 									</div>
-						        	<div class="col-25" jumpUrl="">
+						        	<div class="col-25 jumpIn" jumpUrl="/mobile/moreFun.html">
 										<img class="nav-img" alt="" src="../images/navImg/more.png">
 										<p class="nav-content">更多功能</p>
 									</div>
@@ -292,8 +292,8 @@
 	   						<p>Page content goes here</p>
 	   						<p>Page content goes here</p>
 	   						<p>Page content goes here</p>
-	   						<p><a class="jump" jumpUrl="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyOTAxMTE1MQ==&scene=124#wechat_redirect">关注公众号</a></p>
-	   						<p><a class="jump" jumpUrl="http://www.baidu.com">百度</a></p>
+	   						<p><a class="jumpOut" jumpUrl="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyOTAxMTE1MQ==&scene=124#wechat_redirect">关注公众号</a></p>
+	   						<p><a class="jumpOut" jumpUrl="http://www.baidu.com">百度</a></p>
 			          		
 	   						<p>Page content goes here</p>
 	   						<p>Page content goes here</p>
@@ -375,12 +375,13 @@
 		              			</ul>
 		            		</div>
 		            		<div class="list-block">
-		              			<ul>
-		                			<li><a href="#" class="item-link list-button">点击登录</a></li>
-		              			</ul>
+		              			<div class="list-block-label">
+			                		<p><a href="#" class="item-link list-button">点击登录</a></p>
+			                		<p><a class="item-link list-button jumpIn" jumpUrl="/" >还没有账号？</a></p>
+			              		</div>
 			              		<div class="list-block-label">
-			                		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-			                		<p><a href="#" class="close-login-screen">退出登录</a></p>
+			                		<p>待绑定微信openid的操作</p>
+			                		<p><a href="#" class="close-login-screen">关闭</a></p>
 			              		</div>
 			            	</div>
 			          	</form>
@@ -394,7 +395,7 @@
     	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 		<script type="text/javascript" src="../thirdParty/weChat/js-sdk.js"></script>
 <!-- 		<script type="text/javascript" src="../plugins/jquery-3.1.1.js"></script> -->
-		<script type="text/javascript" src="../plugins/jquery-3.2.1.slim.min.js"></script>
+		<script type="text/javascript" src="../plugins/jquery-3.1.1.min.js"></script>
 		<script type="text/javascript" src="../plugins/formTools.js"></script>
     	<script type="text/javascript" src="js/index.js"></script>
     	
