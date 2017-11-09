@@ -50,7 +50,7 @@ public class WXPay {
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@RequestMapping("/protoPay.do")
+	@RequestMapping("/h5Pay.do")
 	public Map h5Pay(String json, HttpServletRequest request){
 		Map map = Json.toMap(json);
 		
@@ -104,7 +104,6 @@ public class WXPay {
 					"<sign>" + sign + "</sign>" + 
 					"</xml>";
 			
-//			String resultXml = (String) WeixinUtil.httpRequest(PayRoute.WeChatPayUrl, "POST", payXml, "1");
 			String resultXml = HttpUtils.doPostString(PayRoute.WeChatPayUrl, null, null, payXml);
 			
 			Map resultMap = XmlUtils.xmlToMap(resultXml);

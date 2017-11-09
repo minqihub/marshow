@@ -17,56 +17,112 @@ import com.thirdParty.weChat.WXTools;
 public class WXService {
 
 	/**
-	 * 添加微信公众号客服
-	 * @param appid
+	 * 添加客服帐号
 	 * @param json
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	public Map addService(String appid, String json){
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map addService(String json){
 		Map data = Json.toMap(json);
-		
-		Map tokenMap = WXTools.getWeChatToken(appid);
-		String url = "https://api.weixin.qq.com/customservice/kfaccount/add?access_token=" + tokenMap.get("access_token");
-		
-		JSONObject sendJson = new JSONObject();
-		sendJson.put("kf_account", data.get("test1@test"));		//账号前缀@公众号微信号
-		sendJson.put("nickname", data.get("客服1"));
-		sendJson.put("password", data.get("pswmd5"));
-		
+
 		Map returnMap = new HashMap();
 		try {
-			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
-		} catch (Exception e) {
+			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
+			String url = "https://api.weixin.qq.com/customservice/kfaccount/add?access_token=" + tokenMap.get("access_token");
 			
+			JSONObject sendJson = new JSONObject();
+			// 账号前缀@公众号微信号
+			sendJson.put("kf_account", data.get("test1@test").toString());		//帐号前缀最多10个字符，必须是英文、数字字符或者下划线
+			sendJson.put("nickname", data.get("客服1").toString());				//客服昵称，最长16个字
+//			sendJson.put("password", data.get("pswmd5").toString());
+			
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
+			returnMap.put("MSGID", "S");
+			if(!returnMap.get("errcode").toString().equals("0")){
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", returnMap.get("errmsg"));
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "写入数据库失败");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "写入数据库失败");
 		}
 		return returnMap;
 	}
 	
 	
 	/**
-	 * 修改微信公众号客服
-	 * @param appid
+	 * 邀请绑定客服帐号
+	 * 新添加的客服帐号是不能直接使用的，只有客服人员用微信号绑定了客服账号后，方可登录Web客服进行操作。
+	 * 此接口发起一个绑定邀请到客服人员微信号，客服人员需要在微信客户端上用该微信号确认后帐号才可用。
+	 * 尚未绑定微信号的帐号可以进行绑定邀请操作，邀请未失效时不能对该帐号进行再次绑定微信号邀请
 	 * @param json
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	public Map editService(String appid, String json){
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map inviteService(String json){
 		Map data = Json.toMap(json);
-		
-		Map tokenMap = WXTools.getWeChatToken(appid);
-		String url = "https://api.weixin.qq.com/customservice/kfaccount/update?access_token=" + tokenMap.get("access_token");
-		
-		JSONObject sendJson = new JSONObject();
-		sendJson.put("kf_account", data.get("test1@test"));
-		sendJson.put("nickname", data.get("客服1"));
-		sendJson.put("password", data.get("pswmd5"));
-		
+
 		Map returnMap = new HashMap();
 		try {
-			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
-		} catch (Exception e) {
+			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
+			String url = "https://api.weixin.qq.com/customservice/kfaccount/inviteworker?access_token=" + tokenMap.get("access_token");
 			
+			JSONObject sendJson = new JSONObject();
+			sendJson.put("kf_account", data.get("kf_account"));
+			sendJson.put("invite_wx", data.get("invite_wx"));				//接收绑定邀请的客服微信号
+			
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
+			returnMap.put("MSGID", "S");
+			if(!returnMap.get("errcode").toString().equals("0")){
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", returnMap.get("errmsg"));
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "写入数据库失败");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "写入数据库失败");
+		}
+		return returnMap;
+	}
+	
+	
+	
+	
+	/**
+	 * 设置客服信息
+	 * @param json
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map editService(String json){
+		Map data = Json.toMap(json);
+
+		Map returnMap = new HashMap();
+		try {
+			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
+			String url = "https://api.weixin.qq.com/customservice/kfaccount/update?access_token=" + tokenMap.get("access_token");
+			
+			JSONObject sendJson = new JSONObject();
+			sendJson.put("kf_account", data.get("test1@test"));
+			sendJson.put("nickname", data.get("客服1"));
+			
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
+			returnMap.put("MSGID", "S");
+			if(!returnMap.get("errcode").toString().equals("0")){
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", returnMap.get("errmsg"));
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "写入数据库失败");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "写入数据库失败");
 		}
 		return returnMap;
 	}
@@ -77,23 +133,29 @@ public class WXService {
 	 * @param json
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	public Map delService(String appid, String json){
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map delService(String json){
 		Map data = Json.toMap(json);
-		
-		Map tokenMap = WXTools.getWeChatToken(appid);
-		String url = "https://api.weixin.qq.com/customservice/kfaccount/del?access_token=" + tokenMap.get("access_token");
-		
-		JSONObject sendJson = new JSONObject();
-		sendJson.put("kf_account", data.get("test1@test"));
-		sendJson.put("nickname", data.get("客服1"));
-		sendJson.put("password", data.get("pswmd5"));
-		
+
 		Map returnMap = new HashMap();
 		try {
-//			returnMap = HttpUtils.doGet(url, headers, querys));
-		} catch (Exception e) {
+			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
+			String access_token = tokenMap.get("access_token").toString();
+			String kf_account = data.get("kf_account").toString();
 			
+			String url = "https://api.weixin.qq.com/customservice/kfaccount/del?access_token="+access_token+"&kf_account=" + kf_account;
+			returnMap = HttpUtils.doGet(url, null, null);
+			returnMap.put("MSGID", "S");
+			if(!returnMap.get("errcode").toString().equals("0")){
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", returnMap.get("errmsg"));
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少必要参数");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "请求失败");
 		}
 		return returnMap;
 	}
@@ -126,54 +188,71 @@ public class WXService {
 	
 	
 	/**
-	 * 获取所有微信公众号客服账号；请求方式GET
-	 * @param appid
+	 * 查询所有客服信息
 	 * @param json
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	public Map getAllService(String appid, String json){
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map queryAllService(String json){
 		Map data = Json.toMap(json);
-		
-		Map tokenMap = WXTools.getWeChatToken(appid);
-		String url = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token=" + tokenMap.get("access_token");
 
 		Map returnMap = new HashMap();
 		try {
+			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
+			String access_token = tokenMap.get("access_token").toString();
+			
+			String url = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token=" + access_token;
+			
+			
 			returnMap = HttpUtils.doGet(url, null, null);
 			
-/*	请求结果示例		
-			{
-			    "kf_list": [
-			        {
-			            "kf_account": "test1@test", 
-			            "kf_nick": "ntest1", 
-			            "kf_id": "1001"
-			            "kf_headimgurl": " http://mmbiz.qpic.cn/mmbiz/4whpV1VZl2iccsvYbHvnphkyGtnvjfUS8Ym0GSaLic0FD3vN0V8PILcibEGb2fPfEOmw/0"
-			        }, 
-			        {
-			            "kf_account": "test2@test", 
-			            "kf_nick": "ntest2", 
-			            "kf_id": "1002"
-			            "kf_headimgurl": " http://mmbiz.qpic.cn/mmbiz/4whpV1VZl2iccsvYbHvnphkyGtnvjfUS8Ym0GSaLic0FD3vN0V8PILcibEGb2fPfEOmw /0"
-			        }, 
-			        {
-			            "kf_account": "test3@test", 
-			            "kf_nick": "ntest3", 
-			            "kf_id": "1003"
-			            "kf_headimgurl": " http://mmbiz.qpic.cn/mmbiz/4whpV1VZl2iccsvYbHvnphkyGtnvjfUS8Ym0GSaLic0FD3vN0V8PILcibEGb2fPfEOmw /0"
-			        }
-			    ]
+			returnMap.put("MSGID", "S");
+			if(!returnMap.get("errcode").toString().equals("0")){
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", returnMap.get("errmsg"));
 			}
-*/		
-			
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少必要参数");
 		} catch (Exception e) {
-			
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "请求失败");
 		}
 		return returnMap;
 	}
 	
 	
+	/**
+	 * 查询在线客服信息
+	 * @param json
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map queryOnlineService(String json){
+		Map data = Json.toMap(json);
+
+		Map returnMap = new HashMap();
+		try {
+			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
+			String access_token = tokenMap.get("access_token").toString();
+			String url = "https://api.weixin.qq.com/cgi-bin/customservice/getonlinekflist?access_token=" + access_token;
+			
+			returnMap = HttpUtils.doGet(url, null, null);
+			
+			returnMap.put("MSGID", "S");
+			if(!returnMap.get("errcode").toString().equals("0")){
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", returnMap.get("errmsg"));
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少必要参数");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "请求失败");
+		}
+		return returnMap;
+	}
 	
 	
 	
