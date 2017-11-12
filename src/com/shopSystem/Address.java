@@ -28,6 +28,19 @@ public class Address extends DBHandler{
 	public String district;			//区
 	public String detail;			//详细地址
 	
+	/**
+	 * 获取默认地址
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("/getDefaultAddress.do")
+	public List getDefaultAddress(String json, HttpServletResponse response){
+		Map data = Json.toMap(json);
+		
+		
+		
+		return null;
+	}
 	
 	
 	/**

@@ -20,8 +20,8 @@
 	     		background-color: white;
 	     	} 
 	     	
-	     	/* css图标 */
-	     	i.fa {
+	     	/* css图标，foot文字颜色 */
+	     	i.fa,span.tabbar-label {
 	     		color: #3CADAD;
 	     	}
 	     	
@@ -325,18 +325,19 @@
 			    	<div class="toolbar-inner">
 			        	<a href="#tab1" class="tab-link">
 				            <i class="f7-icons size-50">bell</i>
+				            <span class="tabbar-label">通知</span>
 				        </a>
 				        <a href="#tab2" class="tab-link">
-				            <i class="f7-icons size-50">compass</i>
+				            <i class="f7-icons size-50">home</i>
+				            <span class="tabbar-label">主页</span>
 				        </a>
 				        <a href="#tab3" class="tab-link">
-				            <i class="f7-icons size-50">home</i>
+				            <i class="f7-icons size-50">compass</i>
+				            <span class="tabbar-label">邻里圈</span>
 				        </a>
-				        <a href="#tab4" class="tab-link">
-				            <i class="f7-icons size-50">chat</i>
-				        </a>
-				        <a href="#tab5" class="tab-link open-panel" data-panel="right">
+				        <a href="#tab4" class="tab-link open-panel" data-panel="right">
 				            <i class="f7-icons size-50">person</i>
+				            <span class="tabbar-label">个人中心</span>
 				        </a>
 			    	</div>
 			  	</div>
@@ -394,7 +395,6 @@
     	<script type="text/javascript" src="../plugins/framework7/js/framework7.min.js"></script>
     	<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 		<script type="text/javascript" src="../thirdParty/weChat/js-sdk.js"></script>
-<!-- 		<script type="text/javascript" src="../plugins/jquery-3.1.1.js"></script> -->
 		<script type="text/javascript" src="../plugins/jquery-3.1.1.min.js"></script>
 		<script type="text/javascript" src="../plugins/formTools.js"></script>
     	<script type="text/javascript" src="js/index.js"></script>
