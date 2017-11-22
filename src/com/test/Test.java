@@ -99,7 +99,6 @@ public class Test {
 		
 		
 		
-		WXMenu.creatMenu(appid, null);
 		
 	}
 	

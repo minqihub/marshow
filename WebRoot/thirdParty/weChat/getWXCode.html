@@ -54,14 +54,14 @@
             //跳转
             doRedirect: function() {
                 var code = MQ.urlParams['code'];
-                var appId = MQ.urlParams['appid'];
+                var appid = MQ.urlParams['appid'];
                 var scope = MQ.urlParams['scope'] || 'snsapi_base';
                 var state = MQ.urlParams['state'];		//自定义字段
                 var redirectUri;
                 if (!code) {debugger;
                     //第一步，没有拿到code，跳转至微信授权页面获取code
                     redirectUri = MQ.appendParams('https://open.weixin.qq.com/connect/oauth2/authorize#wechat_redirect', {
-                        'appid': appId,
+                        'appid': appid,
                         'redirect_uri': encodeURIComponent(location.href),	//回跳地址
                         'response_type': 'code',
                         'scope': scope,
@@ -77,7 +77,6 @@
                 location.href = redirectUri;
             }
         };
-        
         MQ.getUrlParams();
         MQ.doRedirect();
     </script>
