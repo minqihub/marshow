@@ -15,7 +15,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSONObject;
 import com.framework.database.DataSource;
 import com.framework.database.MySQLUtils;
+import com.framework.database.SQLConvertor;
 import com.framework.file.XmlUtils;
-import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 import com.framework.utils.PropertiesReader;
@@ -53,20 +52,16 @@ public class WXTools {
 	
 	
 	/**
-	 * 获取存在数据库的微信全配置；注意此方法返回数据不允许返回到客户端
+	 * 获取存在数据库的微信配置
+	 * 注意此方法返回敏感数据不允许返回到客户端
 	 * @param appid
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes" })
 	public static Map getWeChatConfig(String appid){
-		//TODO 待定取哪个表
-		
-		
-		Map returnMap = new HashMap();
-		returnMap.put("secret", "fe0a94fd03c020d7530e7f023e9e472c");		//微信提供的测试公众号的secret
-		
-		return returnMap;
+		String sql = "SELECT * FROM C_WeChatSign WHERE appid LIKE '" + appid + "'";
+		return MySQLUtils.sqlQueryForMap(DataSource.comm, sql);
 	}
-	
 	
 	/**
 	 * 获取access_token和api_ticket，7200秒的有效期，超过7000秒就重新获取
@@ -76,9 +71,7 @@ public class WXTools {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Map getWeChatToken(String appid){
 		//查询已有的access_token、api_ticket是否过期
-		String sql = "SELECT * FROM C_WeChatSign WHERE appid = '"+ appid +"'";
-		JdbcTemplate comm = DataSource.comm;
-		Map tokenMap = MySQLUtils.sqlQueryForMap(comm, sql);
+		Map tokenMap = getWeChatConfig(appid);
 		
 		Map returnMap = new HashMap();
 		if(tokenMap.isEmpty()){
@@ -88,6 +81,7 @@ public class WXTools {
 			try {
 				String url1 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + tokenMap.get("secret");
 				Map access_tokenMap  = HttpUtils.doGet(url1, null, null);
+				System.out.println("access_token更新了：" + access_tokenMap);
 				String access_token = access_tokenMap.get("access_token").toString();
 				
 				String url2 = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + access_token + "&type=jsapi";
@@ -103,13 +97,16 @@ public class WXTools {
 				
 				//更新access_token、api_ticket
 				String updateSql = "UPDATE C_WeChatSign SET `access_token`=?access_token, `api_ticket`=?api_ticket, `timestamp`=?timestamp WHERE `serviceId`=?serviceId";
-				MySQLUtils.sqlExecuteMap(comm, updateSql, returnMap);
+				MySQLUtils.sqlExecuteMap(DataSource.comm, updateSql, returnMap);
+			} catch (NullPointerException e) {
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", "空指针异常：获取access_token失败");
 			} catch (SQLException e1) {
 				returnMap.put("MSGID", "E");
-				returnMap.put("MESSAGE", "写入数据库失败");
+				returnMap.put("MESSAGE", "SQL异常：写入数据库失败");
 			} catch (Exception e) {
 				returnMap.put("MSGID", "E");
-				returnMap.put("MESSAGE", "获取token失败");
+				returnMap.put("MESSAGE", "请求失败");
 			}
 		}else{
 			returnMap.put("MSGID", "S");
@@ -122,22 +119,24 @@ public class WXTools {
 	
 	/**
 	 * 获取网页授权access_token，同时可获取微信用户openid
-	 * @param code 页面用户授权获得的code
 	 * @param appid 公众号appid
+	 * @param secret 公众号密钥
+	 * @param code 页面用户授权获得的code
 	 * @return
-	 * @throws Exception 
 	 */
-	@SuppressWarnings("rawtypes")
-	public static String getOpenId(String json) throws Exception{
-		Map data = Json.toMap(json);
-		
-		String code = data.get("code").toString();
-		String appid = data.get("appid").toString();
-		String secret = data.get("secret").toString();
-		
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Map getOpenid(String appid, String secret, String code){
 	   	String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + secret + "&code=" + code + "&grant_type=authorization_code";
-	   	Map resultMap = HttpUtils.doGet(url, null, null);
-	   	return resultMap.get("openid").toString();
+	   	
+	   	Map returnMap = new HashMap();
+	   	returnMap.put("MSGID", "E");
+	   	try{
+	   		returnMap = HttpUtils.doGet(url, null, null);
+		   	returnMap.put("MSGID", "S");
+	   	}catch(Exception e){
+		   	returnMap.put("MESSAGE", "Exception警告：" + e);
+	   	}
+	   	return returnMap;
 	}
 	
 	/**
@@ -276,8 +275,7 @@ public class WXTools {
 	        }
 	        
 		//其他推送
-		}else {
-			
+		}else{
 			Map receiveData = XmlUtils.xmlToMap(request);
 			System.out.println("微信推送来的xml转换成map：" + receiveData);
 			//{Content=123123, CreateTime=1505878925, ToUserName=gh_4cd6ce95f880, FromUserName=oz29Y0rzM_1KT1CyySU_Zh7nPJYA, MsgType=text, MsgId=6467700735044133770}
@@ -291,9 +289,7 @@ public class WXTools {
 				//自动回复，即对微信推送的响应
 	            out.print(replyStr);
 			}
-            
 		}
-
         out.flush();
         out.close();
 	}

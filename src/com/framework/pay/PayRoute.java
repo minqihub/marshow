@@ -14,31 +14,23 @@ import com.framework.utils.Json;
  *
  */
 public class PayRoute {
+
+	/**
+	 * 线下支付方式
+	 */
+	public static final String OffLinePayType = "0";
 	
 	/**
-	 * 微信统一下单（支付）
+	 * 微信支付方式
 	 */
-	public static final String WeChatPayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+	public static final String WeChatPayType = "1";
+
 	/**
-	 * 微信退款
+	 * 支付宝支付方式
 	 */
-	public static final String WeChatRefundUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
-	/**
-	 * 微信提现
-	 */
-	public static final String WeChatGetCashUrl = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+	public static final String AliPayType = "2";
+
 	
-	
-	
-	
-	/**
-	 * 支付宝支付
-	 */
-	public static final String AliPayUrl = "";
-	/**
-	 * 支付宝退款
-	 */
-	public static final String AliRefundUrl = "";
 	
 	
 	/**

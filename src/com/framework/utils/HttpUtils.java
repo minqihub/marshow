@@ -99,7 +99,7 @@ public class HttpUtils {
      * 因为过滤器对.do方法返回进行了包装，对于外部接口访问本项目的.do方法时，按照给定参数进行页面返回，
      * （过滤器中的该方法：包装视图，让前台访问.do方法时，返回json格式的视图，以便前台ajax方法方便获取返回值）
      * @param response 非前台调用时，response可以为null
-     * @param data
+     * @param data 返回值的内容都会被包在{"data" : 返回值}中
      * @throws Exception
      */
     public static void printString(HttpServletResponse response, Object data){

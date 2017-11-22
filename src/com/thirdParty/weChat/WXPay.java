@@ -24,8 +24,10 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.framework.database.DataSource;
+import com.framework.database.MySQLUtils;
+import com.framework.database.SQLConvertor;
 import com.framework.file.XmlUtils;
-import com.framework.pay.PayRoute;
 import com.framework.pay.PayUtils;
 import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
@@ -40,6 +42,13 @@ import com.framework.utils.Json;
 @Controller
 @RequestMapping("/trust/WXPay")
 public class WXPay {
+	
+	//微信统一下单（支付）
+	private final String WeChatPayUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+	//微信退款（退款）
+	private final String WeChatRefundUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+	//微信企业付款（提现）
+	private final String WeChatGetCashUrl = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 	
 	/**
 	 * 微信客户端支付
@@ -68,8 +77,8 @@ public class WXPay {
 			String trade_type = "JSAPI";
 			String openid = map.get("openid").toString();					//openid
 			String attach;
-			if(map.containsKey("attach") && !DataUtils.isNull(map.get("attach"))){
-				attach = map.get("attach").toString();						//额外参数，可空
+			if(!DataUtils.isNull(map.get("attach"))){
+				attach = map.get("attach").toString();						//额外参数（可空）
 			}else{
 				//参与验签的参数不能为空，故给定非空字符串
 				attach = "empty";
@@ -104,7 +113,7 @@ public class WXPay {
 					"<sign>" + sign + "</sign>" + 
 					"</xml>";
 			
-			String resultXml = HttpUtils.doPostString(PayRoute.WeChatPayUrl, null, null, payXml);
+			String resultXml = HttpUtils.doPostString(this.WeChatPayUrl, null, null, payXml);
 			
 			Map resultMap = XmlUtils.xmlToMap(resultXml);
 			System.out.println("微信支付返回：" + resultMap);
@@ -183,7 +192,7 @@ public class WXPay {
 			String notify_url = map.get("notify_url").toString();			//回调地址
 			String trade_type = "NATIVE";
 			String attach;
-			if(map.containsKey("attach") && !DataUtils.isNull(map.get("attach"))){
+			if(!DataUtils.isNull(map.get("attach"))){
 				attach = map.get("attach").toString();						//额外参数，可空
 			}else{
 				//参与验签的参数不能为空，故给定非空字符串
@@ -217,7 +226,7 @@ public class WXPay {
 					"<sign>" + sign + "</sign>" + 
 					"</xml>";
 			
-			String resultXml = HttpUtils.doPostString(PayRoute.WeChatPayUrl, null, null, payXml);
+			String resultXml = HttpUtils.doPostString(this.WeChatPayUrl, null, null, payXml);
 			
 			Map resultMap = XmlUtils.xmlToMap(resultXml);
 			System.out.println("微信支付返回：" + resultMap);
@@ -323,11 +332,10 @@ public class WXPay {
 					"</xml>";
 
 			//退款请求需要证书的双向验证；因为deployWithCert()方法被改动过，所以按此形式拼接configMap参数过去
-			String refundUrl = "https://api.mch.weixin.qq.com/secapi/pay/refund";
 			Map configMap = new HashMap();
 			configMap.put("certPath", certPath);
 			configMap.put("mch_id", mch_id);
-			String resultXml = deployWithCert(refundUrl, refundXml , configMap);
+			String resultXml = deployWithCert(this.WeChatRefundUrl, refundXml , configMap);
 			Map resultMap = XmlUtils.xmlToMap(resultXml);
 			System.out.println("微信退款返回：" + resultMap);
 			
@@ -476,7 +484,7 @@ public class WXPay {
 							"<sign>" + sign + "</sign>" +
 							"</xml>";
 
-			String resultXml= deployWithCert(PayRoute.WeChatGetCashUrl, postXml, map);			//需要验证证书
+			String resultXml= deployWithCert(this.WeChatGetCashUrl, postXml, map);			//需要验证证书
 			Map resultMap = XmlUtils.xmlToMap(resultXml);
 			System.out.println("！！！！！微信体现返回的returnMap：" + resultMap);
 			

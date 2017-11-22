@@ -10,7 +10,7 @@ import com.thirdParty.weChat.WXTools;
 
 /**
  * 微信公众号客服
- * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547
+ * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1458044813
  * @author minqi 2017-09-20 13:04:11
  *
  */
@@ -200,9 +200,7 @@ public class WXService {
 		try {
 			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
 			String access_token = tokenMap.get("access_token").toString();
-			
 			String url = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token=" + access_token;
-			
 			
 			returnMap = HttpUtils.doGet(url, null, null);
 			

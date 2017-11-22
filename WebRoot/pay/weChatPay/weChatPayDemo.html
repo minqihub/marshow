@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!--用于移动端H5页面适配，若PC端页面可不引用-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>测试微信支付跳转中</title>
+</head>
+
+<body>
+	<div class="loading">
+	</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+	//此页面仅用于测试微信支付流程是否走得通；验证支付安全路径是否已经配置
+	var pub_url = "http://219.140.199.45:8084/SCM";
+	
+	debugger;
+	
+	function onBridgeReady(){debugger
+	  	var ajaxObj = {async: true};
+	  	var json = {
+	  		"PAYTYPE": "1",									//支付类型"1"为微信支付
+	  		"PARTYID": "00000101",							//商家partyId
+	  		"out_trade_no": "DD132456789",					//商户单号
+	  		"body": "商品",									//商品名称\描述
+  			"openid": "oliD9skfH_3P6xSFj1pL9iWlidGI",		//openid
+	  		"total_fee": 1000,								//总金额（单位分）
+	  		"attach": "",									//额外自定义参数
+	  	};
+	  	ajaxObj['type'] = "post";
+	  	ajaxObj['url'] = pub_url + "/trust/protoWeChatOnline/getConfigToPay.do";
+	  	ajaxObj['data'] = {"json":JSON.stringify(json)};
+	  	ajaxObj['error'] = function(){debugger
+	  		alert("网络连接异常!");
+	  	};
+	  	ajaxObj['success'] = function(data){debugger
+	    	var data = JSON.parse(data).data;
+	    	if(data && data.flag == 1){
+	          	WeixinJSBridge.invoke('getBrandWCPayRequest', 
+	          		{
+	               		"appId": data.appId,
+	               		"timeStamp": data.timeStamp,
+	               		"nonceStr": data.nonceStr,
+	               		"package": data.package,
+	               		"signType": "MD5",
+	               		"paySign": data.paySign
+	           		},
+	           		function(res){debugger
+	           			sessionStorage.setItem("ordermx", JSON.stringify({"orderId":orderData.orderId}))
+	               		if(res.err_msg == "get_brand_wcpay_request:ok"){			//"没有此SDK或暂不支持此SDK模拟"
+	                  		alert("支付成功!");
+//	                  		sessionStorage.removeItem("ordermx"); 
+	                  		
+//		                 	location.href = pub_url+"/index.html";
+	               		}else{
+			              	alert("支付失败!");
+//			          		location.href=pub_url+"/index.html";
+	              		}
+	           		}
+	       		); 
+	    	}else{
+	      		alert("支付参数获取失败!");
+//	        	location.href = pub_url+"/index.html";
+	    	}
+	  	};
+	  	$.ajax(ajaxObj);
+	}
+	
+	function wx_pay(){debugger
+	  	if (typeof WeixinJSBridge == "undefined"){
+	     	if( document.addEventListener ){
+	         	document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+	     	}else if (document.attachEvent){
+	         	document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+	         	document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	     	}
+	  	}else{
+	     	onBridgeReady();
+	  	}
+	};
+	wx_pay();
+	
+	function GetQueryString(name){
+	  	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	 	var r = window.location.search.substr(1).match(reg);
+		if(r!=null) return unescape(r[2]); return null;
+	};
+	
+</script>
+</body>
+</html>

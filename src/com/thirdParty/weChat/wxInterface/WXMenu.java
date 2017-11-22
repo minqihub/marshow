@@ -23,40 +23,90 @@ public class WXMenu {
 	
 	/**
 	 * 创建自定义菜单
-	 * @param appid
 	 * @param json
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	public static Map creatMenu(String appid, String json){
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map createMenu(String json){
 		Map data = Json.toMap(json);
-		
-		Map tokenMap = WXTools.getWeChatToken(appid);
-		String url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + tokenMap.get("access_token");
 
-		JSONObject btn = new JSONObject();
-		btn.put("type", "click");
-		btn.put("name", "今日歌曲");
-		btn.put("key", "5gg4g545g4dg");
-		
-		JSONArray ary = new JSONArray();
-		ary.add(btn);
-		
-		JSONObject sendJson = new JSONObject();
-		sendJson.put("button", ary);
-		
 		Map returnMap = new HashMap();
 		try {
-			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
-		} catch (Exception e) {
+			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
+			String url = "https://api.weixin.qq.com/cgi-bin/menu/addconditional?access_token=" + tokenMap.get("access_token");
 			
+			JSONObject sendJson = new JSONObject();
+
+			//一级菜单
+			JSONObject button = new JSONObject();
+			
+			
+			
+			
+			//菜单匹配规则，字段内容不填则不做匹配
+			JSONObject matchrule = new JSONObject();
+			matchrule.put("tag_id", "");					//用户标签的id，可通过用户标签管理接口获取
+			matchrule.put("sex", "");						//性别：男1女2，
+			matchrule.put("country", "");					//国家信息，是用户在微信中设置的地区，具体请参考地区信息表
+			matchrule.put("province", "");					//省份信息，是用户在微信中设置的地区，具体请参考地区信息表
+			matchrule.put("city", "");						//城市信息，是用户在微信中设置的地区，具体请参考地区信息表
+			matchrule.put("client_platform_type", "");		//客户端版本，当前只具体到系统型号：IOS(1), Android(2),Others(3)
+			matchrule.put("language", "zh_CN");				//语言
+			
+
+			sendJson.put("button", button);
+			sendJson.put("matchrule", matchrule);
+			
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
+			returnMap.put("MSGID", "S");
+			if(!returnMap.get("errcode").toString().equals("0")){
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", returnMap.get("errmsg"));
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少必填参数");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "请求失败");
 		}
 		return returnMap;
 	}
 	
 	
 	
-	
+	/**
+	 * 删除自定义菜单
+	 * @param json
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map delMenu(String json){
+		Map data = Json.toMap(json);
+
+		Map returnMap = new HashMap();
+		try {
+			Map tokenMap = WXTools.getWeChatToken(data.get("appid").toString());
+			String url = "https://api.weixin.qq.com/cgi-bin/menu/delconditional?access_token=" + tokenMap.get("access_token");
+			
+			JSONObject sendJson = new JSONObject();
+			sendJson.put("menuid", data.get("menuid").toString());
+			
+			returnMap = HttpUtils.doPostStringForMap(url, null, null, sendJson.toString());
+			returnMap.put("MSGID", "S");
+			if(!returnMap.get("errcode").toString().equals("0")){
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", returnMap.get("errmsg"));
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少必填参数");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "请求失败");
+		}
+		return returnMap;
+	}
 	
 	
 	
