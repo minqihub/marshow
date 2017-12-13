@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.framework.service.Authorization;
 import com.framework.utils.Json;
-import com.thirdParty.AliAPI;
+import com.thirdParty.Ali.AliAPI;
 
 /**
  * 短信类

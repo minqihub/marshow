@@ -120,7 +120,7 @@ public class DataUtils {
 	 * @param obj
 	 * @return
 	 */
-	public static boolean isChinese(Object obj){
+	public static boolean isAllChinese(Object obj){
 //		TODO
 		
 		
@@ -133,7 +133,7 @@ public class DataUtils {
 	 * @param obj
 	 * @return
 	 */
-	public static boolean containChinese(Object obj){
+	public static boolean isContainChinese(Object obj){
 //		TODO
 		
 		
@@ -179,7 +179,7 @@ public class DataUtils {
 	 * @return
 	 * 2016-11-19
 	 */
-	public static boolean isPhone(Object obj){
+	public static boolean isMobile(Object obj){
 		String expression = "((^(13|15|18)[0-9]{9}$)|(^0[1,2]{1}\\d{1}-?\\d{8}$)|(^0[3-9] {1}\\d{2}-?\\d{7,8}$)|(^0[1,2]{1}\\d{1}-?\\d{8}-(\\d{1,4})$)|(^0[3-9]{1}\\d{2}-? \\d{7,8}-(\\d{1,4})$))";
 		Pattern pattern = Pattern.compile(expression);
 		Matcher matcher = pattern.matcher(obj.toString());
@@ -299,7 +299,7 @@ public class DataUtils {
 			int choose  = rand.nextInt();
 			int numIndex = rand.nextInt(num.length);
 			int strIndex = rand.nextInt(str.length);
-			if( choose % 2 ==0){
+			if( choose % 2 == 0){
 				resultStr = resultStr + num[numIndex];
 			}else{
 				resultStr = resultStr + str[strIndex];

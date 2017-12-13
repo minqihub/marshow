@@ -1,4 +1,4 @@
-package com.thirdParty;
+package com.thirdParty.Ali;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,8 +60,7 @@ public class AliAPI {
 
 	/**
 	 * 获取手机号归属地信息
-	 * 
-	 *{"status":"0","msg":"ok","result":{"shouji":"13986147769","province":"湖北","city":"武汉","company":"中国移动","cardtype":"GSM","areacode":"027"}}
+	 * {"status":"0","msg":"ok","result":{"shouji":"13986147769","province":"湖北","city":"武汉","company":"中国移动","cardtype":"GSM","areacode":"027"}}
 	 * @param phone
 	 * @throws Exception 
 	 */

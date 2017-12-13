@@ -69,10 +69,32 @@
                     });
                 } else {
                     //第二步，从微信授权页面跳转回来，已经获取到了code，再次跳转到实际所需页面
-                    redirectUri = MQ.appendParams(MQ.urlParams['redirect_uri'], {
-                        'code': code,
-                        'state': state
-                    });
+                    
+//                    var url1 = "http://pay.fengmi.tv/pay/wx/r/" + Base64.encode(location.href);
+//                    var url2 = encodeURIComponent(url1);
+//                    var url3 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + url2 + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+                    
+                    /*
+                    	使用方法：
+                    	var url1 = "http://www.marshow.top/thirdParty/weChat/getWXCode.html?custom_uri=" + Base64.encode(location.href);
+                    	var url2 = encodeURIComponent(url1);
+                    	var url3 = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + url2 + "&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+                    
+                    */
+                    
+                    var custom_uri = MQ.urlParams['custom_uri'];
+                    if(custom_uri){
+                    	redirectUri = MQ.appendParams(Base64.decode(custom_uri), {
+	                        'code': code,
+	                        'state': state
+	                    });
+                    }else{
+	                    redirectUri = MQ.appendParams(MQ.urlParams['redirect_uri'], {
+	                        'code': code,
+	                        'state': state
+	                    });
+                    }
+                    
                 }
                 location.href = redirectUri;
             }
@@ -80,6 +102,9 @@
         MQ.getUrlParams();
         MQ.doRedirect();
     </script>
+    
+    <script type="text/javascript" src="/plugins/base64.min.js"></script>
+    
 </body>
 
 </html>

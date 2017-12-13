@@ -24,9 +24,6 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.framework.database.DataSource;
-import com.framework.database.MySQLUtils;
-import com.framework.database.SQLConvertor;
 import com.framework.file.XmlUtils;
 import com.framework.pay.PayUtils;
 import com.framework.utils.DataUtils;
@@ -375,59 +372,6 @@ public class WXPay {
 		return returnMap;
 	}
 	
-
-    /**
-     * 带证书的调用，微信双向证书验签
-     * @param url 调用地址
-     * @param data xml报文
-     * @param configMap {"certPath"=证书路径,"mch_id"=微信支付商户号}
-     * @return 加密结果
-     * @throws Exception
-     */
-    @SuppressWarnings({ "deprecation", "rawtypes" })
-	public String deployWithCert(String url, String data, Map configMap) throws Exception {
-        KeyStore keyStore  = KeyStore.getInstance("PKCS12");
-        FileInputStream instream = new FileInputStream(new File(configMap.get("certPath").toString()));	//P12文件目录
-        try {
-            keyStore.load(instream, configMap.get("mch_id").toString().toCharArray());						//这里写密码..默认是你的MCHID
-        } finally {
-            instream.close();
-        }
-        
-        // Trust own CA and all self-signed certs
-        SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore, configMap.get("mch_id").toString().toCharArray()).build();
-        // Allow TLSv1 protocol only
-        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                sslcontext,
-                new String[] { "TLSv1" },
-                null,
-                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-        CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-        
-        try {
-        	HttpPost httpost = new HttpPost(url); // 设置响应头信息
-        	httpost.addHeader("Connection", "keep-alive");
-        	httpost.addHeader("Accept", "*/*");
-        	httpost.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        	httpost.addHeader("Host", "api.mch.weixin.qq.com");
-        	httpost.addHeader("X-Requested-With", "XMLHttpRequest");
-        	httpost.addHeader("Cache-Control", "max-age=0");
-        	httpost.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0) ");
-    		httpost.setEntity(new StringEntity(data, "UTF-8"));
-            CloseableHttpResponse response = httpclient.execute(httpost);
-            try {
-                HttpEntity entity = response.getEntity();
-                String jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");
-                EntityUtils.consume(entity);
-                return jsonStr;
-            } finally {
-                response.close();
-            }
-        } finally {
-            httpclient.close();
-        }
-    }
-	
 	/**
 	 * 企业付款，即微信公众号向用户转账（需要证书）
 	 * 需在微信商户平台开通企业付款功能，企业的付款账户和收款账户不是同一个账户，需要单独充值
@@ -450,10 +394,18 @@ public class WXPay {
 			String nonce_str = PayUtils.getNonceStr();
 			String partner_trade_no = map.get("partner_trade_no").toString();		//商户订单号（33位以下）
 			String openid = map.get("openid").toString();							//用户openid
-			String check_name = "NO_CHECK";											//NO_CHECK：不校验真实姓名 ；FORCE_CHECK：强校验真实姓名
-			String re_user_name = "张三";											//收款用户真实姓名。 如果check_name设置为FORCE_CHECK，则必填用户真实姓名
+			
+			String check_name = "";													//NO_CHECK：不校验真实姓名 ；FORCE_CHECK：强校验真实姓名
+			String re_user_name = "";												//收款用户真实姓名。 如果check_name设置为FORCE_CHECK，则必填用户真实姓名
+			if(map.get("isCheckName").toString().equals("1")){
+				check_name = "FORCE_CHECK";
+				re_user_name = map.get("name").toString();
+			}else{
+				check_name = "NO_CHECK";
+				re_user_name = "张三";
+			}
 			String amount = map.get("money").toString();							//企业付款金额，单位为分，最低100分
-			String desc = !DataUtils.isNull(map.get("desc")) ? map.get("desc").toString() : "余额佣金提现";		//企业付款描述信息
+			String desc = !DataUtils.isNull(map.get("desc")) ? map.get("desc").toString() : "默认用户提现";		//企业付款描述信息
 			String spbill_create_ip = request.getRemoteAddr();
 			
 			SortedMap<String, String> packageParams = new TreeMap<String, String>();
@@ -518,6 +470,57 @@ public class WXPay {
 		return returnMap;
 	}
 	
-	
+
+    /**
+     * 带证书的调用，微信双向证书验签
+     * @param url 调用地址
+     * @param data xml报文
+     * @param configMap {"certPath"=证书路径,"mch_id"=微信支付商户号}
+     * @return 加密结果
+     * @throws Exception
+     */
+    @SuppressWarnings({ "deprecation", "rawtypes" })
+	public String deployWithCert(String url, String data, Map configMap) throws Exception {
+        KeyStore keyStore  = KeyStore.getInstance("PKCS12");
+        FileInputStream instream = new FileInputStream(new File(configMap.get("certPath").toString()));	//P12文件目录
+        try {
+            keyStore.load(instream, configMap.get("mch_id").toString().toCharArray());						//这里写密码..默认是你的MCHID
+        } finally {
+            instream.close();
+        }
+        
+        // Trust own CA and all self-signed certs
+        SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore, configMap.get("mch_id").toString().toCharArray()).build();
+        // Allow TLSv1 protocol only
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                new String[] { "TLSv1" },
+                null,
+                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+        CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+        
+        try {
+        	HttpPost httpost = new HttpPost(url); // 设置响应头信息
+        	httpost.addHeader("Connection", "keep-alive");
+        	httpost.addHeader("Accept", "*/*");
+        	httpost.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        	httpost.addHeader("Host", "api.mch.weixin.qq.com");
+        	httpost.addHeader("X-Requested-With", "XMLHttpRequest");
+        	httpost.addHeader("Cache-Control", "max-age=0");
+        	httpost.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0) ");
+    		httpost.setEntity(new StringEntity(data, "UTF-8"));
+            CloseableHttpResponse response = httpclient.execute(httpost);
+            try {
+                HttpEntity entity = response.getEntity();
+                String jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");
+                EntityUtils.consume(entity);
+                return jsonStr;
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpclient.close();
+        }
+    }
 	
 }
