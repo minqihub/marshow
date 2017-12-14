@@ -1,4 +1,4 @@
-package com.framework.file;
+package com.framework.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

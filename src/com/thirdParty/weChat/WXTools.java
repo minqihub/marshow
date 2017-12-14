@@ -23,18 +23,16 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
 import com.framework.database.DataSource;
 import com.framework.database.MySQLUtils;
-import com.framework.database.SQLConvertor;
-import com.framework.file.XmlUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 import com.framework.utils.PropertiesReader;
+import com.framework.utils.XmlUtils;
 import com.thirdParty.weChat.wxInterface.WXEventPush;
 import com.thirdParty.weChat.wxInterface.WXServiceMsg;
 
