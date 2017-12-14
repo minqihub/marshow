@@ -16,7 +16,7 @@ import com.framework.utils.Json;
 import com.framework.utils.XmlUtils;
 
 /**
- * 微信企业付款（原型方法，不含业务逻辑）
+ * 微信企业付款、发送红包（原型方法，不含业务逻辑）
  * https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1
  * @author minqi 2017-12-14 16:02:53
  */
@@ -317,6 +317,206 @@ public class WXMchPay {
 				returnMap.put("err_code_des", return_msg);
 				returnMap.put("MSGID", "E");
 			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少传入的支付参数");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "请求微信支付失败");
+		}
+		return returnMap;
+	}
+	
+	
+	
+	/**
+	 * 发放普通红包（需要证书）
+	 * https://pay.weixin.qq.com/wiki/doc/api/tools/cash_coupon.php?chapter=13_4&index=3
+	 * @param json 所需参数：添加了注释的变量
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping("/sendNormalRedPack.do")
+	public Map sendNormalRedPack(String json, HttpServletRequest request) {
+		Map map = Json.toMap(json);		
+		
+		Map returnMap = new HashMap();
+		try {
+			String wxappid = map.get("appid").toString();							//appid
+			String mch_id = map.get("mch_id").toString();							//微信支付分配的商户号
+			String key = map.get("key").toString();									//微信商户号分配的密钥
+			String nonce_str = PayUtils.getNonceStr();
+			String mch_billno = map.get("mch_billno").toString();					//商户订单号（0~9，a~z，A~Z）
+			String send_name = map.get("send_name").toString();						//商户名称
+			String re_openid = map.get("re_openid").toString();						//用户openid
+			String total_amount = map.get("total_amount").toString();				//付款金额
+			String total_num = map.get("total_num").toString();						//红包发放总人数
+			String wishing = map.get("wishing").toString();							//红包祝福语（128）
+			String client_ip = request.getRemoteAddr();
+			String act_name = map.get("act_name").toString();						//活动名称
+			String remark = map.get("remark").toString();							//备注
+			
+			SortedMap<String, String> packageParams = new TreeMap<String, String>();
+			packageParams.put("wxappid", wxappid);
+			packageParams.put("mch_id", mch_id);
+			packageParams.put("nonce_str", nonce_str);
+			packageParams.put("mch_billno", mch_billno);
+			packageParams.put("send_name", send_name);
+			packageParams.put("re_openid", re_openid);
+			packageParams.put("total_amount", total_amount);
+			packageParams.put("total_num", total_num);
+			packageParams.put("wishing", wishing);
+			packageParams.put("client_ip", client_ip);
+			packageParams.put("act_name", act_name);
+			packageParams.put("remark", remark);
+			
+			String sign = PayUtils.getSignature(packageParams, key, "MD5");
+			
+			packageParams.put("sign", sign);
+			String postXml = XmlUtils.mapToXml(packageParams);
+
+			String url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
+			String resultXml= WXPay.deployWithCert(url, postXml, map);			//需要验证证书
+			Map resultMap = XmlUtils.xmlToMap(resultXml);
+			System.out.println("！！！！！微信体现返回的returnMap：" + resultMap);
+			
+			String return_code = (String) resultMap.get("return_code");
+			String result_code = (String) resultMap.get("result_code");
+			
+			if ("SUCCESS".equals(return_code)) {
+				if ("SUCCESS".equals(result_code)) {
+					//成功转账的业务逻辑
+					returnMap.put("flag", "1");			//不在此处执行业务，返回给调用者执行
+					returnMap.put("MSGID", "S");
+				} else {
+					String err_code_des = resultMap.get("err_code_des").toString();
+					returnMap.put("flag", "0");
+					returnMap.put("err_code_des", err_code_des);
+					returnMap.put("MSGID", "E");
+				}
+			} else {
+				String return_msg = (String) resultMap.get("return_msg");
+				returnMap.put("flag", "0");
+				returnMap.put("err_code_des", return_msg);
+				returnMap.put("MSGID", "E");
+			}
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少传入的支付参数");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "请求微信支付失败");
+		}
+		return returnMap;
+	}
+	
+	/**
+	 * 发放裂变红包（需要证书）
+	 * https://pay.weixin.qq.com/wiki/doc/api/tools/cash_coupon.php?chapter=13_4&index=3
+	 * @param json 所需参数：添加了注释的变量
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping("/sendGroupRedPack.do")
+	public Map sendGroupRedPack(String json, HttpServletRequest request) {
+		Map map = Json.toMap(json);		
+		
+		Map returnMap = new HashMap();
+		try {
+			String wxappid = map.get("appid").toString();							//appid
+			String mch_id = map.get("mch_id").toString();							//微信支付分配的商户号
+			String key = map.get("key").toString();									//微信商户号分配的密钥
+			String nonce_str = PayUtils.getNonceStr();
+			String mch_billno = map.get("mch_billno").toString();					//商户订单号（0~9，a~z，A~Z）
+			String send_name = map.get("send_name").toString();						//商户名称
+			String re_openid = map.get("re_openid").toString();						//用户openid
+			String total_amount = map.get("total_amount").toString();				//红包总金额
+			String total_num = map.get("total_num").toString();						//红包发放总人数
+			String amt_type = "ALL_RAND";											//红包金额设置方式：ALL_RAND：全部随机
+
+			
+			
+			
+			String wishing = map.get("wishing").toString();							//红包祝福语（128）
+			String client_ip = request.getRemoteAddr();
+			String act_name = map.get("act_name").toString();						//活动名称
+			String remark = map.get("remark").toString();							//备注
+			
+			SortedMap<String, String> packageParams = new TreeMap<String, String>();
+			packageParams.put("wxappid", wxappid);
+			packageParams.put("mch_id", mch_id);
+			packageParams.put("nonce_str", nonce_str);
+			packageParams.put("mch_billno", mch_billno);
+			packageParams.put("send_name", send_name);
+			packageParams.put("re_openid", re_openid);
+			packageParams.put("total_amount", total_amount);
+			packageParams.put("total_num", total_num);
+			packageParams.put("wishing", wishing);
+			packageParams.put("client_ip", client_ip);
+			packageParams.put("act_name", act_name);
+			packageParams.put("remark", remark);
+			
+			String sign = PayUtils.getSignature(packageParams, key, "MD5");
+			
+			packageParams.put("sign", sign);
+			String postXml = XmlUtils.mapToXml(packageParams);
+
+			String url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
+			String resultXml= WXPay.deployWithCert(url, postXml, map);			//需要验证证书
+			Map resultMap = XmlUtils.xmlToMap(resultXml);
+			System.out.println("！！！！！微信体现返回的returnMap：" + resultMap);
+			
+		} catch (NullPointerException e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "缺少传入的支付参数");
+		} catch (Exception e) {
+			returnMap.put("MSGID", "E");
+			returnMap.put("MESSAGE", "请求微信支付失败");
+		}
+		return returnMap;
+	}
+	
+	/**
+	 * 查询红包记录（需要证书）
+	 * @param json 所需参数：添加了注释的变量
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping("/sendGroupRedPack.do")
+	public Map queryRedPack(String json, HttpServletRequest request) {
+		Map map = Json.toMap(json);		
+		
+		Map returnMap = new HashMap();
+		try {
+			String appid = map.get("appid").toString();								//appid
+			String mch_id = map.get("mch_id").toString();							//微信支付分配的商户号
+			String key = map.get("key").toString();									//微信商户号分配的密钥
+			String nonce_str = PayUtils.getNonceStr();
+			String mch_billno = map.get("mch_billno").toString();					//商户订单号（0~9，a~z，A~Z）
+			String bill_type  = "MCHT";												//订单类型:MCHT:通过商户订单号获取红包信息 
+			
+			SortedMap<String, String> packageParams = new TreeMap<String, String>();
+			packageParams.put("appid", appid);
+			packageParams.put("mch_id", mch_id);
+			packageParams.put("nonce_str", nonce_str);
+			packageParams.put("mch_billno", mch_billno);
+			packageParams.put("bill_type", bill_type);
+			
+			String sign = PayUtils.getSignature(packageParams, key, "MD5");
+			
+			packageParams.put("sign", sign);
+			String postXml = XmlUtils.mapToXml(packageParams);
+
+			String url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo";
+			String resultXml= WXPay.deployWithCert(url, postXml, map);			//需要验证证书
+			Map resultMap = XmlUtils.xmlToMap(resultXml);
+			
 		} catch (NullPointerException e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "缺少传入的支付参数");

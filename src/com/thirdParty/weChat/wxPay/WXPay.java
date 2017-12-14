@@ -44,11 +44,9 @@ import com.framework.utils.XmlUtils;
 public class WXPay {
 	
 	/**
-	 * 微信客户端支付
-	 * 微信内H5调起支付；是否调用成功，根据"MSGID":"S"且"flag":"1"判断
+	 * 微信客户端支付（统一下单）
 	 * @param XmlData 所需参数：添加了注释的变量
 	 * @param request
-	 * @author minqi
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -119,7 +117,7 @@ public class WXPay {
 					returnMap.put("signType", "MD5");
 					
 					String sign2 = PayUtils.getSignature(returnMap, key, "MD5");
-					returnMap.put("flag", "1");
+					returnMap.put("MSGID", "S");
 					returnMap.put("sign", sign2);
 					
 					//以下参数是扫码支付（模式一回调所需参数）
@@ -128,14 +126,13 @@ public class WXPay {
 					returnMap.put("return_code", return_code);
 					returnMap.put("result_code", result_code);
 				} else {
-					returnMap.put("flag", "0");
-					returnMap.put("err", return_msg);
+					returnMap.put("MSGID", "E");
+					returnMap.put("MESSAGE", return_msg);
 				}
 			}else{
-				returnMap.put("flag", "0");
-				returnMap.put("err", return_msg);
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", return_msg);
 			}
-			returnMap.put("MSGID", "S");
 		} catch (NullPointerException e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "缺少传入的支付参数");
@@ -153,7 +150,6 @@ public class WXPay {
 	/**
 	 * 在微信客户端外的页面使用微信支付,从外部浏览器唤起微信支付
 	 * https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=9_20&index=1
-	 * 微信内H5调起支付；是否调用成功，根据"MSGID":"S"且"flag":"1"判断
 	 * @param XmlData 所需参数：添加了注释的变量
 	 * @param request
 	 * @author minqi
@@ -226,16 +222,16 @@ public class WXPay {
 			if ("SUCCESS".equals(return_code)) {
 				if ("SUCCESS".equals(result_code)) {
 					
-				
+
+					returnMap.put("MSGID", "S");
 				} else {
-					returnMap.put("flag", "0");
-					returnMap.put("err", return_msg);
+					returnMap.put("MSGID", "E");
+					returnMap.put("MESSAGE", return_msg);
 				}
 			}else{
-				returnMap.put("flag", "0");
-				returnMap.put("err", return_msg);
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", return_msg);
 			}
-			returnMap.put("MSGID", "S");
 		} catch (NullPointerException e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "缺少传入的支付参数");
@@ -310,19 +306,6 @@ public class WXPay {
 			
 			packageParams.put("sign", sign);
 			String payXml = XmlUtils.mapToXml(packageParams);
-//			String payXml = "<xml>" + 
-//					"<appid>" + appid + "</appid>" + 
-//					"<attach>" + attach + "</attach>"+
-//					"<body>" + body + "</body>" + 
-//					"<mch_id>" + mch_id + "</mch_id>"+ 
-//					"<nonce_str>" + nonce_str + "</nonce_str>" + 
-//					"<out_trade_no>" + out_trade_no + "</out_trade_no>" + 
-//					"<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>" +				
-//					"<total_fee>" + total_fee + "</total_fee>" + 				
-//					"<auth_code>" + auth_code + "</auth_code>" + 
-//					"<scene_info>" + scene_info + "</scene_info>" + 
-//					"<sign>" + sign + "</sign>" + 
-//					"</xml>";
 			
 			String WeChatMicroUrl = "https://api.mch.weixin.qq.com/pay/micropay";
 			String resultXml = HttpUtils.doPostString(WeChatMicroUrl, null, null, payXml);
@@ -338,16 +321,16 @@ public class WXPay {
 			if ("SUCCESS".equals(return_code)) {
 				if ("SUCCESS".equals(result_code)) {
 					
-				
+
+					returnMap.put("MSGID", "S");
 				} else {
-					returnMap.put("flag", "0");
-					returnMap.put("err", return_msg);
+					returnMap.put("MSGID", "E");
+					returnMap.put("MESSAGE", return_msg);
 				}
 			}else{
-				returnMap.put("flag", "0");
-				returnMap.put("err", return_msg);
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", return_msg);
 			}
-			returnMap.put("MSGID", "S");
 		} catch (NullPointerException e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "缺少传入的支付参数");
@@ -511,18 +494,17 @@ public class WXPay {
 				if ("SUCCESS".equals(result_code)) {
 					String code_url = returnMap.get("code_url").toString();
 					String prepay_id = returnMap.get("prepay_id").toString();
-					returnMap.put("flag", "1");
 					returnMap.put("code_url", code_url);
 					returnMap.put("prepay_id", prepay_id);
+					returnMap.put("MSGID", "S");
 				} else {
-					returnMap.put("flag", "0");
-					returnMap.put("err", return_msg);
+					returnMap.put("MSGID", "E");
+					returnMap.put("MESSAGE", return_msg);
 				}
 			}else{
-				returnMap.put("flag", "0");
-				returnMap.put("err", return_msg);
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", return_msg);
 			}
-			returnMap.put("MSGID", "S");
 		} catch (NullPointerException e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "缺少传入的支付参数");
