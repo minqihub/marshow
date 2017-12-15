@@ -279,7 +279,6 @@ public class WXPay {
 			store_info.put("area_code", map.get("area_code").toString());	//门店行政区划码
 			store_info.put("address", map.get("address").toString());		//门店详细地址 
 			sceneJson.put("store_info", store_info);
-			
 			String scene_info = sceneJson.toString();
 			
 			String attach;
