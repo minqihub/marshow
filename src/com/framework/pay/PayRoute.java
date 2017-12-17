@@ -15,21 +15,9 @@ import com.framework.utils.Json;
  */
 public class PayRoute {
 
-	/**
-	 * 线下支付方式
-	 */
-	public static final String OffLinePayType = "0";
 	
-	/**
-	 * 微信支付方式
-	 */
-	public static final String WeChatPayType = "1";
-
-	/**
-	 * 支付宝支付方式
-	 */
-	public static final String AliPayType = "2";
-
+	//支付方式PAYWAY：cashPay,weChatPay,aliPay,bankCardPay
+	
 	
 	
 	

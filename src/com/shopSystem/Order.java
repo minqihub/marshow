@@ -17,6 +17,7 @@ import com.framework.utils.Json;
  */
 public class Order {
 	
+	//订单状态STATE：orderOpen,orderPaid,oderCancel,orderRefund,orderClosed,orderFinished
 	
 	
 	/**
