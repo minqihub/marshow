@@ -2,6 +2,11 @@ package com.test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
 import com.thirdParty.weChat.wxInterface.WXMenu;
@@ -103,7 +109,22 @@ public class Test {
 	}
 	
 	
-	
+	public static void main(String[] args) throws ParseException {
+		String a = "2017-01-01 00:04:33";
+
+		String startTs1 = a;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date1 = format.parse(startTs1);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date1);
+		cal.add(Calendar.MINUTE, -5);
+		Date date2 = cal.getTime();
+		String startTs2 = format.format(date2);
+		
+		
+		System.out.println(a);
+		System.out.println(startTs2);
+	}
 	
 	
 }

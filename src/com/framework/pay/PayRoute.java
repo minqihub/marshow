@@ -49,15 +49,16 @@ public class PayRoute {
 			
 			if(returnMap.isEmpty()){
 				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", "支付参数获取失败：未查到支付配置");
 			}else{
 				returnMap.put("MSGID", "S");
 			}
 		} catch (NullPointerException e) {
 			returnMap.put("MSGID", "E");
-			returnMap.put("MESSAGE", "缺少必要参数：" + e);
+			returnMap.put("MESSAGE", "支付参数获取失败：缺少必要参数：" + e);
 		} catch (Exception e) {
 			returnMap.put("MSGID", "E");
-			returnMap.put("MESSAGE", "其他异常：" + e);
+			returnMap.put("MESSAGE", "支付参数获取失败：其他异常：" + e);
 		}
 		return returnMap;
 	}
@@ -65,14 +66,14 @@ public class PayRoute {
 	
 	
 	/**
-	 * 客户端直接调用支付
-	 * @param json 参数：SERVICE_ID、PAYTYPE、payMoney、orderId、describe、extra、openid（微信必填）、productId（支付宝必填）、、、
+	 * 客户端直接调用微信支付
+	 * @param json 参数：SERVICE_ID、PAYTYPE、payMoney、orderId、describe、extra、openid（微信必填）
 	 * @param response
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@RequestMapping("/customerPay.do")
-	public Map customerPay(String json, HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping("/weChatPay.do")
+	public Map weChatPay(String json, HttpServletRequest request, HttpServletResponse response){
 		Map data = Json.toMap(json);
 		
 		//获取支付配置
@@ -80,55 +81,81 @@ public class PayRoute {
 		
 		Map returnMap = new HashMap();
 		if(configMap.get("MSGID").equals("S")){
-			
 			try {
 				Map payParams = new HashMap();
-				if(data.get("PAYTYPE").toString().equals("weChatPay")){
-					
-					payParams.put("appid", configMap.get("WX_APPID"));
-					payParams.put("mch_id", configMap.get("WX_MCH_ID"));
-					payParams.put("key", configMap.get("WX_KEY"));
-					payParams.put("body", data.get("describe"));
-					payParams.put("out_trade_no", data.get("orderId").toString());
-					payParams.put("total_fee", Double.parseDouble(data.get("payMoney").toString()) * 100);				//注意微信支付金额单位：分
-					payParams.put("spbill_create_ip", request.getRemoteAddr());
-					payParams.put("notify_url", configMap.get("WX_NOTIFY_URL"));
-					payParams.put("openid", data.get("openid").toString());
-					payParams.put("attach", data.get("extra"));
-					
-					returnMap = WXPay.weChatPay(payParams);
-					
-				}else if(data.get("PAYTYPE").toString().equals("aliPay")){
-
-					payParams.put("app_id", configMap.get("ALI_APPID"));
-					payParams.put("rsa_private_key", configMap.get("ALI_PRIVATE_KEY"));
-					payParams.put("public_key", configMap.get("ALI_PUBLIC_KEY"));
-					payParams.put("body", "");
-					payParams.put("passback_params", data.get("extra"));
-					payParams.put("out_trade_no", data.get("orderId").toString());
-					payParams.put("subject", data.get("describe"));													//订单名称
-					payParams.put("total_amount", Double.parseDouble(data.get("payMoney").toString()));				//注意支付宝支付金额单位：元
-					payParams.put("product_code", data.get("productId").toString());
-					payParams.put("notify_url", configMap.get("NOTIFY_URL"));
-					payParams.put("return_url", configMap.get("ALI_RETURN_URL"));
-
-					payParams.put("isPcPay", "");
-					
-					returnMap = AliPay.aliPay(configMap);
-					
-				}else{
-					System.out.println("其他类型的支付");
-					returnMap.put("MSGID", "E");
-				}
+				payParams.put("appid", configMap.get("WX_APPID"));
+				payParams.put("mch_id", configMap.get("WX_MCH_ID"));
+				payParams.put("key", configMap.get("WX_KEY"));
+				payParams.put("body", data.get("describe"));
+				payParams.put("out_trade_no", data.get("orderId").toString());
+				payParams.put("total_fee", Double.parseDouble(data.get("payMoney").toString()) * 100);				//注意微信支付金额单位：分
+				payParams.put("spbill_create_ip", request.getRemoteAddr());
+				payParams.put("notify_url", configMap.get("WX_NOTIFY_URL"));
+				payParams.put("openid", data.get("openid").toString());
+				payParams.put("attach", data.get("extra"));
+				
+				returnMap = WXPay.weChatPay(payParams);
 			} catch (NullPointerException e) {
 				returnMap.put("MSGID", "E");
 				returnMap.put("MESSAGE", "空指针异常：" + e);
 			}
 		}else{
+			//获取支付配置失败
 			returnMap = configMap;
 		}
 		HttpUtils.printString(response, returnMap);
 		return returnMap;
 	}
+
+
+	/**
+	 * 客户端直接调用支付宝支付
+	 * @param json 参数：SERVICE_ID、PAYTYPE、payMoney、orderId、describe、extra、productId
+	 * @param response
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping("/aLiPay.do")
+	public Map aLiPay(String json, HttpServletRequest request, HttpServletResponse response){
+		Map data = Json.toMap(json);
+		
+		//获取支付配置
+		Map configMap = getPayConfig(data);
+		
+		Map returnMap = new HashMap();
+		if(configMap.get("MSGID").equals("S")){
+			try {
+				Map payParams = new HashMap();
+				payParams.put("app_id", configMap.get("ALI_APPID"));
+				payParams.put("rsa_private_key", configMap.get("ALI_PRIVATE_KEY"));
+				payParams.put("public_key", configMap.get("ALI_PUBLIC_KEY"));
+				payParams.put("body", data.get("body"));												//
+				payParams.put("passback_params", data.get("extra"));
+				payParams.put("out_trade_no", data.get("orderId").toString());
+				payParams.put("subject", data.get("describe"));											//订单名称
+				payParams.put("total_amount", Double.parseDouble(data.get("payMoney").toString()));		//注意支付宝支付金额单位：元
+				payParams.put("product_code", data.get("productId").toString());
+				payParams.put("notify_url", configMap.get("ALI_NOTIFY_URL"));
+				payParams.put("return_url", configMap.get("ALI_RETURN_URL"));
 	
+				payParams.put("isPcPay", "");
+					
+				returnMap = AliPay.aliPay(configMap);
+			
+			} catch (NullPointerException e) {
+				returnMap.put("MSGID", "E");
+				returnMap.put("MESSAGE", "空指针异常：" + e);
+			}
+		}else{
+			//获取支付配置失败
+			returnMap = configMap;
+		}
+		HttpUtils.printString(response, returnMap);
+		return returnMap;
+	}
+
+	
+	
+
 }
+

@@ -72,9 +72,9 @@ public class AliPay {
 		    AlipayClient client = getAlipayClient(map);
 			
 			//可空的业务请求参数
-		    String body = map.get("body").toString();							//商品描述，可空
-		    String timeout_express = "2m"; 										//超时时间，可空
-		    String passback_params = map.get("passback_params").toString(); 	//公共回传参数，可空
+		    String timeout_express = "2m"; 															//超时时间，可空
+		    String body = DataUtils.isNull(map.get("body")) ? "" : map.get("body").toString();		//商品描述，可空
+		    String passback_params = DataUtils.isNull(map.get("passback_params")) ? "" : map.get("passback_params").toString(); 	//公共回传参数，可空
 
 		    String formData;
 		    if(DataUtils.isNull(map.get("isPcPay"))){							//默认wap支付（移动端，唤起手机支付宝支付）

@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,53 +48,21 @@ import com.github.kevinsawicki.http.HttpRequest;
 public class HttpUtils {
 	
 	/**
-	 * post请求方法，此方法请求数据的格式是raw，而不是form-data
-	 * 主要用于调用微信接口
-	 * @param url
-	 * @param json
+	 * 是否是微信客户端
+	 * @param request
 	 * @return
-	 * @throws ParseException
-	 * @throws IOException
 	 */
-	@SuppressWarnings({ "rawtypes", "deprecation" })
-	public static Map jsonPost(String url, String json) throws ParseException, IOException{
-	    HttpClient httpClient = new DefaultHttpClient();
-	    HttpPost post = new HttpPost(url);
-	    StringEntity postingString = new StringEntity(json,"utf-8");		//json传递  
-	    post.setEntity(postingString);
-	    
-	    post.addHeader("Content-type","application/json; charset=utf-8");
-	    post.setHeader("Accept", "application/json");
-	    HttpResponse response = httpClient.execute(post);
-	    
-	    String result1 = EntityUtils.toString(response.getEntity());
-	    String result2 = new String(result1.getBytes("ISO8859-1"),"utf-8");		//字符乱码
-	    System.out.println("微信接口请求返回值："+result2);
-	    return Json.toMap(result2);
-	}
-	
-	/**
-	 * 连接外部url，获取数据
-	 * @param url
-	 * @param data
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("rawtypes")
-	public static String postFormMap(String url, Map data) throws Exception {
-    	HttpRequest hr = HttpRequest.post(url);
-		if (url != null) {
-			if ("https://".equalsIgnoreCase(url.substring(0, 8))) {
-	    		hr.trustAllCerts().trustAllHosts();
-	    	}
-		} else {
-			throw new RuntimeException("url required.");
+	public static boolean isWeChatDevice(HttpServletRequest request){
+		String userAgent = request.getHeader("User-Agent");
+		System.out.println("User-Agent：" + userAgent);
+//		User-Agent：Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36
+		
+		boolean flag = false;
+		if(userAgent.toLowerCase().contains("micromessenger")){
+			flag = true;
 		}
-		hr.connectTimeout(10 * 1000); // 连接服务等待 10 秒
-		hr.readTimeout(60 * 1000);    // 获取数据等待 60 秒
-		return hr.form(data).body();
-    }
-	
+		return flag;
+	}
 	
     /**
      * 因为过滤器对.do方法返回进行了包装，对于外部接口访问本项目的.do方法时，按照给定参数进行页面返回，

@@ -155,9 +155,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/h5Pay.do")
-	public static Map h5Pay(String json, HttpServletRequest request){
-		Map map = Json.toMap(json);
-		
+	public static Map h5Pay(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -167,7 +165,7 @@ public class WXPay {
 			String body = map.get("body").toString();						//商品名称
 			String out_trade_no = map.get("out_trade_no").toString();		//商户订单号
 			String total_fee = map.get("total_fee").toString();				//支付总金额，单位分
-			String spbill_create_ip = request.getRemoteAddr();
+			String spbill_create_ip = map.get("spbill_create_ip").toString();	//IP
 			String notify_url = map.get("notify_url").toString();			//回调地址
 			String trade_type = "MWEB";
 			
@@ -255,9 +253,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/microPay.do")
-	public static Map microPay(String json, HttpServletRequest request){
-		Map map = Json.toMap(json);
-		
+	public static Map microPay(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -267,7 +263,7 @@ public class WXPay {
 			String body = map.get("body").toString();						//商品名称
 			String out_trade_no = map.get("out_trade_no").toString();		//商户订单号
 			String total_fee = map.get("total_fee").toString();				//支付总金额，单位分
-			String spbill_create_ip = request.getRemoteAddr();
+			String spbill_create_ip = map.get("spbill_create_ip").toString();	//IP
 			String auth_code = map.get("auth_code").toString();				//扫码支付授权码，设备读取用户微信中的条码或者二维码信息
 			
 			JSONObject sceneJson = new JSONObject();
@@ -352,9 +348,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/qrPay1.do")
-	public static Map qrPay1(String json, HttpServletRequest request){
-		Map map = Json.toMap(json);
-		
+	public static Map qrPay1(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -436,9 +430,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/qrPay2.do")
-	public static Map qrPay2(String json, HttpServletRequest request){
-		Map map = Json.toMap(json);
-		
+	public static Map qrPay2(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -448,7 +440,7 @@ public class WXPay {
 			String body = map.get("body").toString();						//商品名称
 			String out_trade_no = map.get("out_trade_no").toString();		//商户订单号
 			String total_fee = map.get("total_fee").toString();				//支付总金额，单位分
-			String spbill_create_ip = request.getRemoteAddr();
+			String spbill_create_ip = map.get("spbill_create_ip").toString();	//IP
 			String notify_url = map.get("notify_url").toString();			//回调地址
 			String trade_type = "NATIVE";
 			String attach;
@@ -527,9 +519,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/queryOrder.do")
-	public static Map queryOrder(String json, HttpServletRequest request){
-		Map map = Json.toMap(json);
-		
+	public static Map queryOrder(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -548,7 +538,6 @@ public class WXPay {
 				out_trade_no = map.get("out_trade_no").toString();			//商户订单号
 				tempParam = "<out_trade_no>" + out_trade_no + "</out_trade_no>";
 			}
-			
 			
 			Map<String, String> packageParams = new HashMap<String, String>();
 			packageParams.put("appid", appid);
@@ -590,9 +579,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/closeOrder.do")
-	public static Map closeOrder(String json){
-		Map map = Json.toMap(json);
-		
+	public static Map closeOrder(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -642,9 +629,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/refund.do")
-	public static Map refund(String json){
-		Map map = Json.toMap(json);
-		
+	public static Map refund(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String certPath = map.get("certPath").toString();				//证书路径
@@ -744,9 +729,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/queryRefund.do")
-	public static Map queryRefund(String json){
-		Map map = Json.toMap(json);
-		
+	public static Map queryRefund(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -795,9 +778,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/queryRefund.do")
-	public static Map downloadBill(String json){
-		Map map = Json.toMap(json);
-		
+	public static Map downloadBill(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -846,9 +827,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/queryComment.do")
-	public static Map queryComment(String json){
-		Map map = Json.toMap(json);
-		
+	public static Map queryComment(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
