@@ -72,12 +72,10 @@ public class MySQLUtils {
 	 * @throws SQLException 
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	public static int sqlExecuteMap(JdbcTemplate jdbcTemp, String sql, Map map) throws SQLException{
-		
-		sql = SQLConvertor.format(sql, map);
+	public static int sqlExecuteMap(JdbcTemplate jdbcTemp, String sqlTemplate, Map map) throws Exception{
+		String sql = SQLConvertor.format(sqlTemplate, map);
 		return sqlExecute(jdbcTemp, sql);
 	}
-	
 	
 	/**
 	 * 查询多条
@@ -87,7 +85,12 @@ public class MySQLUtils {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public static List sqlQueryForList(JdbcTemplate jdbcTemp, String sql){
-		
+		return jdbcTemp.queryForList(sql);
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	public static List sqlQueryForList(JdbcTemplate jdbcTemp, String sqlTemplate, Map map) throws Exception{
+		String sql = SQLConvertor.format(sqlTemplate, map);
 		return jdbcTemp.queryForList(sql);
 	}
 	
@@ -99,14 +102,13 @@ public class MySQLUtils {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public static Map sqlQueryForMap(JdbcTemplate jdbcTemp, String sql){
-		Map returnMap = new HashMap();
-		try {
-			returnMap = jdbcTemp.queryForMap(sql);
-		} catch (EmptyResultDataAccessException e){
-			
-		}
-		return returnMap;
+		return jdbcTemp.queryForMap(sql);
 	}
 	
+	@SuppressWarnings({ "rawtypes" })
+	public static Map sqlQueryForMap(JdbcTemplate jdbcTemp, String sqlTemplate, Map map) throws Exception{
+		String sql = SQLConvertor.format(sqlTemplate, map);
+		return jdbcTemp.queryForMap(sql);
+	}
 
 }

@@ -3,7 +3,6 @@ package com.thirdParty.Ali.aliPay;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -67,7 +66,7 @@ public class AliPay {
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map aliPay(Map map){
+	public static Map aliPay(Map map){
 		Map returnMap = new HashMap();
 		try {
 		    AlipayClient client = getAlipayClient(map);
@@ -75,7 +74,7 @@ public class AliPay {
 			//可空的业务请求参数
 		    String body = map.get("body").toString();							//商品描述，可空
 		    String timeout_express = "2m"; 										//超时时间，可空
-		    String passback_params = "2m"; 										//公共回传参数，可空
+		    String passback_params = map.get("passback_params").toString(); 	//公共回传参数，可空
 
 		    String formData;
 		    if(DataUtils.isNull(map.get("isPcPay"))){							//默认wap支付（移动端，唤起手机支付宝支付）
@@ -144,7 +143,7 @@ public class AliPay {
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map queryTrade(Map map){
+	public static Map queryTrade(Map map){
 		Map returnMap = new HashMap();
 		try {
 		    AlipayClient client = getAlipayClient(map);
@@ -181,7 +180,7 @@ public class AliPay {
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map refund(Map map){
+	public static Map refund(Map map){
 		Map returnMap = new HashMap();
 		try {
 		    AlipayClient client = getAlipayClient(map);
@@ -221,7 +220,7 @@ public class AliPay {
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map queryRefund(Map map){
+	public static Map queryRefund(Map map){
 		Map returnMap = new HashMap();
 		try {
 		    AlipayClient client = getAlipayClient(map);
@@ -258,7 +257,7 @@ public class AliPay {
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map closeTrade(Map map){
+	public static Map closeTrade(Map map){
 		Map returnMap = new HashMap();
 		try {
 		    AlipayClient client = getAlipayClient(map);
@@ -295,7 +294,7 @@ public class AliPay {
 	 * @return
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map downloadBill(Map map){
+	public static Map downloadBill(Map map){
 		Map returnMap = new HashMap();
 		try {
 		    AlipayClient client = getAlipayClient(map);

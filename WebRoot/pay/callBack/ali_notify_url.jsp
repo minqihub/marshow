@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.util.Map"%>
-<%@ page import="com.framework.pay.aliPay.*"%>
 <%@ page import="com.alipay.api.*"%>
 <%@ page import="com.alipay.api.internal.util.*"%>
 <%
@@ -28,15 +27,17 @@
 		String[] values = (String[]) requestParams.get(name);
 		String valueStr = "";
 		for (int i = 0; i < values.length; i++) {
-			valueStr = (i == values.length - 1) ? valueStr + values[i]
-					: valueStr + values[i] + ",";
+			valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
 		}
 		//乱码解决，这段代码在出现乱码时使用
 		valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
 		params.put(name, valueStr);
 	}
 	
-	boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key, AlipayConfig.charset, AlipayConfig.sign_type); //调用SDK验证签名
+	//通过ORDER_ID查找卖家信息，找到卖家支付宝配置，找到对应支付宝公钥
+	String alipay_public_key = "";
+	
+	boolean signVerified = AlipaySignature.rsaCheckV1(params, alipay_public_key, "UTF-8", "RSA2"); //调用SDK验证签名
 
 	//——请在这里编写您的程序（以下代码仅作参考）——
 	

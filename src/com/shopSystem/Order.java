@@ -17,7 +17,18 @@ import com.framework.utils.Json;
  */
 public class Order {
 	
-	//订单状态STATE：orderOpen,orderPaid,oderCancel,orderRefund,orderClosed,orderFinished
+	private final String[] ORDER_STATE = {"orderOpen","orderPaid","orderDelivering","orderReceived","orderClosed","orderRefund","orderFinished",""};
+	private final String[] ORDER_STATE_ZN = {"待支付","待发货","待收货","待评价","订单取消","orderRefund","订单完成",""};
+	/**
+	 * 订单状态STATE：
+	 * orderOpen（待支付）
+	 * orderPaid（待发货）
+	 * orderDelivering（待收货）
+	 * orderReceived（待评价）
+	 * orderClosed（订单取消）
+	 * orderRefund（）
+	 * orderFinished（订单完成）
+	 */
 	
 	
 	/**
@@ -29,6 +40,16 @@ public class Order {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map createOrder(String json, HttpServletResponse response){
 		Map map = Json.toMap(json);
+		
+		try {
+			
+		} catch (NullPointerException e) {
+			
+		}
+		
+		
+		
+		
 		
 		String goodId = map.get("goodId").toString();		//商品编号
 		String buyer = "";									//买家

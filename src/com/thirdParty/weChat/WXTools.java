@@ -383,7 +383,7 @@ public class WXTools {
             String nonce_str = create_nonce_str();
             String timestamp = create_timestamp();
 
-            //注意这里参数名必须全部小写，且必须有序
+            //注意这里参数名必须全部小写，且按ASCII 码从小到大排序
             String preSign = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonce_str + "&timestamp=" + timestamp + "&url=" + url;
             String signature = "";
             try {
@@ -391,19 +391,15 @@ public class WXTools {
                 crypt.reset();
                 crypt.update(preSign.getBytes("UTF-8"));
                 signature = byteToHex(crypt.digest());
-            } catch (NoSuchAlgorithmException e){
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
 
-        	returnMap.put("MSGID", "S");
-            returnMap.put("appid", tokenMap.get("appid").toString());
-            returnMap.put("jsapi_ticket", jsapi_ticket);
-            returnMap.put("nonceStr", nonce_str);
-            returnMap.put("timestamp", timestamp);
-            returnMap.put("url", url);
-            returnMap.put("signature", signature);
+                returnMap.put("appid", tokenMap.get("appid").toString());
+                returnMap.put("nonceStr", nonce_str);
+                returnMap.put("timestamp", timestamp);
+                returnMap.put("signature", signature);
+            	returnMap.put("MSGID", "S");
+            } catch (Exception e) {
+            	returnMap.put("MSGID", "E");
+            }
         }else{
         	returnMap = tokenMap;
         }

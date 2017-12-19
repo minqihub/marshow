@@ -51,9 +51,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/weChatPay.do")
-	public Map weChatPay(String json, HttpServletRequest request){
-		Map map = Json.toMap(json);
-		
+	public static Map weChatPay(Map map){
 		Map returnMap = new HashMap();
 		try {
 			String appid = map.get("appid").toString();						//appid
@@ -63,7 +61,7 @@ public class WXPay {
 			String body = map.get("body").toString();						//商品名称
 			String out_trade_no = map.get("out_trade_no").toString();		//商户订单号
 			String total_fee = map.get("total_fee").toString();				//支付总金额，单位分
-			String spbill_create_ip = request.getRemoteAddr();
+			String spbill_create_ip = map.get("spbill_create_ip").toString();	//IP
 			String notify_url = map.get("notify_url").toString();			//回调地址
 			String trade_type = "JSAPI";
 			String openid = map.get("openid").toString();					//openid
@@ -157,7 +155,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/h5Pay.do")
-	public Map h5Pay(String json, HttpServletRequest request){
+	public static Map h5Pay(String json, HttpServletRequest request){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -257,7 +255,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/microPay.do")
-	public Map microPay(String json, HttpServletRequest request){
+	public static Map microPay(String json, HttpServletRequest request){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -354,7 +352,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/qrPay1.do")
-	public Map qrPay1(String json, HttpServletRequest request){
+	public static Map qrPay1(String json, HttpServletRequest request){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -416,7 +414,7 @@ public class WXPay {
 		json.put("sign", request.getParameter("sign"));
 		
 		//调用统一下单接口
-		Map returnMap = this.weChatPay(json.toString(), request);
+		Map returnMap = weChatPay(json);
 		
 		PrintWriter pw = null;
 		try {
@@ -438,7 +436,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/qrPay2.do")
-	public Map qrPay2(String json, HttpServletRequest request){
+	public static Map qrPay2(String json, HttpServletRequest request){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -529,7 +527,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/queryOrder.do")
-	public Map queryOrder(String json, HttpServletRequest request){
+	public static Map queryOrder(String json, HttpServletRequest request){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -592,7 +590,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/closeOrder.do")
-	public Map closeOrder(String json){
+	public static Map closeOrder(String json){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -644,7 +642,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/refund.do")
-	public Map refund(String json){
+	public static Map refund(String json){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -746,7 +744,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/queryRefund.do")
-	public Map queryRefund(String json){
+	public static Map queryRefund(String json){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -797,7 +795,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/queryRefund.do")
-	public Map downloadBill(String json){
+	public static Map downloadBill(String json){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
@@ -848,7 +846,7 @@ public class WXPay {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/queryComment.do")
-	public Map queryComment(String json){
+	public static Map queryComment(String json){
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();

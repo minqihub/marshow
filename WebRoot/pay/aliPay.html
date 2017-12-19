@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    	<title>支付宝支付</title>
+	
+    	<meta name="content-type" content="text/html; charset=UTF-8">
+    
+  	</head>
+  
+  	<body>
+	    
+    	<!-- 待打入到页面 -->
+    
+		<script src="/plugins/jquery-3.1.1.min.js"></script>
+    	<script src="/plugins/formTools.js"></script>
+    	<script type="text/javascript">
+    		debugger;
+    		//检查登陆状态
+			if(!form.checkLogin()){
+				alert("错误的登陆状态，请重新登陆");
+    			window.location.href = form.getprojectUrl + "/payFail.html";
+			}
+    		
+    		//检查待支付参数
+    		var payItem = JSON.parse(window.sessionStorage.getItem("payItem"));
+    		if(!payItem || !payItem["SERVICE_ID"] || !payItem["PAYTYPE"] || !payItem["orderId"] 
+    			|| !payItem["payMoney"] || !payItem["describe"]){
+    			alert("缺少必要的支付参数");
+    			window.location.href = form.getprojectUrl + "/payFail.html";
+    		}
+    
+    		//请求支付
+    		var json = {"json": JSON.stringify(payItem)};
+			var url = form.getprojectUrl + "/trust/checkLogin.do";
+			var payData = form.ajax(json, url).data;
+			if(payData["MSGID"] == "S"){
+//				$("body").append(data);
+    			document.body.appendChild(payData["MESSAGE"]);
+			}else{
+				alert("请求支付失败：" + payData["MESSAGE"]);
+				window.location.href = form.getprojectUrl + "/payFail.html";
+			}
+			
+    	</script>
+    
+	</body>
+  
+</html>
