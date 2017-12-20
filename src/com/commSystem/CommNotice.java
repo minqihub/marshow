@@ -31,7 +31,6 @@ import com.framework.utils.Json;
 @RequestMapping("/commNotice")
 public class CommNotice {
 
-	private JdbcTemplate community = DataSource.comm;
 	
 	/**
 	 * 查找通知、活动
@@ -45,8 +44,8 @@ public class CommNotice {
 		Map data = Json.toMap(json);
 		
 //		String sql = "SELECT * FROM C_Notice WHERE commId = '" + data.get("commId") +"' AND validMark = '1' AND status = '20' ORDER BY startTime";
-		String sql = "SELECT * FROM C_Notice WHERE commId = '" + data.get("commId") +"' AND validMark = '1' ORDER BY startTime";
-		List list = MySQLUtils.sqlQueryForList(community, sql);
+		String sql = "SELECT * FROM C_COMM_NOTICE WHERE COMM_ID = '" + data.get("commId") +"' AND VALIDMARK = '1' ORDER BY START_TIME";
+		List list = MySQLUtils.sqlQueryForList(DataSource.comm, sql);
 		System.out.println(list);
 		
 		//TODO 数据库中的时间有小数点的问题
@@ -95,20 +94,20 @@ public class CommNotice {
 	public Map addNotice(String json, HttpServletResponse response){
 		Map data = Json.toMap(json);
 
-		data.put("commId", "comm0001");
-		data.put("userFound", "user0001");
-		data.put("timeFound", DataUtils.getSysTime());
-		data.put("status", "10");
-		data.put("opinion", "");
+		data.put("COMM_ID", "comm0001");
+		data.put("USER_ID", "user0001");
+		data.put("TIME_FOUND", DataUtils.getSysTime());
+		data.put("STATE", "10");
+		data.put("OPINION", "");
 		
-		String sql = "INSERT INTO C_Notice (`commId`, `title`, `content`, `userFound`, `timeFound`, `startTime`, `endTime`, `noticeType`, `status`, `opinion`, `shareMark`) "
-				+ "VALUES (?commId, ?title, ?content, ?userFound, ?timeFound, ?startTime, ?endTime, ?noticeType, ?status, ?opinion, ?shareMark);";
+		String sql = "INSERT INTO C_COMM_NOTICE (COMM_ID, TITLE, CONTENT, USER_ID, TIME_FOUND, START_TIME, END_TIME, NOTICE_TYPE, STATE, OPINION, VISIBLE) "
+				+ "VALUES (?COMM_ID, ?TITLE, ?CONTENT, ?USER_ID, ?TIME_FOUND, ?START_TIME, ?END_TIME, ?NOTICE_TYPE, ?STATE, ?OPINION, ?VISIBLE);";
 		Map returnMap = new HashMap();
 		try {
-			MySQLUtils.sqlExecuteMap(community, sql, data);
+			MySQLUtils.sqlExecuteMap(DataSource.comm, sql, data);
 			returnMap.put("MSGID", "S");
 			returnMap.put("MESSAGE", "发布成功");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "发布失败：" + e);
 		}

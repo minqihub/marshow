@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   	<head>
-    	<title>交易市场</title>
+    	<title>商品详情</title>
   		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
   		<meta name="apple-mobile-web-app-capable" content="yes">
   		<meta name="theme-color" content="#2196f3">
@@ -20,11 +20,13 @@
 		
 		<div class="views">
   			<div class="view view-main">
-				<h1>交易市场功能开发中。。。</h1>
+				<h1>商品详情功能开发中。。。</h1>
 				
-				<div class="product" code="123123">商品1</div>
-				
-				
+				<div>
+					商品编码：<span id="productId"></span><br>
+					商品名称：<span id="name"></span><br>
+					商品介绍：<span id="content"></span>
+				</div>
 				
 				
 				
@@ -35,7 +37,9 @@
 		</div>
 		
     	<script type="text/javascript" src="../../plugins/framework7/js/framework7.min.js"></script>
-    	<script type="text/javascript" src="js/market.js"></script>
+		<script type="text/javascript" src="../../plugins/jquery-3.1.1.min.js"></script>
+    	<script type="text/javascript" src="../../plugins/formTools.js"></script>
+    	<script src="js/productMain.js"></script>
 		<script type="text/javascript">
 		
 var myApp = new Framework7({
@@ -53,12 +57,21 @@ var mainView = myApp.addView('.view-main', {
 	// Because we want to use dynamic navbar, we need to enable it for this view:
 	//	dynamicNavbar: true
 });
-		
-		
-//商品详情点击事件
-$$('.product').on('click', function () {debugger
-	window.location.href = "productMain.html?code=" + $$(this).attr("code");
-});
+
+debugger
+var productId = form.getUrlParams("code");
+if(form.isNull(productId)){
+	window.location.href = "market.html";
+}
+//查找对应商品
+var json = {"json": JSON.stringify({"PRODUCT_ID":productId})};
+var url = form.getprojectUrl + "/trust/product/queryProduct.do";
+var productData = form.ajax(json, url).data;
+
+$("#productId")[0].innerText = productId;
+$("#name")[0].innerText = productData["NAME"];
+$("#content")[0].innerText = productData["CONTENT"];
+
 		
 		
 		</script>

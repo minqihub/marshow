@@ -27,8 +27,8 @@ public class Authorization {
 		
 		//获取sessionId
 		Map sessionMap = new HashMap();
-		sessionMap.put("sessionId", request.getSession().getId());
-		String sqlTemplate = "SELECT userId,mobile,email,nickName,logoImg,roleMark,commId,commName,location FROM S_User WHERE sessionId LIKE ?sessionId";
+		sessionMap.put("SESSION_ID", request.getSession().getId());
+		String sqlTemplate = "SELECT * FROM S_USER WHERE SESSION_ID = ?SESSION_ID";
 		
 		Map returnMap = MySQLUtils.sqlQueryForMap(comm, SQLConvertor.format(sqlTemplate, sessionMap));
 		if(!returnMap.isEmpty()){

@@ -30,7 +30,6 @@ public class Community {
 
 	//查询当前社区的所有结构数据
 	private List list = null;
-	private JdbcTemplate community = DataSource.comm;
 	
 	/**
 	 * 查询社区结构
@@ -44,8 +43,8 @@ public class Community {
 	public List getStructure(String json, HttpServletResponse response){
 		Map data = Json.toJO(json);
 
-		String sql = "SELECT * FROM C_CommStructure WHERE commId = '" + data.get("commId") +"' AND validMark = '1' ORDER BY code";
-		List list = MySQLUtils.sqlQueryForList(community, sql);
+		String sql = "SELECT * FROM C_COMM_STRUCTURE WHERE COMM_ID = '" + data.get("commId") +"' AND VALIDMARK = '1' ORDER BY CODE";
+		List list = MySQLUtils.sqlQueryForList(DataSource.comm, sql);
 		this.list = list;
 		
 		//处理数据
@@ -142,15 +141,15 @@ public class Community {
 	private Map edit(Map data, JSONObject choosedNode){
 		Map returnMap = new HashMap();
 		Map map = new HashMap();
-		map.put("commId", choosedNode.getString("commId"));
-		map.put("code", choosedNode.getString("code"));
-		map.put("name", data.get("name"));
-		String sql = "UPDATE C_CommStructure SET name = ?name WHERE code = ?code AND commId = ?commId";
+		map.put("COMM_ID", choosedNode.getString("commId"));
+		map.put("CODE", choosedNode.getString("code"));
+		map.put("NAME", data.get("name"));
+		String sql = "UPDATE C_COMM_STRUCTURE SET NAME = ?NAME WHERE CODE = ?CODE AND COMM_ID = ?COMM_ID";
 		try {
-			MySQLUtils.sqlExecuteMap(community, sql, map);
+			MySQLUtils.sqlExecuteMap(DataSource.comm, sql, map);
 			returnMap.put("MSGID", "S");
 			returnMap.put("MESSAGE", "修改成功");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "修改失败：" + e);
 		}
@@ -173,12 +172,12 @@ public class Community {
 		map.put("isFirst", choosedNode.getString("isFirst"));
 		map.put("newNodeCode", data.get("newNodeCode"));
 		map.put("newNodeName", data.get("newNodeName"));
-		String sql = "INSERT INTO C_CommStructure (`commId`, `name`, `code`, `sjCode`, `isLast`, `isFirst`) VALUES (?commId, ?newNodeName, ?newNodeCode, ?sjCode, ?isLast, ?isFirst);";
+		String sql = "INSERT INTO C_COMM_STRUCTURE (commId, name, code, sjCode, isLast, isFirst) VALUES (?commId, ?newNodeName, ?newNodeCode, ?sjCode, ?isLast, ?isFirst);";
 		try {
-			MySQLUtils.sqlExecuteMap(community, sql, map);
+			MySQLUtils.sqlExecuteMap(DataSource.comm, sql, map);
 			returnMap.put("MSGID", "S");
 			returnMap.put("MESSAGE", "新增成功");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "新增失败：" + e);
 		}
@@ -202,12 +201,12 @@ public class Community {
 		map.put("isFirst", choosedNode.getString("isFirst"));
 		map.put("newNodeCode", data.get("newNodeCode"));
 		map.put("newNodeName", data.get("newNodeName"));
-		String sql = "INSERT INTO C_CommStructure (`commId`, `name`, `code`, `sjCode`, `isLast`, `isFirst`) VALUES (?commId, ?newNodeName, ?newNodeCode, ?code, '1', '0');";
+		String sql = "INSERT INTO C_COMM_STRUCTURE (commId, name, code, sjCode, isLast, isFirst) VALUES (?commId, ?newNodeName, ?newNodeCode, ?code, '1', '0')";
 		try {
-			MySQLUtils.sqlExecuteMap(community, sql, map);
+			MySQLUtils.sqlExecuteMap(DataSource.comm, sql, map);
 			returnMap.put("MSGID", "S");
 			returnMap.put("MESSAGE", "新增成功");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "新增失败：" + e);
 		}
@@ -225,14 +224,14 @@ public class Community {
 		//TODO 需先判断是否含有子节点，一并删除？？？
 		Map returnMap = new HashMap();
 		Map map = new HashMap();
-		map.put("commId", choosedNode.getString("commId"));
-		map.put("code", choosedNode.getString("code"));
-		String sql = "UPDATE C_CommStructure SET validMark = '0' WHERE code = ?code AND commId = ?commId";
+		map.put("COMM_ID", choosedNode.getString("commId"));
+		map.put("CODE", choosedNode.getString("code"));
+		String sql = "UPDATE C_COMM_STRUCTURE SET VALIDMARK = '0' WHERE CODE = ?CODE AND COMM_ID = ?COMM_ID";
 		try {
-			MySQLUtils.sqlExecuteMap(community, sql, map);
+			MySQLUtils.sqlExecuteMap(DataSource.comm, sql, map);
 			returnMap.put("MSGID", "S");
 			returnMap.put("MESSAGE", "删除成功");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "删除失败：" + e);
 		}

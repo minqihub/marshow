@@ -53,22 +53,20 @@ public class Regist extends DBHandler{
 		Map map = Json.toMap(json);
 		
 		Map returnMap = new HashMap();
-		Map insertMap = new HashMap();
-
 		try{
-			insertMap.put("userId", request.getSession().getId());
-			insertMap.put("mobile", map.get("mobile").toString());
-			insertMap.put("password", map.get("password").toString());
-			insertMap.put("nickName", map.get("mobile").toString());
-			insertMap.put("logoImg", this.default_User_Logo);
-			insertMap.put("registTime", DataUtils.getSysTime());
+			Map insertMap = new HashMap();
+			insertMap.put("USER_ID", request.getSession().getId());
+			insertMap.put("MOBILE", map.get("mobile").toString());
+			insertMap.put("PASSWORD", map.get("password").toString());
+			insertMap.put("NICKNAME", map.get("mobile").toString());
+			insertMap.put("LOGOIMG", this.default_User_Logo);
+			insertMap.put("CTS", DataUtils.getSysTime());
 			
 			//角色标记：1社区超管；2社区管理员；3社区居民；4社区商户
-			insertMap.put("roleMark", map.get("roleMark").toString());
+			insertMap.put("ROLEMARK", map.get("roleMark").toString());
 			
-			String sql = "INSERT INTO S_User (`userId`, `mobile`, `nickName`, `logoImg`, `passWord`, `registTime`, `roleMark`) "
-					+ "VALUES (?userId, ?mobile, ?nickName, ?logoImg, ?password, ?registTime, ?roleMark)";
-			
+			String sql = "INSERT INTO S_USER (USER_ID, MOBILE, NICKNAME, LOGOIMG, PASSWORD, ROLEMARK, CTS) "
+					+ "VALUES (?USER_ID, ?MOBILE, ?NICKNAME, ?LOGOIMG, ?PASSWORD, ?registTime, ?ROLEMARK, ?CTS)";
 			sqlExecuteMap(comm, sql, insertMap);
 
 			returnMap.put("MSGID", "S");
@@ -77,9 +75,9 @@ public class Regist extends DBHandler{
 		} catch (NullPointerException e){
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "必填字段请填写完整");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			returnMap.put("MSGID", "E");
-			returnMap.put("MESSAGE", "数据库异常");
+			returnMap.put("MESSAGE", "其他异常：" + e);
 		}
 		
 		HttpUtils.printString(response, returnMap);

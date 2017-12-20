@@ -6,8 +6,8 @@ if(!form.checkLogin()){
 
 //根据登陆的账号，找到所属的菜单列表，代办，头像信息数据
 var userInfo = JSON.parse(window.localStorage.getItem("userInfo"));
-$("#logoImg").attr("src", userInfo.logoImg);
-$("#nickName")[0].innerText = userInfo.nickName;
+$("#logoImg").attr("src", userInfo.LOGOIMG);
+$("#nickName")[0].innerText = userInfo.NICKNAME;
 
 
 //将数据打入页面

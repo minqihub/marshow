@@ -102,13 +102,20 @@ public class MySQLUtils {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public static Map sqlQueryForMap(JdbcTemplate jdbcTemp, String sql){
-		return jdbcTemp.queryForMap(sql);
+		Map returnMap = new HashMap();
+		try {
+			returnMap = jdbcTemp.queryForMap(sql);
+		} catch (EmptyResultDataAccessException e) {
+			//TODO 如果查不到数据，就会报这个错误
+			//org.springframework.dao.EmptyResultDataAccessException: Incorrect result size: expected 1, actual 0
+		}
+		return returnMap;
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
 	public static Map sqlQueryForMap(JdbcTemplate jdbcTemp, String sqlTemplate, Map map) throws Exception{
 		String sql = SQLConvertor.format(sqlTemplate, map);
-		return jdbcTemp.queryForMap(sql);
+		return sqlQueryForMap(jdbcTemp, sql);
 	}
 
 }

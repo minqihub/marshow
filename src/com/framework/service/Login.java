@@ -51,8 +51,7 @@ public class Login{
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping("/login.do")
 	public Map login(String json, HttpServletRequest request, HttpServletResponse response){
-		Map data = Json.toJO(json);
-		
+		Map data = Json.toMap(json);
 		
 		Map loginMap = new HashMap();
 		
@@ -61,16 +60,16 @@ public class Login{
 		returnMap.put("MESSAGE", "登陆失败");
 		
 		try {
-			String sessionId = request.getSession().getId();
+			String SESSION_ID = request.getSession().getId();
 			Map result = new HashMap();
 			
 			if(DataUtils.isNull(data.get("loginType"))){					//默认手机号登陆
 				
-				loginMap.put("mobile", data.get("username").toString());
-				loginMap.put("password", data.get("password").toString());
+				loginMap.put("MOBILE", data.get("username").toString());
+				loginMap.put("PASSWORD", data.get("password").toString());
+				String sqlTemplate = "SELECT * FROM S_USER WHERE MOBILE = ?MOBILE and PASSWORD = ?PASSWORD";
 				
-				String sqlTemplate = "select * from S_User where mobile like ?mobile and password like ?password";
-				result = MySQLUtils.sqlQueryForMap(comm, SQLConvertor.format(sqlTemplate, loginMap));
+				result = MySQLUtils.sqlQueryForMap(comm, sqlTemplate, loginMap);
 				if(!result.isEmpty()){
 					returnMap.put("MSGID", "S");
 					returnMap.put("MESSAGE", "登陆成功");
@@ -86,20 +85,14 @@ public class Login{
 			
 			//验证成功之后，写入sessionId
 			if(returnMap.get("MSGID").toString().equals("S")){
-				String sql = "UPDATE S_User SET `sessionId`=?sessionId WHERE `userId`=?userId";
+				String sql = "UPDATE S_USER SET SESSION_ID = ?SESSION_ID WHERE USER_ID = ?USER_ID";
 				Map sessionMap = new HashMap();
-				sessionMap.put("userId", result.get("userId").toString());
-				sessionMap.put("sessionId", sessionId);
+				sessionMap.put("USER_ID", result.get("USER_ID").toString());
+				sessionMap.put("SESSION_ID", SESSION_ID);
 				MySQLUtils.sqlExecuteMap(comm, sql, sessionMap);
 			}
 			
-		} catch (EmptyResultDataAccessException e){
-			returnMap.put("MSGID", "E");
-			returnMap.put("MESSAGE", "用户名或密码不存在");
-		} catch (NullPointerException e){
-			returnMap.put("MSGID", "E");
-			returnMap.put("MESSAGE", "必填字段请填写完整");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "数据库异常");
 		}
@@ -134,7 +127,7 @@ public class Login{
 	 * @param response
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping("/checkLogin.do")
 	public static Map checkLogin(HttpServletRequest request, HttpServletResponse response){
 		Map returnMap = Authorization.getUserInfo(request);

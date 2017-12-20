@@ -193,7 +193,7 @@ form.getType = function(str){debugger
 };
 
 //判断是否为空
-form.isNull = function(str){
+form.isNull = function(str){debugger
 	if(typeof str == "undefined"){
 		return true;
 	}else if(str == null){
