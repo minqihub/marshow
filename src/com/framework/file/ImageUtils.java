@@ -26,6 +26,17 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import com.framework.utils.PropertiesReader;
 
@@ -42,22 +53,40 @@ public class ImageUtils extends FileUtils {
 	//MySQL数据库参数
 	private static String FileDir = property.getProperty("FileDir");
 	
+	
 	/**
 	 * 抓取网络图片
-	 * @param url
-	 * @return 本地服务器图片路径
+	 * @param imgUrl 网络图片路径http://pic1.win4000.com/wallpaper/e/526c9f87129d9.jpg
+	 * @return 字节数组
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
 	 */
-	public static Map getNetImg(String url){
-		try {
-			URL imgUrl = new URL(url);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		return null;
+	public static byte[] getNetImg(String imgUrl) throws ClientProtocolException, IOException{
+        HttpClient c = HttpClientBuilder.create().build();
+        HttpGet g = new HttpGet(imgUrl);
+        HttpEntity entity = null;
+        HttpResponse r = c.execute(g);
+        entity = r.getEntity();
+        byte [] b = EntityUtils.toByteArray(entity);
+        return b;
 	}
+	
+	/**
+	 * 获取get请求的网页图片
+	 * @param imgByte
+	 * @return ResponseEntity由java方法直接返回即可
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public ResponseEntity getResponseImg(byte[] imgByte) throws ClientProtocolException, IOException{
+    	HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        ResponseEntity entity = new ResponseEntity(imgByte, headers, HttpStatus.CREATED);
+        return entity; 
+    }
+	
+	
 	
 	
 	/**

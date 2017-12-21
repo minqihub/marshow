@@ -1,267 +1,131 @@
 package com.framework.function;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Shape;
-import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImage;  
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Hashtable;
-import java.util.Random;
-
+import java.io.PrintWriter;
+import java.util.HashMap;  
+import java.util.Map;  
+  
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.Result;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.apache.http.client.ClientProtocolException;
+import org.springframework.http.HttpHeaders;  
+import org.springframework.http.HttpStatus;  
+import org.springframework.http.MediaType;  
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.alibaba.fastjson.JSONObject;
+import com.framework.file.ImageUtils;
+import com.framework.utils.HttpUtils;
+import com.google.zxing.BarcodeFormat;  
+import com.google.zxing.Binarizer;  
+import com.google.zxing.BinaryBitmap;  
+import com.google.zxing.DecodeHintType;  
+import com.google.zxing.EncodeHintType;  
+import com.google.zxing.LuminanceSource;  
+import com.google.zxing.MultiFormatReader;  
+import com.google.zxing.MultiFormatWriter;  
+import com.google.zxing.NotFoundException;  
+import com.google.zxing.Result;  
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;  
+import com.google.zxing.common.HybridBinarizer; 
 
 /**
  * 二维码相关
- * @author minqi 2017-11-05 15:20:53
+ * 好像只支持JDK1.8及以上
+ * 只提供基础的二维码生成，二维码美化推荐草料二维码http://mh.cli.im/
+ * @author minqi 2017-12-20 14:02:29
  *
  */
+@Controller
+@RequestMapping("/trust/qrCode")
 public class QrCode {
 	
-	private static final String CHARSET = "utf-8";
-	private static final String FORMAT_NAME = "JPG";
+	private static final String format = "png";		//二维码图片类型
+	private static final int width = 300;			//图像宽度
+	private static final int height = 300;			//图像高度
 	
-	// 二维码尺寸
-	private static final int QRCODE_SIZE = 300;
-	// LOGO宽度
-	private static final int WIDTH = 60;
-	// LOGO高度
-	private static final int HEIGHT = 60;
-	
-	
-	
-	
-	
-	private static BufferedImage createImage(String content, String imgPath, boolean needCompress) throws Exception {
-		
-		Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
-		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-		hints.put(EncodeHintType.CHARACTER_SET, CHARSET);
-		hints.put(EncodeHintType.MARGIN, 1);
-		BitMatrix bitMatrix = new MultiFormatWriter().encode(content,BarcodeFormat.QR_CODE, QRCODE_SIZE, QRCODE_SIZE, hints);
-		int width = bitMatrix.getWidth();
-		int height = bitMatrix.getHeight();
-		BufferedImage image = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
-			}
-		}
-		if (imgPath == null || "".equals(imgPath)) {
-			return image;
-		}
-		// 插入图片
-		insertImage(image, imgPath, needCompress);
-		return image;
-	}
-	 
-	 /**
-	  * 插入LOGO
-	  * 
-	  * @param source
-	  *   二维码图片
-	  * @param imgPath
-	  *   LOGO图片地址
-	  * @param needCompress
-	  *   是否压缩
-	  * @throws Exception
-	  */
-	private static void insertImage(BufferedImage source, String imgPath, boolean needCompress) throws Exception {
-		File file = new File(imgPath);
-		if (!file.exists()) {
-			System.err.println(""+imgPath+" 该文件不存在！");
-			return;
-		}
-		Image src = ImageIO.read(new File(imgPath));
-		int width = src.getWidth(null);
-		int height = src.getHeight(null);
-		if (needCompress) { // 压缩LOGO
-			if (width > WIDTH) {
-				width = WIDTH;
-			}
-			if (height > HEIGHT) {
-				height = HEIGHT;
-			}
-			Image image = src.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-			BufferedImage tag = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-			Graphics g = tag.getGraphics();
-			g.drawImage(image, 0, 0, null); // 绘制缩小后的图
-			g.dispose();
-			src = image;
-		}
-		// 插入LOGO
-		Graphics2D graph = source.createGraphics();
-		int x = (QRCODE_SIZE - width) / 2;
-		int y = (QRCODE_SIZE - height) / 2;
-		graph.drawImage(src, x, y, width, height, null);
-		Shape shape = new RoundRectangle2D.Float(x, y, width, width, 6, 6);
-		graph.setStroke(new BasicStroke(3f));
-		graph.draw(shape);
-		graph.dispose();
-	}
-	 
-	 /**
-	  * 生成二维码(内嵌LOGO)
-	  * 
-	  * @param content
-	  *   内容
-	  * @param imgPath
-	  *   LOGO地址
-	  * @param destPath
-	  *   存放目录
-	  * @param needCompress
-	  *   是否压缩LOGO
-	  * @throws Exception
-	  */
-	public static void encode(String content, String imgPath, String destPath, boolean needCompress) throws Exception {
-		BufferedImage image = createImage(content, imgPath, needCompress);
-		mkdirs(destPath);
-		String file = new Random().nextInt(99999999)+".jpg";
-		ImageIO.write(image, FORMAT_NAME, new File(destPath+"/"+file));
-	}
-	 
-	 /**
-	  * 当文件夹不存在时，mkdirs会自动创建多层目录，区别于mkdir．(mkdir如果父目录不存在则会抛出异常)
-	  * @author lanyuan
-	  * Email: mmm333zzz520@163.com
-	  * @date 2013-12-11 上午10:16:36
-	  * @param destPath 存放目录
-	  */
-	public static void mkdirs(String destPath) {
-	 	File file =new File(destPath); 
-	 	//当文件夹不存在时，mkdirs会自动创建多层目录，区别于mkdir．(mkdir如果父目录不存在则会抛出异常)
-	 	if (!file.exists() && !file.isDirectory()) {
-	 		file.mkdirs();
-	 	}
-	}
-	 
-	 /**
-	  * 生成二维码(内嵌LOGO)
-	  * 
-	  * @param content
-	  *   内容
-	  * @param imgPath
-	  *   LOGO地址
-	  * @param destPath
-	  *   存储地址
-	  * @throws Exception
-	  */
-	public static void encode(String content, String imgPath, String destPath) throws Exception {
-		encode(content, imgPath, destPath, false);
-	}
-	 
-	 /**
-	  * 生成二维码
-	  * 
-	  * @param content
-	  *   内容
-	  * @param destPath
-	  *   存储地址
-	  * @param needCompress
-	  *   是否压缩LOGO
-	  * @throws Exception
-	  */
-	public static void encode(String content, String destPath, boolean needCompress) throws Exception {
-		encode(content, null, destPath, needCompress);
-	}
-	 
-	 /**
-	  * 生成二维码
-	  * 
-	  * @param content
-	  *   内容
-	  * @param destPath
-	  *   存储地址
-	  * @throws Exception
-	  */
-	public static void encode(String content, String destPath) throws Exception {
-		encode(content, null, destPath, false);
-	}
-	 
-	 /**
-	  * 生成二维码(内嵌LOGO)
-	  * 
-	  * @param content
-	  *   内容
-	  * @param imgPath
-	  *   LOGO地址
-	  * @param output
-	  *   输出流
-	  * @param needCompress
-	  *   是否压缩LOGO
-	  * @throws Exception
-	  */
-	public static void encode(String content, String imgPath, OutputStream output, boolean needCompress) throws Exception {
-		BufferedImage image = createImage(content, imgPath, needCompress);
-		ImageIO.write(image, FORMAT_NAME, output);
-	}
-	 
-	 /**
-	  * 生成二维码
-	  * 
-	  * @param content
-	  *   内容
-	  * @param output
-	  *   输出流
-	  * @throws Exception
-	  */
-	public static void encode(String content, OutputStream output) throws Exception {
-		encode(content, null, output, false);
-	}
-	 
-	 /**
-	  * 解析二维码
-	  * 
-	  * @param file
-	  *   二维码图片
-	  * @return
-	  * @throws Exception
-	  */
-	public static String decode(File file) throws Exception {
-		BufferedImage image;
-		image = ImageIO.read(file);
-		if (image == null) {
-			return null;
-		}
-		BufferedImageLuminanceSource source = new BufferedImageLuminanceSource( image);
-		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-		Result result;
-		Hashtable<DecodeHintType, Object> hints = new Hashtable<DecodeHintType, Object>();
-		hints.put(DecodeHintType.CHARACTER_SET, CHARSET);
-		result = new MultiFormatReader().decode(bitmap, hints);
-		String resultStr = result.getText();
-		return resultStr;
-	}
-	 
-	 /**
-	  * 解析二维码
-	  * 
-	  * @param path
-	  *   二维码图片地址
-	  * @return
-	  * @throws Exception
-	  */
-	public static String decode(String path) throws Exception {
-		return decode(new File(path));
-	}
-	 
-	public static void main(String[] args) throws Exception {
-		String text = "http://www.yihaomen.com";
-		encode(text, "c:/me.jpg", "c:/barcode", true);
-	}
+	public static void main(String[] args) throws Exception {  
+		getQrEncode("");  
+//        getQrDecode();  
+    }  
+  
+    /**
+     * 生成二维码 
+     * @param content 二维码扫码内容
+     * @return
+     * @throws WriterException
+     * @throws IOException
+     */
+    public static void getQrEncode(String content) throws WriterException, IOException {
+        content = "测试zxing生成二维码";
+        
+        //准备参数
+        Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
+        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        
+        //生成矩阵
+        BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);
+        
+        //生成图片
+        File file = new File("D://zxing.png");
+        MatrixToImageWriter.writeToFile(bitMatrix, format, file);				//输出到文件
+        
+//        MatrixToImageWriter.writeToStream(bitMatrix, format, outPutStream);		//输出到流
+        
+        System.out.println("输出成功.");
+    }  
+  
+    /** 
+     * 解析二维码 
+     */  
+    public static void getQrDecode() {  
+        String filePath = "D://zxing.png";
+        BufferedImage image;
+        try {
+            image = ImageIO.read(new File(filePath));
+            LuminanceSource source = new BufferedImageLuminanceSource(image);
+            Binarizer binarizer = new HybridBinarizer(source);
+            BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
+            
+            Map<DecodeHintType, Object> hints = new HashMap<DecodeHintType, Object>();
+            hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
+            Result result = new MultiFormatReader().decode(binaryBitmap, hints);//对图像进行解码
+            
+            System.out.println("图片中内容author： " + result.getText());
+            System.out.println("图片中格式encode： " + result.getBarcodeFormat());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * 直接获取网络图片显示在页面上
+     * http://localhost:8080/marshow/trust/qrCode/test.do
+     * @param response
+     * @throws IOException 
+     * @throws ClientProtocolException 
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@RequestMapping("/test.do")
+    public ResponseEntity test(HttpServletResponse response) throws ClientProtocolException, IOException{
+    	HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);  
+        String imgUrl = "http://www.ksks001.com/img1/5370105154200175440.jpeg";  
+        byte[] imgByte = ImageUtils.getNetImg(imgUrl);  
+        ResponseEntity entity = new ResponseEntity(imgByte, headers, HttpStatus.CREATED);
+        return entity; 
+    }
+    
 	
 }

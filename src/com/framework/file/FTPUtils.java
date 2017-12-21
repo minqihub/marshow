@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +20,13 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
+import com.framework.utils.Json;
 
 /**
  * 文件服务器传输工具类
@@ -29,7 +34,7 @@ import com.framework.utils.HttpUtils;
  *
  */
 @Controller
-@RequestMapping("/ftpUtils")
+@RequestMapping("/trust/ftpUtils")
 public class FTPUtils {
 	
 	//用户私有文件存储路径
@@ -143,6 +148,60 @@ public class FTPUtils {
 		
 		
 		return null;
+	}
+	
+	
+	
+	/**
+	 * 下载多媒体文件，用来下载不是直接存在服务器上的文件
+	 * 例如http://..../downloadMedia.do?json={"sourceUrl":"http://pic1.win4000.com/wallpaper/e/526c9f87129d9.jpg","sourceName":"123.png"}
+	 * @param json {"sourceUrl":"文件的互联网地址","sourceName":"指定要下载的文件名"}，一定要urlEncode
+	 * @param request
+	 * @param response
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping("/downloadMedia.do")
+	public void downloadMedia(String json, HttpServletRequest request, HttpServletResponse response) {
+		InputStream inputStream = null;
+		OutputStream outputStream = null;
+		
+		try {
+			//处理GET请求中文乱码
+			json = new String(json.getBytes("ISO8859-1"), "UTF-8");
+			Map data = Json.toMap(json);
+			
+			String sourceUrl = data.get("sourceUrl").toString();
+			String sourceName = DataUtils.isNull(data.get("sourceName")) ? sourceUrl : data.get("sourceName").toString();
+			
+			//处理浏览器兼容；设置下载文件名称
+			String browserName = request.getHeader("User-Agent");
+			boolean isMSIE = browserName.contains("MSIE");
+			if (isMSIE) {
+				response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(sourceName, "UTF8"));
+			} else {
+				response.addHeader("Content-Disposition", "attachment;fileName=" + new String(sourceName.getBytes("gb2312"), "ISO8859-1"));
+			}
+			
+			//请求资源
+			sourceUrl = sourceUrl.replace(" ", "%20");		//url地址如果存在空格，会导致报错！  解决方法为：用+或者%20代替url参数中的空格
+			URL url = new URL(sourceUrl);
+			URLConnection conn = url.openConnection();
+			
+			//定义输出类型
+			response.setContentType("application/msexcel;charset=utf-8");
+			//设置下载的文件大小
+			response.setContentLength(conn.getContentLength());
+			
+			inputStream = conn.getInputStream();
+			outputStream = response.getOutputStream();
+			IOUtils.copy(inputStream, outputStream);
+			
+	 	} catch (Exception e) {
+	    	System.out.println("请求下载资源出错：" + e);
+		} finally { 
+			IOUtils.closeQuietly(inputStream); 
+	    	IOUtils.closeQuietly(outputStream); 
+	  	} 
 	}
 	
 	
