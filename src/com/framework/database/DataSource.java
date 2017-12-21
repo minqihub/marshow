@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.framework.config.V1;
 import com.framework.utils.DataUtils;
-import com.framework.utils.PropertiesReader;
 
 /**
  * 连接池类
@@ -16,34 +16,31 @@ import com.framework.utils.PropertiesReader;
  */
 public class DataSource {
 	
-	//配置文件读取对象
-	public static PropertiesReader property = PropertiesReader.getInstance();
-	
 	//MySQL数据库参数
-	private static String MySQL_IP = property.getProperty("MySQL_IP");
-	private static String MySQL_PORT = property.getProperty("MySQL_PORT");
-	private static String MySQL_DATABASE = property.getProperty("MySQL_DATABASE");
-	private static String MySQL_USERNAME = property.getProperty("MySQL_USERNAME");
-	private static String MySQL_PASSWORD = property.getProperty("MySQL_PASSWORD");
+	private static String MySQL_IP = V1.getProperty("MySQL_IP");
+	private static String MySQL_PORT = V1.getProperty("MySQL_PORT");
+	private static String MySQL_DATABASE = V1.getProperty("MySQL_DATABASE");
+	private static String MySQL_USERNAME = V1.getProperty("MySQL_USERNAME");
+	private static String MySQL_PASSWORD = V1.getProperty("MySQL_PASSWORD");
 	//MySQL连接池参数
-	private static int MySQL_InitialSize = Integer.parseInt(property.getProperty("MySQL_InitialSize"));
-	private static int MySQL_MaxActive = Integer.parseInt(property.getProperty("MySQL_MaxActive"));
-	private static int MySQL_MaxIdle = Integer.parseInt(property.getProperty("MySQL_MaxIdle"));
-	private static int MySQL_MinIdle = Integer.parseInt(property.getProperty("MySQL_MinIdle"));
-	private static int MySQL_MaxWait = Integer.parseInt(property.getProperty("MySQL_MaxWait"));
+	private static int MySQL_InitialSize = Integer.parseInt(V1.getProperty("MySQL_InitialSize"));
+	private static int MySQL_MaxActive = Integer.parseInt(V1.getProperty("MySQL_MaxActive"));
+	private static int MySQL_MaxIdle = Integer.parseInt(V1.getProperty("MySQL_MaxIdle"));
+	private static int MySQL_MinIdle = Integer.parseInt(V1.getProperty("MySQL_MinIdle"));
+	private static int MySQL_MaxWait = Integer.parseInt(V1.getProperty("MySQL_MaxWait"));
 	
 	//Oracle数据库参数
-	private static String Oracle_IP = property.getProperty("Oracle_IP");
-	private static String Oracle_PORT = property.getProperty("Oracle_PORT");
-	private static String Oracle_DATABASE = property.getProperty("Oracle_DATABASE");
-	private static String Oracle_USERNAME = property.getProperty("Oracle_USERNAME");
-	private static String Oracle_PASSWORD = property.getProperty("Oracle_PASSWORD");
+	private static String Oracle_IP = V1.getProperty("Oracle_IP");
+	private static String Oracle_PORT = V1.getProperty("Oracle_PORT");
+	private static String Oracle_DATABASE = V1.getProperty("Oracle_DATABASE");
+	private static String Oracle_USERNAME = V1.getProperty("Oracle_USERNAME");
+	private static String Oracle_PASSWORD = V1.getProperty("Oracle_PASSWORD");
 	//Oracle连接池参数
-	private static int Oracle_InitialSize = Integer.parseInt(property.getProperty("Oracle_InitialSize"));
-	private static int Oracle_MaxActive = Integer.parseInt(property.getProperty("Oracle_MaxActive"));
-	private static int Oracle_MaxIdle = Integer.parseInt(property.getProperty("Oracle_MaxIdle"));
-	private static int Oracle_MinIdle = Integer.parseInt(property.getProperty("Oracle_MinIdle"));
-	private static int Oracle_MaxWait = Integer.parseInt(property.getProperty("Oracle_MaxWait"));
+	private static int Oracle_InitialSize = Integer.parseInt(V1.getProperty("Oracle_InitialSize"));
+	private static int Oracle_MaxActive = Integer.parseInt(V1.getProperty("Oracle_MaxActive"));
+	private static int Oracle_MaxIdle = Integer.parseInt(V1.getProperty("Oracle_MaxIdle"));
+	private static int Oracle_MinIdle = Integer.parseInt(V1.getProperty("Oracle_MinIdle"));
+	private static int Oracle_MaxWait = Integer.parseInt(V1.getProperty("Oracle_MaxWait"));
 	
 	//连接池对象
 	public static BasicDataSource dataSource_MySql;
@@ -65,13 +62,15 @@ public class DataSource {
 			dataSource_MySql.setPassword(MySQL_PASSWORD);
 			
 			//设置池参数，代码内均为默认参数
-			dataSource_MySql.setInitialSize(MySQL_InitialSize);		//初始化池大小，即一开始就会有10个链接对象，
-			dataSource_MySql.setMaxActive(MySQL_MaxActive);			//最大连接数，若为非正数，即无限制。空闲+活动的
-			dataSource_MySql.setMaxIdle(MySQL_MaxIdle);				//最大空闲连接。超过了就被干掉
-			dataSource_MySql.setMinIdle(MySQL_MinIdle);				//最小空闲连接。“备用金”最低值
-			dataSource_MySql.setMaxWait(MySQL_MaxWait);				//最大等待时间（毫秒）默认表示无限等待不抛异常
+			dataSource_MySql.setInitialSize(MySQL_InitialSize);			//初始化池大小，即一开始就会有10个链接对象，
+			dataSource_MySql.setMaxActive(MySQL_MaxActive);				//最大连接数，若为非正数，即无限制。空闲+活动的
+			dataSource_MySql.setMaxIdle(MySQL_MaxIdle);					//最大空闲连接。超过了就被干掉
+			dataSource_MySql.setMinIdle(MySQL_MinIdle);					//最小空闲连接。“备用金”最低值
+			dataSource_MySql.setMaxWait(MySQL_MaxWait);					//最大等待时间（毫秒）默认表示无限等待不抛异常
 			
 			comm = new JdbcTemplate(dataSource_MySql);
+			System.out.println("_______初始化MySQL成功：BasicDataSource：" + dataSource_MySql);
+			System.out.println("_______初始化MySQL成功：JdbcTemplate：" + comm);
 		}
 		
 		if(dataSource_Oracle == null){
@@ -89,6 +88,8 @@ public class DataSource {
 			dataSource_Oracle.setMaxWait(Oracle_MaxWait);				//最大等待时间（毫秒）默认表示无限等待不抛异常
 			
 			orcl = new JdbcTemplate(dataSource_Oracle);
+			System.out.println("_______初始化Oracle成功：BasicDataSource：" + dataSource_Oracle);
+			System.out.println("_______初始化Oracle成功：JdbcTemplate：" + orcl);
 		}
 	}
 

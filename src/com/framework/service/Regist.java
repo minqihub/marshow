@@ -1,7 +1,5 @@
 package com.framework.service;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +11,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.framework.config.V1;
 import com.framework.database.DBHandler;
 import com.framework.database.DataSource;
 import com.framework.database.SQLConvertor;
 import com.framework.utils.DataUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
-import com.framework.utils.PropertiesReader;
 
 /**
  * 注册类
@@ -30,13 +28,10 @@ import com.framework.utils.PropertiesReader;
 @RequestMapping("/trust/regist")
 public class Regist extends DBHandler{
 	
-	//配置文件读取对象
-	public static PropertiesReader property = PropertiesReader.getInstance();
-	
 	//默认管理员头像
-	private static final String default_Admin_Logo = property.getProperty("defaultAdminLogo");
+	private static final String default_Admin_Logo = V1.getProperty("defaultAdminLogo");
 	//默认用户头像
-	private static final String default_User_Logo = property.getProperty("defaultUserLogo");
+	private static final String default_User_Logo = V1.getProperty("defaultUserLogo");
 	
 	private static JdbcTemplate comm = DataSource.comm;
 	

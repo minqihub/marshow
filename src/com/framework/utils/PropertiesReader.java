@@ -29,8 +29,8 @@ public class PropertiesReader {
      */
     private PropertiesReader(){ 
         try {
-        	System.out.println("！！！！！！！初始化的v1.config路径："+fileName);
-        	System.out.println("！！！！！！！原有的v1.config路径："+ System.getProperty("user.dir") + System.getProperty("file.separator") + "v1.config");
+        	System.out.println("_______初始化的v1.config路径：" + fileName);
+        	System.out.println("_______原有的v1.config路径："+ System.getProperty("user.dir") + System.getProperty("file.separator") + "v1.config");
 			properties.load(new FileInputStream(fileName));
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("MQFrame：未找到配置文件");

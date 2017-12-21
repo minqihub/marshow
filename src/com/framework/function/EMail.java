@@ -14,7 +14,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.framework.utils.PropertiesReader;
+import com.framework.config.V1;
 
 /**
  * 邮件类
@@ -24,12 +24,9 @@ import com.framework.utils.PropertiesReader;
  */
 public class EMail {
 
-	//配置文件读取对象
-	public static PropertiesReader property = PropertiesReader.getInstance();
-	
-    private static String MAIL_HOST = property.getProperty("MAIL_HOST");			//邮箱的 SMTP 服务器地址
-    private static String MAIL_SEND = property.getProperty("MAIL_SEND");			//发件箱
-    private static String MAIL_PSW = property.getProperty("MAIL_PSW");				//密码或授权码
+    private static String MAIL_HOST = V1.getProperty("MAIL_HOST");			//邮箱的 SMTP 服务器地址
+    private static String MAIL_SEND = V1.getProperty("MAIL_SEND");			//发件箱
+    private static String MAIL_PSW = V1.getProperty("MAIL_PSW");				//密码或授权码
 	
     /**
      * 获取邮件会话对象

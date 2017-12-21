@@ -16,10 +16,10 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.framework.config.V1;
 import com.framework.utils.Json;
 import com.framework.utils.SysLog;
 
-import com.framework.utils.PropertiesReader;
 
 import jxl.Cell;
 import jxl.CellType;
@@ -38,9 +38,6 @@ import jxl.write.biff.RowsExceededException;
  */
 public class ExcelUtils extends FileUtils {
 	
-	private static PropertiesReader property = PropertiesReader.getInstance();
-	
-
 	/**
 	 * 读取模板Excel文件
 	 * @param file
@@ -52,11 +49,11 @@ public class ExcelUtils extends FileUtils {
 			return new ArrayList();
 		}
 		String excelName = file.getName();
-		String KEYS = PropertiesReader.getInstance().getProperty(excelName);			//通过文件名再配置文件中找对应的keys[]
+		String KEYS = V1.getProperty(excelName);			//通过文件名再配置文件中找对应的keys[]
 		String[] keys = KEYS.split(",");
 		
-		int rowBegin = Integer.parseInt(property.getProperty(excelName + "RowBegin"));
-		int columnsBegin = Integer.parseInt(property.getProperty(excelName + "ColumnsBegin"));
+		int rowBegin = Integer.parseInt(V1.getProperty(excelName + "RowBegin"));
+		int columnsBegin = Integer.parseInt(V1.getProperty(excelName + "ColumnsBegin"));
 		
 		Workbook workbook = null;
 		List list = new ArrayList();

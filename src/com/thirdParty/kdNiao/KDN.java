@@ -9,9 +9,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+import com.framework.config.V1;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
-import com.framework.utils.PropertiesReader;
 
 /**
  * 快递鸟
@@ -21,11 +21,8 @@ import com.framework.utils.PropertiesReader;
  */
 public class KDN {
 	
-	//配置文件读取对象
-	private static PropertiesReader property = PropertiesReader.getInstance();
-	
-	private final String EBusinessID = property.getProperty("KDN_EBusinessID");		//电商ID
-	private final String AppKey = property.getProperty("KDN_AppKey");				//电商加密私钥
+	private final String EBusinessID = V1.getProperty("KDN_EBusinessID");		//电商ID
+	private final String AppKey = V1.getProperty("KDN_AppKey");				//电商加密私钥
 	private final String ReqURL = "http://testapi.kdniao.cc:8081/api/dist";			//测试请求url
 //	private static final String ReqURL = "http://api.kdniao.cc/api/dist";			//正式请求url
 	

@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+import com.framework.config.V1;
 import com.framework.utils.DataUtils;
-import com.framework.utils.PropertiesReader;
 
 /**
  * 微信接口的异常
@@ -16,19 +16,8 @@ import com.framework.utils.PropertiesReader;
  */
 public class WXException extends Exception {
 	
-	private static final Properties properties = new Properties();		//静态常量，只有一个实例化Properties对象
-    private static PropertiesReader reader = null;						//静态变量
-	
 	static {
-		String fileName = WXException.class.getClassLoader().getResource("/").getPath().replace("classes", "v1.config");
-//		Properties properties = new Properties();
-		try {
-			properties.load(new FileInputStream(fileName));
-		} catch (FileNotFoundException e) {
-			
-		} catch (IOException e) {
 		
-		}
 	}
     
     /**
@@ -37,7 +26,7 @@ public class WXException extends Exception {
      * @return
      */
 	public static String getExceptionMsg(String errcode){
-		String errcode_zn = DataUtils.isNull(properties.getProperty(errcode)) ? "未找到"+errcode+"匹配的中文信息" : properties.getProperty(errcode);
+		String errcode_zn = DataUtils.isNull(V1.getProperty(errcode)) ? "未找到"+errcode+"匹配的中文信息" : V1.getProperty(errcode);
 		return errcode_zn;
 	}
     

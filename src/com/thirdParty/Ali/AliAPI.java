@@ -5,11 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import com.framework.config.V1;
 import com.framework.utils.HttpUtils;
-import com.framework.utils.PropertiesReader;
 
 
 /**
@@ -20,16 +17,13 @@ import com.framework.utils.PropertiesReader;
  *
  */
 public class AliAPI {
-
-	//配置文件读取对象
-	private static PropertiesReader property = PropertiesReader.getInstance();
 	
-	private static final String ALI_APPCODE = property.getProperty("ALI_APPCODE");
+	private static final String ALI_APPCODE = V1.getProperty("ALI_APPCODE");
 	
 	//阿里云平台短信模板编号（必须是已通过审核）
-	private static final String SMSTemplateCode1 = property.getProperty("SMSTemplateCode1");
-	private static final String SMSTemplateCode2 = property.getProperty("SMSTemplateCode2");
-	private static final String SMSTemplateCode3 = property.getProperty("SMSTemplateCode3");
+	private static final String SMSTemplateCode1 = V1.getProperty("SMSTemplateCode1");
+	private static final String SMSTemplateCode2 = V1.getProperty("SMSTemplateCode2");
+	private static final String SMSTemplateCode3 = V1.getProperty("SMSTemplateCode3");
 	
 	
 	

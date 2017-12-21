@@ -27,11 +27,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
+import com.framework.config.V1;
 import com.framework.database.DataSource;
 import com.framework.database.MySQLUtils;
 import com.framework.utils.HttpUtils;
 import com.framework.utils.Json;
-import com.framework.utils.PropertiesReader;
 import com.framework.utils.XmlUtils;
 import com.thirdParty.weChat.wxInterface.WXEventPush;
 import com.thirdParty.weChat.wxInterface.WXServiceMsg;
@@ -46,7 +46,7 @@ import com.thirdParty.weChat.wxInterface.WXServiceMsg;
 public class WXTools {
 
 	//微信服务器token
-	private static final String TOKEN = PropertiesReader.getInstance().getProperty("WECHAT_TOKEN");
+	private static final String TOKEN = V1.getProperty("WECHAT_TOKEN");
 	
 	/**
 	 * 接收微信公众平台的推送

@@ -5,13 +5,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
@@ -38,7 +35,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import com.framework.utils.PropertiesReader;
+import com.framework.config.V1;
 
 /**
  * 图片处理类
@@ -47,11 +44,8 @@ import com.framework.utils.PropertiesReader;
  */
 public class ImageUtils extends FileUtils {
 
-	//配置文件读取对象
-	public static PropertiesReader property = PropertiesReader.getInstance();
-	
 	//MySQL数据库参数
-	private static String FileDir = property.getProperty("FileDir");
+	private static String FileDir = V1.getProperty("FileDir");
 	
 	
 	/**
