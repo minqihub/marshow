@@ -71,25 +71,4 @@ public class SpringInterceptor implements HandlerInterceptor {
     }  
       
     
-    
-    /**
-     * 包装视图，让前台访问.do方法时，返回json格式的视图，以便前台ajax方法方便获取返回值
-     * @param response
-     * @param data
-     * @throws Exception
-     */
-    private void printJsonString(HttpServletResponse response, Object data) throws Exception {
-        PrintWriter pw = response.getWriter();
-        try {
-            pw.print(JSON.toJSON(data));
-        } catch (Exception exception) {
-            pw.print("拦截器Exception: " + exception);
-        } finally{
-            pw.close();
-        }
-    }
-    
-    
-    
-    
 }  

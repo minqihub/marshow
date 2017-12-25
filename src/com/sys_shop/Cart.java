@@ -1,4 +1,4 @@
-package com.shopSystem;
+package com.sys_shop;
 
 import java.util.HashMap;
 import java.util.List;

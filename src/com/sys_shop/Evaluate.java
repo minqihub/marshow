@@ -1,4 +1,4 @@
-package com.shopSystem;
+package com.sys_shop;
 
 /**
  * 评价

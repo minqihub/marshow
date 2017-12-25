@@ -1,4 +1,4 @@
-package com.commSystem;
+package com.sys_comm;
 
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -104,7 +104,7 @@ public class WXTools {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	public static Map getWeChatConfig(String appid){
-		String sql = "SELECT * FROM C_WeChatSign WHERE appid LIKE '" + appid + "'";
+		String sql = "SELECT * FROM S_WECHAT_SIGN WHERE APPID = '" + appid + "'";
 		return MySQLUtils.sqlQueryForMap(DataSource.comm, sql);
 	}
 	
@@ -151,26 +151,32 @@ public class WXTools {
 		if(tokenMap.isEmpty()){
 			returnMap.put("MSGID", "E");
 			returnMap.put("MESSAGE", "未找到appid对应配置");
-		}else if(System.currentTimeMillis() / 1000 - Integer.parseInt(tokenMap.get("timestamp").toString()) > 7000){
+		}else if(System.currentTimeMillis() / 1000 - Integer.parseInt(tokenMap.get("TIMESTAMP").toString()) > 7000){
 			try {
-				String url1 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + tokenMap.get("secret");
+				String url1 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + tokenMap.get("SECRET");
 				Map access_tokenMap  = HttpUtils.doGet(url1, null, null);
-				System.out.println("access_token更新了：" + access_tokenMap);
+				System.out.println("_______access_token更新了：" + access_tokenMap);
 				String access_token = access_tokenMap.get("access_token").toString();
 				
 				String url2 = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + access_token + "&type=jsapi";
-				Map api_ticketMap  = HttpUtils.doGet(url2, null, null);
-				String api_ticket = api_ticketMap.get("ticket").toString();
+				Map jsapi_ticketMap  = HttpUtils.doGet(url2, null, null);
+				System.out.println("_______jsapi_ticketMap更新了：" + jsapi_ticketMap);
+				String jsapi_ticket = jsapi_ticketMap.get("ticket").toString();
 				
 				returnMap.put("MSGID", "S");
-				returnMap.put("appid", tokenMap.get("appid"));
+				returnMap.put("appid", tokenMap.get("APPID"));
 				returnMap.put("access_token", access_token);
-				returnMap.put("api_ticket", api_ticket);
+				returnMap.put("jsapi_ticket", jsapi_ticket);
 				returnMap.put("timestamp", System.currentTimeMillis() / 1000);
-				returnMap.put("serviceId", tokenMap.get("serviceId"));
+				returnMap.put("serviceId", tokenMap.get("SERVICE_ID"));
 				
 				//更新access_token、api_ticket
-				String updateSql = "UPDATE C_WeChatSign SET `access_token`=?access_token, `api_ticket`=?api_ticket, `timestamp`=?timestamp WHERE `serviceId`=?serviceId";
+				String updateSql = "UPDATE S_WECHAT_SIGN "
+						+ "SET ACCESS_TOKEN = ?access_token, "
+						+ "JSAPI_TICKET = ?jsapi_ticket, "
+						+ "TIMESTAMP = ?timestamp "
+						+ "WHERE SERVICE_ID = ?serviceId "
+						+ "AND APPID = ?appid";
 				MySQLUtils.sqlExecuteMap(DataSource.comm, updateSql, returnMap);
 			} catch (NullPointerException e) {
 				returnMap.put("MSGID", "E");
@@ -184,9 +190,9 @@ public class WXTools {
 			}
 		}else{
 			returnMap.put("MSGID", "S");
-			returnMap.put("appid", tokenMap.get("appid"));
-			returnMap.put("access_token", tokenMap.get("access_token"));
-			returnMap.put("api_ticket", tokenMap.get("api_ticket"));
+			returnMap.put("appid", tokenMap.get("APPID"));
+			returnMap.put("access_token", tokenMap.get("ACCESS_TOKEN"));
+			returnMap.put("jsapi_ticket", tokenMap.get("JSAPI_TICKET"));
 		}
 		return returnMap;
 	}
@@ -379,7 +385,7 @@ public class WXTools {
 
         Map returnMap = new HashMap();
         if(tokenMap.get("MSGID").toString().equals("S")){
-            String jsapi_ticket = tokenMap.get("api_ticket").toString();
+            String jsapi_ticket = tokenMap.get("jsapi_ticket").toString();
             String nonce_str = create_nonce_str();
             String timestamp = create_timestamp();
 

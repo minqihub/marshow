@@ -62,7 +62,8 @@ $$('.confirm-title-ok-cancel').on('click', function () {
 $$('.left.sliding').on('click', function () {
 //	myApp.alert('待开发，定位功能需要调用微信JS-SDK...');
 	var data = {};
-	data.appid = "wx46e8fbea0168eb02";
+//	data.appid = "wx46e8fbea0168eb02";	//编码
+	data.appid = "wx3b8e77b0a26c8a9c";	//多渠
 	weChatJs.getLocation(data, function(res){debugger
 
 		window.sessionStorage.setItem("locationRes", "")
@@ -78,7 +79,8 @@ $$('.left.sliding').on('click', function () {
 $$('.right.sliding').on('click', function () {
 //	myApp.alert('待开发，扫码功能需要调用微信JS-SDK...');
 	var data = {};
-	data.appid = "wx46e8fbea0168eb02";
+//	data.appid = "wx46e8fbea0168eb02";	//编码
+	data.appid = "wx3b8e77b0a26c8a9c";	//多渠
 	weChatJs.scanQRCode(data,function(res){debugger
 		var qrCode = res.resultStr;
 		myApp.alert("二维码内容：" + qrCode);

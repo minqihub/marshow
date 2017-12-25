@@ -1,4 +1,4 @@
-package com.commSystem;
+package com.sys_comm;
 
 import java.sql.SQLException;
 import java.util.HashMap;

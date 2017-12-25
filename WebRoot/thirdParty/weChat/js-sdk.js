@@ -43,7 +43,8 @@ weChatJs.init = function(appid, func){debugger
 	    nonceStr: wxConfig.nonceStr, 		// 必填，生成签名的随机串
 	    signature: wxConfig.signature,		// 必填，签名，见附录1
 	    jsApiList: ['scanQRCode','getLocation','openLocation','chooseImage','uploadImage','downloadImage',
-	    			'onMenuShareTimeline','startRecord','stopRecord'] 		// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	    			'startRecord','stopRecord','onMenuShareAppMessage','onMenuShareTimeline','onMenuShareQQ',
+	    			'onMenuShareQZone'] 		// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 	});
 	
 	/**
@@ -65,6 +66,22 @@ weChatJs.init = function(appid, func){debugger
 		if(typeof func == "function"){
 			func();
 		}
+		wx.onMenuShareAppMessage({
+			title: '这是智慧社区的标题', 								// 分享标题
+			desc: '这是分享的描述', 									// 分享描述
+			link: 'http://www.marshow.top', 						// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+			imgUrl: 'http://www.marshow.top/images/weibo.png', 		// 分享图标
+			type: '', 												// 分享类型,music、video或link，不填默认为link
+			dataUrl: '', 											// 如果type是music或video，则要提供数据链接，默认为空
+			success: function () {debugger
+				// 用户确认分享后执行的回调函数
+				console.log("成功onMenuShareAppMessage");
+			},
+			cancel: function () {debugger
+				// 用户取消分享后执行的回调函数
+				console.log("失败onMenuShareAppMessage");
+			}
+		});
 	});
 	
 };
@@ -163,21 +180,75 @@ weChatJs.downloadImage = function(data, func){debugger
 
 //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
 weChatJs.onMenuShareTimeline = function(data){debugger
-	this.init(data.appid, function(){debugger
-		wx.onMenuShareTimeline({
-		    title: '快来围观智慧社区', 							// 分享标题
-		    link: 'http://www.marshow.top', 					// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-		    imgUrl: 'http://www.marshow.top/images/weibo.png', 	// 分享图标
-		    success: function () { debugger
-		        // 用户确认分享后执行的回调函数
-		    },
-		    cancel: function () { debugger
-		        // 用户取消分享后执行的回调函数
-		    },
-		    trigger: function (res) { debugger 
-	            //  alert('用户点击发送给朋友');    
-		    },
-		});
+	this.init(data.appid);
+	wx.onMenuShareTimeline({
+	    title: data.title, 				// 分享标题
+	    link: data.link, 				// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+	    imgUrl: data.imgUrl, 			// 分享图标
+	    success: function () { debugger
+	        // 用户确认分享后执行的回调函数
+	    },
+	    cancel: function () { debugger
+	        // 用户取消分享后执行的回调函数
+	    },
+	    trigger: function (res) { debugger 
+            //  alert('用户点击发送给朋友');    
+	    },
+	});
+}
+
+//获取“分享给朋友”按钮点击状态及自定义分享内容接口
+weChatJs.onMenuShareAppMessage = function(data){debugger
+	this.init(data.appid);
+	wx.onMenuShareAppMessage({
+	    title: data.title, 				// 分享标题
+		desc: data.desc, 				// 分享描述
+	    link: data.link, 				// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+	    imgUrl: data.imgUrl, 			// 分享图标
+		type: '', 						// 分享类型,music、video或link，不填默认为link
+		dataUrl: '', 					// 如果type是music或video，则要提供数据链接，默认为空
+		success: function () {debugger
+			// 用户确认分享后执行的回调函数
+			
+		},
+		cancel: function () {debugger
+			// 用户取消分享后执行的回调函数
+			
+		}
+	});
+}
+
+//获取“分享到QQ”按钮点击状态及自定义分享内容接口
+weChatJs.onMenuShareQQ = function(data){debugger
+	this.init(data.appid);
+	wx.onMenuShareQQ({
+	    title: data.title, 				// 分享标题
+		desc: data.desc, 				// 分享描述
+	    link: data.link, 				// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+	    imgUrl: data.imgUrl, 			// 分享图标
+		success: function () {
+			// 用户确认分享后执行的回调函数
+		},
+		cancel: function () {
+			// 用户取消分享后执行的回调函数
+		}
+	});
+}
+
+//获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
+weChatJs.onMenuShareQZone = function(data){debugger
+	this.init(data.appid);
+	wx.onMenuShareQZone({
+	    title: data.title, 				// 分享标题
+		desc: data.desc, 				// 分享描述
+	    link: data.link, 				// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+	    imgUrl: data.imgUrl, 			// 分享图标
+		success: function () {
+			// 用户确认分享后执行的回调函数
+		},
+		cancel: function () {
+			// 用户取消分享后执行的回调函数
+		}
 	});
 }
 
