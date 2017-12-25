@@ -179,7 +179,7 @@ weChatJs.downloadImage = function(data, func){debugger
 }
 
 //获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
-weChatJs.onMenuShareTimeline = function(data){debugger
+weChatJs.onMenuShareTimeline = function(data, func1, func2){debugger
 	this.init(data.appid);
 	wx.onMenuShareTimeline({
 	    title: data.title, 				// 分享标题
@@ -187,9 +187,15 @@ weChatJs.onMenuShareTimeline = function(data){debugger
 	    imgUrl: data.imgUrl, 			// 分享图标
 	    success: function () { debugger
 	        // 用户确认分享后执行的回调函数
+	    	if(typeof func1 == "function"){
+	    		func1();
+		    }
 	    },
 	    cancel: function () { debugger
 	        // 用户取消分享后执行的回调函数
+	    	if(typeof func2 == "function"){
+	    		func2();
+		    }
 	    },
 	    trigger: function (res) { debugger 
             //  alert('用户点击发送给朋友');    
@@ -198,7 +204,7 @@ weChatJs.onMenuShareTimeline = function(data){debugger
 }
 
 //获取“分享给朋友”按钮点击状态及自定义分享内容接口
-weChatJs.onMenuShareAppMessage = function(data){debugger
+weChatJs.onMenuShareAppMessage = function(data, func1, func2){debugger
 	this.init(data.appid);
 	wx.onMenuShareAppMessage({
 	    title: data.title, 				// 分享标题
@@ -207,48 +213,64 @@ weChatJs.onMenuShareAppMessage = function(data){debugger
 	    imgUrl: data.imgUrl, 			// 分享图标
 		type: '', 						// 分享类型,music、video或link，不填默认为link
 		dataUrl: '', 					// 如果type是music或video，则要提供数据链接，默认为空
-		success: function () {debugger
-			// 用户确认分享后执行的回调函数
-			
-		},
-		cancel: function () {debugger
-			// 用户取消分享后执行的回调函数
-			
-		}
+	    success: function () { debugger
+	        // 用户确认分享后执行的回调函数
+	    	if(typeof func1 == "function"){
+	    		func1();
+		    }
+	    },
+	    cancel: function () { debugger
+	        // 用户取消分享后执行的回调函数
+	    	if(typeof func2 == "function"){
+	    		func2();
+		    }
+	    },
 	});
 }
 
 //获取“分享到QQ”按钮点击状态及自定义分享内容接口
-weChatJs.onMenuShareQQ = function(data){debugger
+weChatJs.onMenuShareQQ = function(data, func1, func2){debugger
 	this.init(data.appid);
 	wx.onMenuShareQQ({
 	    title: data.title, 				// 分享标题
 		desc: data.desc, 				// 分享描述
 	    link: data.link, 				// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 	    imgUrl: data.imgUrl, 			// 分享图标
-		success: function () {
-			// 用户确认分享后执行的回调函数
-		},
-		cancel: function () {
-			// 用户取消分享后执行的回调函数
-		}
+	    success: function () { debugger
+	        // 用户确认分享后执行的回调函数
+	    	if(typeof func1 == "function"){
+	    		func1();
+		    }
+	    },
+	    cancel: function () { debugger
+	        // 用户取消分享后执行的回调函数
+	    	if(typeof func2 == "function"){
+	    		func2();
+		    }
+	    },
 	});
 }
 
 //获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
-weChatJs.onMenuShareQZone = function(data){debugger
+weChatJs.onMenuShareQZone = function(data, func1, func2){debugger
 	this.init(data.appid);
 	wx.onMenuShareQZone({
 	    title: data.title, 				// 分享标题
 		desc: data.desc, 				// 分享描述
 	    link: data.link, 				// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 	    imgUrl: data.imgUrl, 			// 分享图标
-		success: function () {
-			// 用户确认分享后执行的回调函数
-		},
-		cancel: function () {
-			// 用户取消分享后执行的回调函数
-		}
+	    success: function () { debugger
+	        // 用户确认分享后执行的回调函数
+	    	if(typeof func1 == "function"){
+	    		func1();
+		    }
+	    },
+	    cancel: function () { debugger
+	        // 用户取消分享后执行的回调函数
+	    	if(typeof func2 == "function"){
+	    		func2();
+		    }
+	    },
 	});
 }
 
